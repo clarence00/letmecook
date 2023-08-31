@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:letmecook/assets/themes/app_colors.dart';
 
 class Logos {
   static final Widget letMeCookLogo = SvgPicture.asset(
     'lib/assets/icons/letmecook_logo.svg',
     semanticsLabel: 'Let Me Cook Logo',
+    color: AppColors.light,
   );
 
   static final Widget googleLogo = SvgPicture.asset(
