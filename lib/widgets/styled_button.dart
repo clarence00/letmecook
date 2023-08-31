@@ -2,26 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/pages/login_page.dart';
-import 'package:letmecook/pages/signup_page.dart';
 
 class StyledButton extends StatelessWidget {
   const StyledButton({
     this.text = 'Button',
     this.buttonStyle = 'primary',
     this.icon = const SizedBox(),
+    this.onPressed, // Add this line
     Key? key,
   }) : super(key: key);
 
   final String text;
   final String buttonStyle;
   final Widget icon;
-
-  void buttonPress() {}
+  final VoidCallback? onPressed; // Define the callback
 
   @override
   Widget build(context) {
     if (buttonStyle == 'text') {
-      return _buildTextButton(context);
+      return _buildTextButton();
     } else if (buttonStyle == 'circle') {
       return _buildCircleButton();
     } else {
@@ -31,7 +30,7 @@ class StyledButton extends StatelessWidget {
 
   Widget _buildElevatedButton() {
     return ElevatedButton(
-      onPressed: buttonPress,
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.accent,
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
@@ -45,17 +44,9 @@ class StyledButton extends StatelessWidget {
     );
   }
 
-  Widget _buildTextButton(context) {
+  Widget _buildTextButton() {
     return TextButton(
-      onPressed: () {
-        if (text == 'Log In') {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => const LoginPage()));
-        } else if (text == 'Sign up') {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => const SignUpPage()));
-        }
-      },
+      onPressed: onPressed,
       style: TextButton.styleFrom(
         padding: EdgeInsets.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -70,12 +61,12 @@ class StyledButton extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         ElevatedButton(
-          onPressed: buttonPress,
+          onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.textbox, // Use the specified color
-            shape: CircleBorder(),
-            padding: EdgeInsets.all(0), // Remove padding
-            minimumSize: Size(70, 70), // Set the size
+            shape: const CircleBorder(),
+            padding: const EdgeInsets.all(0), // Remove padding
+            minimumSize: const Size(70, 70), // Set the size
           ),
           child: const SizedBox(
             width: 50,
