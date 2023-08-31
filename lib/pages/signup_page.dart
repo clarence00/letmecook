@@ -4,18 +4,18 @@ import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/assets/icons/logos.dart';
-import 'package:letmecook/pages/signup_page.dart';
+import 'package:letmecook/pages/login_page.dart';
 
 const backgroundColor = AppColors.dark;
 const windowColor = AppColors.light;
 
-void toSignUp(context) {
+void toLogIn(context) {
   Navigator.of(context)
-      .push(MaterialPageRoute(builder: (_) => const SignUpPage()));
+      .push(MaterialPageRoute(builder: (_) => const LoginPage()));
 }
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({super.key});
 
   @override
   Widget build(context) {
@@ -33,7 +33,7 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: 4,
               child: Container(
                 decoration: const BoxDecoration(
                   color: windowColor,
@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget {
                     SizedBox(height: 10),
                     Container(
                       width: 325,
-                      child: const StyledText('LOG IN', 'h1'),
+                      child: const StyledText('SIGN UP', 'h1'),
                     ),
                     Column(
                       children: [
@@ -70,6 +70,21 @@ class LoginPage extends StatelessWidget {
                         ),
                         Container(
                           width: 325,
+                          child: const StyledText('Email', 'h3'),
+                        ),
+                        Container(
+                          width: 325,
+                          height: 40,
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          decoration: ShapeDecoration(
+                            color: AppColors.textbox,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child: const StyledTextbox('email'),
+                        ),
+                        Container(
+                          width: 325,
                           child: const StyledText('Password', 'h3'),
                         ),
                         Container(
@@ -83,12 +98,6 @@ class LoginPage extends StatelessWidget {
                           ),
                           child: const StyledTextbox('password'),
                         ),
-                        Container(
-                          width: 325,
-                          alignment: Alignment.centerRight,
-                          child: const StyledButton(
-                              text: 'Forgot Password?', buttonStyle: 'text'),
-                        ),
                         SizedBox(height: 10),
                       ],
                     ),
@@ -96,7 +105,7 @@ class LoginPage extends StatelessWidget {
                       width: 325,
                       alignment: Alignment.center,
                       child: const StyledButton(
-                          text: 'Log In', buttonStyle: 'primary'),
+                          text: 'Sign Up', buttonStyle: 'primary'),
                     ),
                     Container(
                       width: 325,
@@ -124,8 +133,8 @@ class LoginPage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
-                          StyledText('Don\'t have an account yet? ', 'h3'),
-                          StyledButton(text: "Sign up", buttonStyle: 'text'),
+                          StyledText('Already have an account? ', 'h3'),
+                          StyledButton(text: "Log In", buttonStyle: 'text'),
                         ],
                       ),
                     ),

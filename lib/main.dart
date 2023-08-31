@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letmecook/pages/login_page.dart';
+import 'package:letmecook/pages/signup_page.dart';
 
 void main() {
   runApp(const MyApp());
