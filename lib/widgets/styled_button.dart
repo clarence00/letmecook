@@ -40,7 +40,7 @@ class StyledButton extends StatelessWidget {
         elevation: 4,
         minimumSize: const Size(double.infinity, 55),
       ),
-      child: StyledText(text, 'button-text'),
+      child: StyledText(text: text, size: 26, weight: FontWeight.w700),
     );
   }
 
@@ -52,7 +52,11 @@ class StyledButton extends StatelessWidget {
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         minimumSize: Size.zero,
       ),
-      child: StyledText(text, 'h3-accent'),
+      child: StyledText(
+          text: text,
+          size: 18,
+          weight: FontWeight.w700,
+          color: AppColors.accent),
     );
   }
 
