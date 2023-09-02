@@ -73,7 +73,7 @@ class SignUpWidget extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: const StyledTextbox('username'),
+                  child: const StyledTextbox(type: 'username'),
                 ),
                 Container(
                   width: 325,
@@ -88,7 +88,7 @@ class SignUpWidget extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: const StyledTextbox('email'),
+                  child: const StyledTextbox(type: 'email'),
                 ),
                 Container(
                   width: 325,
@@ -103,7 +103,7 @@ class SignUpWidget extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: const StyledTextbox('password'),
+                  child: const StyledTextbox(type: 'password'),
                 ),
                 const SizedBox(height: 10),
               ],

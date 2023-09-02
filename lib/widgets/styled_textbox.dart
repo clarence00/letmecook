@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class StyledTextbox extends StatelessWidget {
-  const StyledTextbox(this.type, {Key? key}) : super(key: key);
+  const StyledTextbox({Key? key, this.type = 'text'}) : super(key: key);
 
   final String type;
 
   @override
   Widget build(BuildContext context) {
-    final bool isUsername = type == 'username';
     final bool isPassword = type == 'password';
 
     return TextField(

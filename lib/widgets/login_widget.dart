@@ -77,7 +77,7 @@ class LogInWidget extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: const StyledTextbox('username'),
+                  child: const StyledTextbox(type: 'username'),
                 ),
                 Container(
                   width: 325,
@@ -92,7 +92,7 @@ class LogInWidget extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: const StyledTextbox('password'),
+                  child: const StyledTextbox(type: 'password'),
                 ),
                 Container(
                   width: 325,

@@ -9,6 +9,14 @@ class Logos {
     color: AppColors.light,
   );
 
+  static final Widget letMeCookLogoSmall = SvgPicture.asset(
+    'lib/assets/icons/letmecook_logo.svg',
+    semanticsLabel: 'Let Me Cook Logo',
+    color: AppColors.light,
+    width: 40,
+    height: 40,
+  );
+
   static final Widget googleLogo = SvgPicture.asset(
     'lib/assets/icons/google_logo.svg',
     semanticsLabel: 'Google Logo',
