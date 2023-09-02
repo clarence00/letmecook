@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
+import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/pages/login_page.dart';
 
 class StyledButton extends StatelessWidget {
@@ -8,13 +9,15 @@ class StyledButton extends StatelessWidget {
     this.text = 'Button',
     this.buttonStyle = 'primary',
     this.icon = const SizedBox(),
-    this.onPressed, // Add this line
+    this.size = 70,
+    this.onPressed,
     Key? key,
   }) : super(key: key);
 
   final String text;
   final String buttonStyle;
   final Widget icon;
+  final double size;
   final VoidCallback? onPressed; // Define the callback
 
   @override
@@ -61,24 +64,17 @@ class StyledButton extends StatelessWidget {
   }
 
   Widget _buildCircleButton() {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        ElevatedButton(
-          onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.textbox, // Use the specified color
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(0), // Remove padding
-            minimumSize: const Size(70, 70), // Set the size
-          ),
-          child: const SizedBox(
-            width: 50,
-            height: 50,
-          ),
-        ),
-        icon
-      ],
+    return Container(
+      height: size,
+      width: size,
+      decoration: const ShapeDecoration(
+        color: AppColors.textbox,
+        shape: CircleBorder(),
+      ),
+      child: IconButton(
+        icon: icon,
+        onPressed: onPressed,
+      ),
     );
   }
 }
