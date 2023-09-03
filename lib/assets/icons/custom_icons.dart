@@ -11,21 +11,15 @@ class CustomIcons {
     width: 28,
   );
 
-  static final Widget heartDark = SvgPicture.asset(
-    'lib/assets/icons/custom_icons/heart.svg',
-    semanticsLabel: 'Heart Dark',
-    color: AppColors.dark,
-    height: 24,
-    width: 24,
-  );
-
-  static final Widget heartAccent = SvgPicture.asset(
-    'lib/assets/icons/custom_icons/heart.svg',
-    semanticsLabel: 'Heart Accent',
-    color: AppColors.accent,
-    height: 24,
-    width: 24,
-  );
+  static Widget heart({Color? color = AppColors.dark}) {
+    return SvgPicture.asset(
+      'lib/assets/icons/custom_icons/heart.svg',
+      semanticsLabel: 'Heart',
+      color: color,
+      height: 24,
+      width: 24,
+    );
+  }
 
   static final Widget comment = SvgPicture.asset(
     'lib/assets/icons/custom_icons/comment.svg',
@@ -43,29 +37,35 @@ class CustomIcons {
     width: 24,
   );
 
-  static final Widget home = SvgPicture.asset(
-    'lib/assets/icons/custom_icons/home.svg',
-    semanticsLabel: 'Home',
-    color: AppColors.light,
-    height: 24,
-    width: 24,
-  );
+  static Widget home({Color? color = AppColors.dark}) {
+    return SvgPicture.asset(
+      'lib/assets/icons/custom_icons/home.svg',
+      semanticsLabel: 'Home',
+      color: color,
+      height: 24,
+      width: 24,
+    );
+  }
 
-  static final Widget search = SvgPicture.asset(
-    'lib/assets/icons/custom_icons/search.svg',
-    semanticsLabel: 'Search',
-    color: AppColors.light,
-    height: 24,
-    width: 24,
-  );
+  static Widget search({Color? color = AppColors.dark}) {
+    return SvgPicture.asset(
+      'lib/assets/icons/custom_icons/search.svg',
+      semanticsLabel: 'Search',
+      color: color,
+      height: 24,
+      width: 24,
+    );
+  }
 
-  static final Widget profile = SvgPicture.asset(
-    'lib/assets/icons/custom_icons/profile.svg',
-    semanticsLabel: 'Profile',
-    color: AppColors.light,
-    height: 24,
-    width: 24,
-  );
+  static Widget profile({Color? color = AppColors.dark}) {
+    return SvgPicture.asset(
+      'lib/assets/icons/custom_icons/profile.svg',
+      semanticsLabel: 'Profile',
+      color: color,
+      height: 24,
+      width: 24,
+    );
+  }
 
   static final Widget circle = SvgPicture.asset(
     'lib/assets/icons/custom_icons/circle.svg',
