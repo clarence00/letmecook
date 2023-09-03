@@ -66,6 +66,17 @@ flutter:
     - lib/assets/icons/google_logo.svg
     - lib/assets/icons/facebook_logo.svg
     - lib/assets/icons/twitter_logo.svg
+    - lib/assets/icons/custom_icons/arrow_down.svg
+    - lib/assets/icons/custom_icons/arrow_right.svg
+    - lib/assets/icons/custom_icons/bookmark.svg
+    - lib/assets/icons/custom_icons/circle.svg
+    - lib/assets/icons/custom_icons/comment.svg
+    - lib/assets/icons/custom_icons/heart.svg
+    - lib/assets/icons/custom_icons/home.svg
+    - lib/assets/icons/custom_icons/profile.svg
+    - lib/assets/icons/custom_icons/search.svg
+    - lib/assets/icons/custom_icons/send.svg
+    - lib/assets/icons/custom_icons/image.svg
     - lib/assets/icons/
   #   - images/a_dot_ham.jpeg
 
