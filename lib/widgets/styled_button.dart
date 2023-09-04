@@ -26,6 +26,8 @@ class StyledButton extends StatelessWidget {
       return _buildTextButton();
     } else if (buttonStyle == 'circle') {
       return _buildCircleButton();
+    } else if (buttonStyle == 'icon') {
+      return _buildIconButton();
     } else {
       return _buildElevatedButton();
     }
@@ -68,13 +70,20 @@ class StyledButton extends StatelessWidget {
       height: size,
       width: size,
       decoration: const ShapeDecoration(
-        color: AppColors.textbox,
+        color: AppColors.background,
         shape: CircleBorder(),
       ),
       child: IconButton(
         icon: icon,
         onPressed: onPressed,
       ),
+    );
+  }
+
+  Widget _buildIconButton() {
+    return IconButton(
+      icon: icon,
+      onPressed: onPressed,
     );
   }
 }

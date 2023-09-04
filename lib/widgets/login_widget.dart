@@ -73,7 +73,7 @@ class LogInWidget extends StatelessWidget {
                   height: 40,
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   decoration: ShapeDecoration(
-                    color: AppColors.textbox,
+                    color: AppColors.background,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
                   ),
@@ -88,7 +88,7 @@ class LogInWidget extends StatelessWidget {
                   height: 40,
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   decoration: ShapeDecoration(
-                    color: AppColors.textbox,
+                    color: AppColors.background,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
                   ),
