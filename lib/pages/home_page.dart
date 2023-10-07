@@ -33,6 +33,11 @@ class _HomePageState extends State<HomePage> {
       });
     }
 
+    // Clear Text after sending
+    setState(() {
+      textController.clear();
+    });
+
     print(textController.text);
   }
 
