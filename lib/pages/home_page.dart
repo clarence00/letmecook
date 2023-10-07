@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   // Username display (uncomment as needed)
-  // final currentUSer = FirebaseAuth.instance.currentUser;
+ //final currentUser = FirebaseAuth.instance.currentUser;
   
   //text controller
   final textController = TextEditingController();
@@ -27,10 +27,13 @@ class _HomePageState extends State<HomePage> {
   void postMessage() {
     if(textController.text.isNotEmpty){
       FirebaseFirestore.instance.collection("User Posts").add({
+        //'UserEmail': 'Email@example.com',
         'Message':textController.text,
         'TimeStamp': Timestamp.now(),
       });
     }
+
+    print(textController.text);
   }
 
   @override
@@ -66,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             
             // Wall Display (boxes)
             Expanded(
-              child: StreamBuilder(
+              child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                 .collection("User Posts")
                 .orderBy(
@@ -82,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                       final post = snapshot.data!.docs[index];
                       return WallPost(
                         message: post['Message'], 
-                        //user: post['UserName']
+                        //user: post['UserEmail'],
                         );
 
                     }

@@ -16,7 +16,7 @@ class WallPost extends StatelessWidget {
     return Row(
       children: [
         Column(children: [
-          Text('ExampleUser1'),
+          //Text(user),
           Text(message),
 
         ],
