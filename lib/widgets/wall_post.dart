@@ -16,10 +16,10 @@ class WallPost extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(25),
       ),
 
-      margin: EdgeInsets.only(top: 25,left: 25,right: 25),
+      margin: EdgeInsets.only(top: 10,left: 25,right: 25),
       padding: EdgeInsets.all(25),
 
 
@@ -39,7 +39,7 @@ class WallPost extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 20,),
+          const SizedBox(width: 10),
 
 
           Column(
