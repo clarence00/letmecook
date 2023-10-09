@@ -14,6 +14,7 @@ class WallPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),
@@ -24,7 +25,8 @@ class WallPost extends StatelessWidget {
 
 
       child: Row(
-        children: [
+        children: [  
+          
           //Profile Picture
           Container(
             decoration: 
@@ -42,17 +44,20 @@ class WallPost extends StatelessWidget {
           const SizedBox(width: 10),
 
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            const Text(
-              "Email@example.com",
-              style: TextStyle(color: Color.fromARGB(255, 99, 98, 98))
-              ),
-            const SizedBox(height: 10),
-            Text(message),
-    
-          ],
+          Expanded(
+            child: Column(
+              
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+              const Text(
+                "Email@example.com",
+                style: TextStyle(color: Color.fromARGB(255, 99, 98, 98))
+                ),
+              const SizedBox(height: 10),
+              Text(message),
+              
+            ],
+            ),
           )
     
         ],

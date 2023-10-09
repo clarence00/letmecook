@@ -99,6 +99,8 @@ class _HomePageState extends State<HomePage> {
                 // POST MESSAGE
                       Expanded(
                           child: MyTextField(
+                        minLines: 1,
+                        maxLines: 150,
                         controller: textController,
                         hintText: 'Post a new recipe!',
                         obscureText: false,

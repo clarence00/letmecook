@@ -6,12 +6,16 @@ class MyTextField  extends StatelessWidget {
   final controller;
   final String hintText;
   final bool obscureText;
+  final int minLines;
+  final int maxLines;
 
   const MyTextField ({
     super.key,
     required this.controller,
     required this.hintText,
     required this. obscureText,
+    required this. minLines,
+    required this. maxLines,
     
     });
 
@@ -23,6 +27,8 @@ class MyTextField  extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25.0),
         child: TextField(
+          minLines: minLines,
+          maxLines: maxLines,
           controller: controller,
           decoration: InputDecoration(
             
