@@ -25,10 +25,12 @@ class WallPost extends StatelessWidget {
 
 
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [  
           
           //Profile Picture
           Container(
+            
             decoration: 
               BoxDecoration(
                 shape: BoxShape.circle,
