@@ -9,6 +9,7 @@ import 'package:letmecook/widgets/textField.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/widgets/wall_post.dart';
 import 'package:letmecook/widgets/btmNavBar.dart';
+import 'package:letmecook/widgets/topAppBar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   //final currentUser = FirebaseAuth.instance.currentUser;
 
   final botNav = btmNavBar();
+  final _appBar = myAppBar();
 
   //text controller
   final textController = TextEditingController();
@@ -51,27 +53,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: botNav,
 
       backgroundColor: Colors.grey[300],
-      appBar: AppBar(
-        backgroundColor: Colors.grey[900],
-
-        // LET ME COOK TEXT //
-        title: Center(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Logos.letMeCookLogoSmall,
-            SizedBox(
-              width: 15,
-            ),
-            StyledText(
-              text: 'LET ME COOK',
-              color: AppColors.light,
-              size: 32,
-              weight: FontWeight.w700,
-            )
-          ],
-        )),
-      ),
+      appBar: _appBar,
 
       // WALL POST
       body: Center(
