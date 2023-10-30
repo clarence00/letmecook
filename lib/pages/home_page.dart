@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_text.dart';
@@ -75,69 +76,69 @@ class _HomePageState extends State<HomePage> {
         child: Container(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
 
-                //BOX DECORATION
-                child: Container(
+              //   //BOX DECORATION
+              //   child: Container(
                   
 
                   
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                       color: Colors.grey.withOpacity(0.5),
-                       spreadRadius: 5,
-                       blurRadius: 7,
-                       offset: Offset(0, 3),
-                      )
-                    ],
+              //     decoration: BoxDecoration(
+              //       color: Colors.white,
+              //       borderRadius: BorderRadius.circular(25),
+              //       boxShadow: [
+              //         BoxShadow(
+              //          color: Colors.grey.withOpacity(0.5),
+              //          spreadRadius: 5,
+              //          blurRadius: 7,
+              //          offset: Offset(0, 3),
+              //         )
+              //       ],
                     
-                  ),
+              //     ),
                   
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.all(15),
+              //     margin: const EdgeInsets.symmetric(vertical: 10),
+              //     padding: const EdgeInsets.all(15),
 
 
-                // PROFILE PICTURE
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.grey[400]),
-                        padding: EdgeInsets.all(10),
+              //   // PROFILE PICTURE
+              //     child: Row(
+              //       children: [
+              //         Container(
+              //           decoration: BoxDecoration(
+              //               shape: BoxShape.circle, color: Colors.grey[400]),
+              //           padding: EdgeInsets.all(10),
                         
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                        ),
-                      ),
-                // POST MESSAGE
-                      Expanded(
-                          child: MyTextField(
-                        minLines: 1,
-                        maxLines: 150,
-                        controller: textController,
-                        hintText: 'Post a new recipe!',
-                        obscureText: false,
+              //           child: Icon(
+              //             Icons.person,
+              //             color: Colors.white,
+              //           ),
+              //         ),
+              //   // POST MESSAGE
+              //         Expanded(
+              //             child: MyTextField(
+              //           minLines: 1,
+              //           maxLines: 150,
+              //           controller: textController,
+              //           hintText: 'Post a new recipe!',
+              //           obscureText: false,
                         
                         
-                      )
-                      ),
+              //         )
+              //         ),
 
-                      // POST BUTTON
-                      IconButton(
-                          onPressed: postMessage,
-                          icon: const Icon(Icons.arrow_circle_up)),
-                      IconButton(
-                        onPressed: attachImage, 
-                        icon: const Icon(Icons.camera_alt_rounded))
-                    ],
-                  ),
-                ),
-              ),
+              //         // POST BUTTON
+              //         IconButton(
+              //             onPressed: postMessage,
+              //             icon: const Icon(Icons.arrow_circle_up)),
+              //         IconButton(
+              //           onPressed: attachImage, 
+              //           icon: const Icon(Icons.camera_alt_rounded))
+              //       ],
+              //     ),
+              //   ),
+              // ),
 
               // Wall Display (boxes)
               Expanded(
@@ -172,6 +173,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
+
+
+              
               // Post message section
 
               // Logged in as : section
@@ -181,6 +185,45 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+
+
+      bottomNavigationBar: Container(
+        color: Colors.black,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal:15.0,vertical: 20.0),
+          child: GNav(
+            backgroundColor: Colors.black,
+            color: Colors.white,
+            activeColor: Colors.white,
+            tabBackgroundColor: Colors.grey.shade800,
+            padding: EdgeInsets.all(5),
+            tabs: const[
+              GButton(
+                icon: Icons.home,
+                text: 'Home',
+                gap: 8,
+                ),
+        
+              GButton(
+                icon: Icons.search,
+                text: 'Search',
+                gap: 8,
+              ),
+              GButton(
+                icon: Icons.add,
+                text: 'Add',
+                gap: 8,
+                ),
+              GButton(
+                icon: Icons.person,
+                text: 'Profile',
+                gap: 8,
+                ),
+        
+            ],
+          ),
+        ),
+      )
     );
   }
 }
