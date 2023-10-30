@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
-import 'package:letmecook/widgets/btmNavBar.dart';
+import 'package:letmecook/pages/post_page.dart';
+import 'package:letmecook/pages/profile_page.dart';
+import 'package:letmecook/pages/search_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/textField.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/widgets/wall_post.dart';
-import 'package:letmecook/widgets/btmNavBar.dart';
 import 'package:letmecook/widgets/topAppBar.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,15 +20,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
+  //Variables
+
   // Username display (uncomment as needed)
   //final currentUser = FirebaseAuth.instance.currentUser;
-
-  final botNav = btmNavBar();
-  final _appBar = myAppBar();
-
-  //text controller
   final textController = TextEditingController();
 
+
+
+
+  //FUNCTIONS
   void postMessage() {
     if (textController.text.isNotEmpty) {
       FirebaseFirestore.instance.collection("User Posts").add({
@@ -47,13 +51,16 @@ class _HomePageState extends State<HomePage> {
 
   void attachImage() {}
 
+  // CODE PROPER
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: botNav,
+
+     //bottomNavigationBar: botNav,
 
       backgroundColor: Colors.grey[300],
-      appBar: _appBar,
+      //appBar: _appBar,
 
       // WALL POST
       body: Center(
@@ -152,9 +159,6 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-
-              // Post message section
-
               // Logged in as : section
 
               //Text("Logged in as : " + currentUser.email )

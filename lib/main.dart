@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:letmecook/pages/hub_page.dart';
 import 'package:letmecook/pages/login_page.dart';
 import 'package:letmecook/pages/test_page.dart';
 
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
     ]);
     return const MaterialApp(
       title: 'Let Me Cook',
-      home: HomePage(),
+      home: HubPage(),
       // home: TestPage(),
     );
   }
