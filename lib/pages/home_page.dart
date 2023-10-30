@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
+import 'package:letmecook/widgets/btmNavBar.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/textField.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/widgets/wall_post.dart';
+import 'package:letmecook/widgets/btmNavBar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,6 +20,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // Username display (uncomment as needed)
   //final currentUser = FirebaseAuth.instance.currentUser;
+
+  final botNav = btmNavBar();
 
   //text controller
   final textController = TextEditingController();
@@ -39,13 +43,13 @@ class _HomePageState extends State<HomePage> {
     print(textController.text);
   }
 
-  void attachImage(){
-    
-  }
+  void attachImage() {}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: botNav,
+
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
@@ -69,8 +73,6 @@ class _HomePageState extends State<HomePage> {
         )),
       ),
 
-
-
       // WALL POST
       body: Center(
         child: Container(
@@ -81,9 +83,7 @@ class _HomePageState extends State<HomePage> {
 
               //   //BOX DECORATION
               //   child: Container(
-                  
 
-                  
               //     decoration: BoxDecoration(
               //       color: Colors.white,
               //       borderRadius: BorderRadius.circular(25),
@@ -95,12 +95,11 @@ class _HomePageState extends State<HomePage> {
               //          offset: Offset(0, 3),
               //         )
               //       ],
-                    
+
               //     ),
-                  
+
               //     margin: const EdgeInsets.symmetric(vertical: 10),
               //     padding: const EdgeInsets.all(15),
-
 
               //   // PROFILE PICTURE
               //     child: Row(
@@ -109,7 +108,7 @@ class _HomePageState extends State<HomePage> {
               //           decoration: BoxDecoration(
               //               shape: BoxShape.circle, color: Colors.grey[400]),
               //           padding: EdgeInsets.all(10),
-                        
+
               //           child: Icon(
               //             Icons.person,
               //             color: Colors.white,
@@ -123,8 +122,7 @@ class _HomePageState extends State<HomePage> {
               //           controller: textController,
               //           hintText: 'Post a new recipe!',
               //           obscureText: false,
-                        
-                        
+
               //         )
               //         ),
 
@@ -133,7 +131,7 @@ class _HomePageState extends State<HomePage> {
               //             onPressed: postMessage,
               //             icon: const Icon(Icons.arrow_circle_up)),
               //         IconButton(
-              //           onPressed: attachImage, 
+              //           onPressed: attachImage,
               //           icon: const Icon(Icons.camera_alt_rounded))
               //       ],
               //     ),
@@ -173,9 +171,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
-
-
-              
               // Post message section
 
               // Logged in as : section
@@ -185,45 +180,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-
-
-      bottomNavigationBar: Container(
-        color: Colors.black,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal:15.0,vertical: 20.0),
-          child: GNav(
-            backgroundColor: Colors.black,
-            color: Colors.white,
-            activeColor: Colors.white,
-            tabBackgroundColor: Colors.grey.shade800,
-            padding: EdgeInsets.all(5),
-            tabs: const[
-              GButton(
-                icon: Icons.home,
-                text: 'Home',
-                gap: 8,
-                ),
-        
-              GButton(
-                icon: Icons.search,
-                text: 'Search',
-                gap: 8,
-              ),
-              GButton(
-                icon: Icons.add,
-                text: 'Add',
-                gap: 8,
-                ),
-              GButton(
-                icon: Icons.person,
-                text: 'Profile',
-                gap: 8,
-                ),
-        
-            ],
-          ),
-        ),
-      )
     );
   }
 }
