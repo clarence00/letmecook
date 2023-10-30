@@ -38,6 +38,10 @@ class _HomePageState extends State<HomePage> {
     print(textController.text);
   }
 
+  void attachImage(){
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,17 +76,30 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 15, left: 25, right: 25),
+                padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
 
                 //BOX DECORATION
                 child: Container(
                   
+
+                  
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                       color: Colors.grey.withOpacity(0.5),
+                       spreadRadius: 5,
+                       blurRadius: 7,
+                       offset: Offset(0, 3),
+                      )
+                    ],
+                    
                   ),
-                  margin: EdgeInsets.all(0),
-                  padding: EdgeInsets.all(15),
+                  
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.all(15),
+
 
                 // PROFILE PICTURE
                   child: Row(
@@ -91,6 +108,7 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: Colors.grey[400]),
                         padding: EdgeInsets.all(10),
+                        
                         child: Icon(
                           Icons.person,
                           color: Colors.white,
@@ -112,7 +130,10 @@ class _HomePageState extends State<HomePage> {
                       // POST BUTTON
                       IconButton(
                           onPressed: postMessage,
-                          icon: const Icon(Icons.arrow_circle_up))
+                          icon: const Icon(Icons.arrow_circle_up)),
+                      IconButton(
+                        onPressed: attachImage, 
+                        icon: const Icon(Icons.camera_alt_rounded))
                     ],
                   ),
                 ),
