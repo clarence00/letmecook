@@ -8,6 +8,7 @@ import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/pages/login_page.dart';
 import 'package:letmecook/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -35,11 +36,13 @@ class _LogInPageState extends State<LogInPage> {
 
   String? errorMessage = '';
   bool isLogin = true;
+  bool usernameError = false;
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-  final TextEditingController _controllerRepeatPassword =
-      TextEditingController();
+  final TextEditingController _controllerUsername = TextEditingController();
+
+  Future<void> checkUsername() async {}
 
   Future<void> signInWithEmailAndPassword() async {
     try {
@@ -49,20 +52,54 @@ class _LogInPageState extends State<LogInPage> {
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message;
+        if (e.message == 'Error') {
+          errorMessage = 'Email or password is incorrect!';
+        } else {
+          errorMessage = e.message;
+        }
       });
     }
   }
 
   Future<void> createUserWithEmailAndPassword() async {
-    try {
-      await Auth().createUserWithEmailAndPassword(
-        email: _controllerEmail.text,
-        password: _controllerPassword.text,
-      );
-    } on FirebaseAuthException catch (e) {
+    if (_controllerUsername.text.isEmpty) {
       setState(() {
-        errorMessage = e.message;
+        usernameError = true;
+        errorMessage = 'Username cannot be empty!';
+      });
+      return;
+    }
+
+    // Check if the username already exists
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Usernames')
+        .where('Username', isEqualTo: _controllerUsername.text)
+        .get();
+
+    // If the result is empty
+    if (querySnapshot.docs.isEmpty) {
+      errorMessage = '';
+      try {
+        await Auth().createUserWithEmailAndPassword(
+          email: _controllerEmail.text,
+          password: _controllerPassword.text,
+        );
+        await FirebaseFirestore.instance
+            .collection('Usernames')
+            .doc(_controllerEmail.text)
+            .set({
+          'Username': _controllerUsername.text,
+          'UserEmail': _controllerEmail.text,
+        });
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          errorMessage = e.message;
+        });
+      }
+    } else {
+      setState(() {
+        usernameError = true;
+        errorMessage = 'Username is already taken!';
       });
     }
   }
@@ -108,6 +145,30 @@ class _LogInPageState extends State<LogInPage> {
                     ),
                     Column(
                       children: [
+                        isLogin
+                            ? const SizedBox(height: 0)
+                            : Container(
+                                width: 325,
+                                child: const StyledText(
+                                    text: 'Username', size: 18),
+                              ),
+                        isLogin
+                            ? const SizedBox(height: 0)
+                            : Container(
+                                width: 325,
+                                height: 40,
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                decoration: ShapeDecoration(
+                                  color: AppColors.background,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                ),
+                                child: StyledTextbox(
+                                  controller: _controllerUsername,
+                                  type: 'username',
+                                ),
+                              ),
                         Container(
                           width: 325,
                           child: const StyledText(text: 'Email', size: 18),
