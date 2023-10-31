@@ -6,6 +6,7 @@ import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/pages/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpWidget extends StatelessWidget {
   final void Function() toggleView; // Use the correct function type

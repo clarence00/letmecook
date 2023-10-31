@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:letmecook/pages/hub_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/pages/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LogInWidget extends StatelessWidget {
   final void Function() toggleView; // Use the correct function type
 
-  LogInWidget({required this.toggleView, Key? key}) : super(key: key);
-  void logIn() {
+  const LogInWidget({required this.toggleView, Key? key}) : super(key: key);
+  void logIn(BuildContext context) {
     print('Log in');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HubPage()),
+    );
   }
 
   void forgotPassword() {
@@ -37,8 +43,8 @@ class LogInWidget extends StatelessWidget {
       effects: [
         SlideEffect(
             duration: 1000.ms,
-            begin: Offset(0, 1),
-            end: Offset(0, 0),
+            begin: const Offset(0, 1),
+            end: const Offset(0, 0),
             curve: Curves.fastLinearToSlowEaseIn)
       ],
       child: Container(
@@ -109,7 +115,9 @@ class LogInWidget extends StatelessWidget {
               width: 325,
               alignment: Alignment.center,
               child: StyledButton(
-                  text: 'Log In', buttonStyle: 'primary', onPressed: logIn),
+                  text: 'Log In',
+                  buttonStyle: 'primary',
+                  onPressed: () => logIn(context)),
             ),
             Container(
               width: 325,

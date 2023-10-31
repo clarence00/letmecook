@@ -8,16 +8,10 @@ import 'package:letmecook/pages/test_page.dart';
 import 'pages/home_page.dart';
 import 'firebase_options.dart';
 
-
-
-
-
- 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-   options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
   SystemChrome.setPreferredOrientations([
@@ -36,7 +30,7 @@ class MyApp extends StatelessWidget {
     ]);
     return const MaterialApp(
       title: 'Let Me Cook',
-      home: HubPage(),
+      home: LogInPage(),
       // home: TestPage(),
     );
   }
