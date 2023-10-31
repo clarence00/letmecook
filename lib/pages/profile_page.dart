@@ -8,6 +8,7 @@ import 'package:letmecook/pages/post_page.dart';
 import 'package:letmecook/pages/profile_page.dart';
 import 'package:letmecook/pages/search_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
+import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/widgets/textField.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
@@ -178,19 +179,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Row(
                     children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          child: const StyledText(
-                            text: 'Log out',
-                          ),
+                      Container(
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        padding: const EdgeInsets.all(4),
+                        margin: const EdgeInsets.symmetric(vertical: 12),
+                        child: IconButton(
+                          onPressed: () {
+                            Auth().signOut();
+                          },
+                          icon: const Icon(Icons.arrow_back),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Auth().signOut();
-                        },
-                        icon: const Icon(Icons.arrow_right),
+                      Expanded(
+                        child: Container(
+                            padding: const EdgeInsets.all(10),
+                            child: const StyledText(
+                              text: 'Log out',
+                            )),
                       ),
                     ],
                   ),

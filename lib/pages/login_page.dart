@@ -269,7 +269,7 @@ class _LogInPageState extends State<LogInPage> {
                         children: [
                           StyledText(
                               text: isLogin
-                                  ? 'Don\'t have an account yet? '
+                                  ? 'Don\'t have an account? '
                                   : 'Already have an account? ',
                               size: 18),
                           StyledButton(
