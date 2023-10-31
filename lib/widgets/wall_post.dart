@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class WallPost extends StatelessWidget {
   final String message;
-  //final String user;
+  final String user;
 
   const WallPost({
     super.key,
     required this.message,
-    // required this.user,
+    required this.user,
   });
 
   @override
@@ -46,7 +46,7 @@ class WallPost extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Email@example.com",
+                Text((user),
                     style: TextStyle(color: Color.fromARGB(255, 99, 98, 98))),
                 const SizedBox(height: 10),
                 Text(message),

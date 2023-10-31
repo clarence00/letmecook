@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:letmecook/widgets/footer.dart';
-import 'package:letmecook/widgets/login_widget.dart';
-import 'package:letmecook/widgets/signup_widget.dart';
 import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
@@ -39,9 +36,7 @@ class TestPage extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(color: AppColors.background),
                 child: const Center(
-                  child: Footer(
-                    page: 'home',
-                  ),
+                  child: SizedBox(),
                 ),
               ),
             ),
