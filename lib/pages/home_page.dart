@@ -20,113 +20,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
   //Variables
 
   // Username display (uncomment as needed)
   //final currentUser = FirebaseAuth.instance.currentUser;
-  final textController = TextEditingController();
-
-
-
-
-  //FUNCTIONS
-  void postMessage() {
-    if (textController.text.isNotEmpty) {
-      FirebaseFirestore.instance.collection("User Posts").add({
-        //'UserEmail': 'Email@example.com',
-        'Message': textController.text,
-        'TimeStamp': Timestamp.now(),
-      });
-    }
-
-    // Clear Text after sending
-    setState(() {
-      textController.clear();
-    });
-
-    print(textController.text);
-  }
-
-  void attachImage() {}
 
   // CODE PROPER
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-     //bottomNavigationBar: botNav,
-
       backgroundColor: Colors.grey[300],
-      //appBar: _appBar,
-
       // WALL POST
       body: Center(
         child: Container(
           child: Column(
             children: [
-              // Padding(
-              //   padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-
-              //   //BOX DECORATION
-              //   child: Container(
-
-              //     decoration: BoxDecoration(
-              //       color: Colors.white,
-              //       borderRadius: BorderRadius.circular(25),
-              //       boxShadow: [
-              //         BoxShadow(
-              //          color: Colors.grey.withOpacity(0.5),
-              //          spreadRadius: 5,
-              //          blurRadius: 7,
-              //          offset: Offset(0, 3),
-              //         )
-              //       ],
-
-              //     ),
-
-              //     margin: const EdgeInsets.symmetric(vertical: 10),
-              //     padding: const EdgeInsets.all(15),
-
-              //   // PROFILE PICTURE
-              //     child: Row(
-              //       children: [
-              //         Container(
-              //           decoration: BoxDecoration(
-              //               shape: BoxShape.circle, color: Colors.grey[400]),
-              //           padding: EdgeInsets.all(10),
-
-              //           child: Icon(
-              //             Icons.person,
-              //             color: Colors.white,
-              //           ),
-              //         ),
-              //   // POST MESSAGE
-              //         Expanded(
-              //             child: MyTextField(
-              //           minLines: 1,
-              //           maxLines: 150,
-              //           controller: textController,
-              //           hintText: 'Post a new recipe!',
-              //           obscureText: false,
-
-              //         )
-              //         ),
-
-              //         // POST BUTTON
-              //         IconButton(
-              //             onPressed: postMessage,
-              //             icon: const Icon(Icons.arrow_circle_up)),
-              //         IconButton(
-              //           onPressed: attachImage,
-              //           icon: const Icon(Icons.camera_alt_rounded))
-              //       ],
-              //     ),
-              //   ),
-              // ),
-
               // Wall Display (boxes)
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
