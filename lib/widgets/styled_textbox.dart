@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
 class StyledTextbox extends StatelessWidget {
-  const StyledTextbox({Key? key, this.type = 'text', required this.controller})
+  const StyledTextbox(
+      {Key? key, this.type = 'text', this.text = '', required this.controller})
       : super(key: key);
 
   final TextEditingController controller;
   final String type;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
     final bool isPassword = type == 'password';
+    controller.text = text;
 
     return TextField(
       controller: controller,

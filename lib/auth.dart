@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -25,6 +26,16 @@ class Auth {
       email: email,
       password: password,
     );
+
+    String _username = email.split('@').first;
+
+    await FirebaseFirestore.instance
+        .collection("Usernames")
+        .doc(email) // Use the email as the document ID
+        .set({
+      'UserEmail': email,
+      'Username': _username,
+    });
   }
 
   Future<void> signOut() async {
