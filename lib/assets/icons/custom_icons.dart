@@ -3,13 +3,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 
 class CustomIcons {
-  static final Widget arrowRight = SvgPicture.asset(
-    'lib/assets/icons/custom_icons/arrow_right.svg',
-    semanticsLabel: 'Arrow Right',
-    color: AppColors.dark,
-    height: 28,
-    width: 28,
-  );
+  static Widget arrowRight({Color? color, double? size}) {
+    return SvgPicture.asset(
+      'lib/assets/icons/custom_icons/arrow_right.svg',
+      semanticsLabel: 'Arrow Right',
+      colorFilter:
+          color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      height: size,
+      width: size,
+    );
+  }
 
   static Widget heart({Color? color = AppColors.dark}) {
     return SvgPicture.asset(
@@ -57,13 +60,14 @@ class CustomIcons {
     );
   }
 
-  static Widget profile({Color? color = AppColors.dark}) {
+  static Widget profile({Color? color, double? size}) {
     return SvgPicture.asset(
       'lib/assets/icons/custom_icons/profile.svg',
       semanticsLabel: 'Profile',
-      color: color,
-      height: 24,
-      width: 24,
+      colorFilter:
+          color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      height: size,
+      width: size,
     );
   }
 
