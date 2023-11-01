@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: AppColors.background,
       body: Center(
         child: Container(
           child: Column(
@@ -94,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.light,
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             margin: const EdgeInsets.symmetric(vertical: 12),
                             child: const Icon(
                               Icons.person,
-                              color: Colors.white,
+                              color: AppColors.light,
                             ),
                           ),
                           Expanded(
@@ -145,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.light,
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(

@@ -121,7 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(),
-      backgroundColor: Colors.grey[300],
+      backgroundColor: AppColors.background,
       body: Center(
         child: Container(
           child: Column(
@@ -130,7 +130,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.light,
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
@@ -199,7 +199,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.light,
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
