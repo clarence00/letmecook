@@ -114,14 +114,13 @@ class _LogInPageState extends State<LogInPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              flex: 1,
               child: Container(
                 decoration: const BoxDecoration(color: AppColors.dark),
                 child: Center(child: Logos.letMeCookLogo),
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: isLogin ? 2 : 3,
               child: Container(
                 decoration: const BoxDecoration(
                   color: AppColors.light,
@@ -132,10 +131,9 @@ class _LogInPageState extends State<LogInPage> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const SizedBox(height: 10),
-                    Container(
+                    SizedBox(
                       width: 325,
                       child: StyledText(
                         text: isLogin ? 'LOG IN' : 'SIGN UP',
@@ -147,11 +145,9 @@ class _LogInPageState extends State<LogInPage> {
                       children: [
                         isLogin
                             ? const SizedBox(height: 0)
-                            : Container(
+                            : const SizedBox(
                                 width: 325,
-                                child: const StyledText(
-                                    text: 'Username', size: 18),
-                              ),
+                                child: StyledText(text: 'Username', size: 18)),
                         isLogin
                             ? const SizedBox(height: 0)
                             : Container(
@@ -169,9 +165,9 @@ class _LogInPageState extends State<LogInPage> {
                                   type: 'username',
                                 ),
                               ),
-                        Container(
+                        const SizedBox(
                           width: 325,
-                          child: const StyledText(text: 'Email', size: 18),
+                          child: StyledText(text: 'Email', size: 18),
                         ),
                         Container(
                           width: 325,
@@ -187,9 +183,9 @@ class _LogInPageState extends State<LogInPage> {
                             type: 'email',
                           ),
                         ),
-                        Container(
+                        const SizedBox(
                           width: 325,
-                          child: const StyledText(text: 'Password', size: 18),
+                          child: StyledText(text: 'Password', size: 18),
                         ),
                         Container(
                           width: 325,
@@ -205,6 +201,7 @@ class _LogInPageState extends State<LogInPage> {
                             type: 'password',
                           ),
                         ),
+                        const SizedBox(height: 10),
                         Container(
                           width: 325,
                           alignment: Alignment.centerRight,
@@ -226,43 +223,28 @@ class _LogInPageState extends State<LogInPage> {
                         ),
                       ],
                     ),
-                    Container(
-                      width: 325,
-                      alignment: Alignment.center,
-                      child: StyledButton(
-                          text: isLogin ? 'Log In' : 'Sign Up',
-                          buttonStyle: 'primary',
-                          onPressed: isLogin
-                              ? signInWithEmailAndPassword
-                              : createUserWithEmailAndPassword),
+                    Column(
+                      children: [
+                        Container(
+                          width: 325,
+                          alignment: Alignment.center,
+                          child: StyledButton(
+                              text: isLogin ? 'Log In' : 'Sign Up',
+                              buttonStyle: 'primary',
+                              onPressed: isLogin
+                                  ? signInWithEmailAndPassword
+                                  : createUserWithEmailAndPassword),
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          width: 325,
+                          height: 3,
+                          color: AppColors.dark,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                        ),
+                      ],
                     ),
-                    Container(
-                      width: 325,
-                      height: 3,
-                      color: AppColors.dark,
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                    ),
-                    Container(
-                      width: 325,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          StyledButton(
-                              icon: Logos.googleLogo,
-                              buttonStyle: 'circle',
-                              onPressed: logInWithGoogle),
-                          StyledButton(
-                              icon: Logos.facebookLogo,
-                              buttonStyle: 'circle',
-                              onPressed: logInWithFacebook),
-                          StyledButton(
-                              icon: Logos.twitterLogo,
-                              buttonStyle: 'circle',
-                              onPressed: logInWithTwitter),
-                        ],
-                      ),
-                    ),
-                    Container(
+                    SizedBox(
                       width: 325,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
