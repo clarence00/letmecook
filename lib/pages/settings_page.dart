@@ -8,6 +8,7 @@ import 'package:letmecook/pages/post_page.dart';
 import 'package:letmecook/pages/profile_page.dart';
 import 'package:letmecook/pages/search_page.dart';
 import 'package:letmecook/pages/hub_page.dart';
+import 'package:letmecook/widget_tree.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
@@ -36,10 +37,10 @@ class _SettingsPageState extends State<SettingsPage> {
   String errorMessage = '';
   late String username = '';
 
-  void toHub() {
+  void toWidgetTree() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const HubPage()),
+      MaterialPageRoute(builder: (context) => const WidgetTree()),
     );
   }
 
@@ -303,7 +304,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         padding: const EdgeInsets.all(4),
                         margin: const EdgeInsets.symmetric(vertical: 12),
                         child: IconButton(
-                          onPressed: toHub,
+                          onPressed: toWidgetTree,
                           icon: const Icon(Icons.arrow_back),
                         ),
                       ),
