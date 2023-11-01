@@ -231,7 +231,7 @@ class _LogInPageState extends State<LogInPage> {
                       alignment: Alignment.center,
                       child: StyledButton(
                           text: isLogin ? 'Log In' : 'Sign Up',
-                          buttonStyle: 'primary',
+                          buttonStyle: 'login',
                           onPressed: isLogin
                               ? signInWithEmailAndPassword
                               : createUserWithEmailAndPassword),
