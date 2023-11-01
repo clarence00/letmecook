@@ -137,56 +137,23 @@ class _LogInPageState extends State<LogInPage> {
                                 ),
                           isLogin
                               ? const SizedBox(height: 0)
-                              : Container(
-                                  height: 40,
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  decoration: ShapeDecoration(
-                                    color: AppColors.background,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                  child: StyledTextbox(
-                                    controller: _controllerUsername,
-                                    type: 'username',
-                                  ),
+                              : StyledTextbox(
+                                  controller: _controllerUsername,
                                 ),
                           Container(
                             alignment: Alignment.centerLeft,
                             child: const StyledText(text: 'Email', size: 18),
                           ),
-                          Container(
-                            height: 40,
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            decoration: ShapeDecoration(
-                              color: AppColors.background,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: StyledTextbox(
-                              controller: _controllerEmail,
-                              type: 'email',
-                            ),
+                          StyledTextbox(
+                            controller: _controllerEmail,
                           ),
                           Container(
                             alignment: Alignment.centerLeft,
                             child: const StyledText(text: 'Password', size: 18),
                           ),
-                          Container(
-                            height: 40,
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            decoration: ShapeDecoration(
-                              color: AppColors.background,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: StyledTextbox(
-                              controller: _controllerPassword,
-                              type: 'password',
-                            ),
+                          StyledTextbox(
+                            controller: _controllerPassword,
+                            obscureText: true,
                           ),
                           const SizedBox(height: 10),
                           Container(

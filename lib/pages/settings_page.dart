@@ -154,19 +154,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           size: 18,
                         ),
                       ),
-                      Container(
-                        height: 40,
-                        margin: const EdgeInsets.only(top: 10, bottom: 10),
-                        decoration: ShapeDecoration(
-                          color: AppColors.background,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
-                        child: StyledTextbox(
-                          controller: _controllerUsername,
-                          text: username,
-                          type: 'username',
-                        ),
+                      StyledTextbox(
+                        controller: _controllerUsername,
+                        text: username,
                       ),
                       usernameError
                           ? const StyledText(
@@ -227,36 +217,18 @@ class _SettingsPageState extends State<SettingsPage> {
                         size: 16,
                         weight: FontWeight.bold,
                       ),
-                      Container(
-                        height: 40,
-                        margin: const EdgeInsets.only(top: 10, bottom: 15),
-                        decoration: ShapeDecoration(
-                          color: AppColors.background,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
-                        child: StyledTextbox(
-                          controller: _controllerOldPassword,
-                          type: 'password',
-                        ),
+                      StyledTextbox(
+                        controller: _controllerOldPassword,
+                        obscureText: true,
                       ),
                       const StyledText(
                         text: 'New Password',
                         size: 16,
                         weight: FontWeight.bold,
                       ),
-                      Container(
-                        height: 40,
-                        margin: const EdgeInsets.only(top: 10, bottom: 10),
-                        decoration: ShapeDecoration(
-                          color: AppColors.background,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
-                        child: StyledTextbox(
-                          controller: _controllerNewPassword,
-                          type: 'password',
-                        ),
+                      StyledTextbox(
+                        controller: _controllerNewPassword,
+                        obscureText: true,
                       ),
                       passwordError
                           ? StyledText(
