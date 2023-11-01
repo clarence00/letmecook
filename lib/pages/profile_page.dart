@@ -7,7 +7,9 @@ import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/pages/post_page.dart';
 import 'package:letmecook/pages/profile_page.dart';
 import 'package:letmecook/pages/search_page.dart';
+import 'package:letmecook/pages/settings_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
+import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/widgets/text_field.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
@@ -25,9 +27,15 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final currentUser = FirebaseAuth.instance.currentUser;
   final TextEditingController _controllerUsername = TextEditingController();
-  bool isEditing = false;
   bool usernameError = false;
   late String username = '';
+
+  void toSettings() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SettingsPage()),
+    );
+  }
 
   void saveUsername() async {
     // Check if the username already exists
@@ -116,45 +124,19 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           Expanded(
                             child: Container(
-                              padding: EdgeInsets.all(10),
-                              child: isEditing
-                                  ? Container(
-                                      decoration: ShapeDecoration(
-                                        color: AppColors.background,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                      ),
-                                      child: StyledTextbox(
-                                          controller: _controllerUsername,
-                                          type: 'username',
-                                          text: username),
-                                    )
-                                  : StyledText(
-                                      text: username,
-                                    ),
+                              padding: const EdgeInsets.all(10),
+                              child: StyledText(
+                                text: username,
+                                size: 20,
+                              ),
                             ),
                           ),
                           IconButton(
-                            onPressed: () {
-                              setState(() {
-                                isEditing = !isEditing;
-                              });
-                              if (!isEditing) {
-                                saveUsername();
-                              }
-                            },
-                            icon: isEditing
-                                ? const Icon(Icons.check)
-                                : const Icon(Icons.edit),
+                            onPressed: toSettings,
+                            icon: const Icon(Icons.settings),
                           ),
                         ],
                       ),
-                      usernameError
-                          ? const StyledText(
-                              text: 'Username is already taken!',
-                              color: Colors.red)
-                          : const SizedBox(height: 0),
                     ],
                   ),
                 ),
@@ -178,19 +160,25 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Row(
                     children: [
+                      Container(
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        padding: const EdgeInsets.all(4),
+                        margin: const EdgeInsets.symmetric(vertical: 12),
+                        child: IconButton(
+                          onPressed: () {
+                            Auth().signOut();
+                          },
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                      ),
                       Expanded(
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           child: const StyledText(
                             text: 'Log out',
+                            size: 20,
                           ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Auth().signOut();
-                        },
-                        icon: const Icon(Icons.arrow_right),
                       ),
                     ],
                   ),
