@@ -8,10 +8,10 @@ import 'package:letmecook/pages/post_page.dart';
 import 'package:letmecook/pages/profile_page.dart';
 import 'package:letmecook/pages/search_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/textField.dart';
+import 'package:letmecook/widgets/text_field.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/widgets/wall_post.dart';
-import 'package:letmecook/widgets/topAppBar.dart';
+import 'package:letmecook/widgets/top_appbar.dart';
 
 class HubPage extends StatefulWidget {
   const HubPage({super.key});
@@ -21,8 +21,6 @@ class HubPage extends StatefulWidget {
 }
 
 class _HubPageState extends State<HubPage> {
-
-
   int _selectedIndex = 0;
   final List<Widget> _children = [
     HomePage(),
@@ -31,7 +29,7 @@ class _HubPageState extends State<HubPage> {
     ProfilePage(),
   ];
 
-  void navigateBottomBar(int index){
+  void navigateBottomBar(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -41,47 +39,46 @@ class _HubPageState extends State<HubPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(
-      color: Colors.black,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-        child: GNav(
-          backgroundColor: Colors.black,
-          color: Colors.white,
-          activeColor: Colors.white,
-          tabBackgroundColor: Colors.grey.shade800,
-          onTabChange: (_selectedIndex){
-            navigateBottomBar(_selectedIndex);
-            print(_selectedIndex);
-          },
-          padding: EdgeInsets.all(15),
-          tabs: const [
-            GButton(
-              icon: Icons.home,
-              text: 'Home',
-              gap: 8,
-            ),
-            GButton(
-              icon: Icons.search,
-              text: 'Search',
-              gap: 8,
-            ),
-            GButton(
-              icon: Icons.add,
-              text: 'Post',
-              gap: 8,
-            ),
-            GButton(
-              icon: Icons.person,
-              text: 'Profile',
-              gap: 8,
-            ),
-          ],
+        color: Colors.black,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+          child: GNav(
+            backgroundColor: Colors.black,
+            color: Colors.white,
+            activeColor: Colors.white,
+            tabBackgroundColor: Colors.grey.shade800,
+            onTabChange: (_selectedIndex) {
+              navigateBottomBar(_selectedIndex);
+              print(_selectedIndex);
+            },
+            padding: EdgeInsets.all(15),
+            tabs: const [
+              GButton(
+                icon: Icons.home,
+                text: 'Home',
+                gap: 8,
+              ),
+              GButton(
+                icon: Icons.search,
+                text: 'Search',
+                gap: 8,
+              ),
+              GButton(
+                icon: Icons.add,
+                text: 'Post',
+                gap: 8,
+              ),
+              GButton(
+                icon: Icons.person,
+                text: 'Profile',
+                gap: 8,
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-      appBar: myAppBar(),
-
-      body:_children[_selectedIndex],
+      appBar: MyAppBar(),
+      body: _children[_selectedIndex],
     );
   }
 }

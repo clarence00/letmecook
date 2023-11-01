@@ -3,13 +3,13 @@ import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 
-class myAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const myAppBar({super.key});
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MyAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: AppColors.dark,
 
       // LET ME COOK TEXT //
       title: Center(
@@ -17,10 +17,10 @@ class myAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Logos.letMeCookLogoSmall,
-          SizedBox(
+          const SizedBox(
             width: 15,
           ),
-          StyledText(
+          const StyledText(
             text: 'LET ME COOK',
             color: AppColors.light,
             size: 32,

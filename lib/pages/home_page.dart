@@ -8,10 +8,10 @@ import 'package:letmecook/pages/post_page.dart';
 import 'package:letmecook/pages/profile_page.dart';
 import 'package:letmecook/pages/search_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/textField.dart';
+import 'package:letmecook/widgets/text_field.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/widgets/wall_post.dart';
-import 'package:letmecook/widgets/topAppBar.dart';
+import 'package:letmecook/widgets/top_appbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

@@ -11,10 +11,10 @@ import 'package:letmecook/pages/settings_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
-import 'package:letmecook/widgets/textField.dart';
+import 'package:letmecook/widgets/text_field.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/widgets/wall_post.dart';
-import 'package:letmecook/widgets/topAppBar.dart';
+import 'package:letmecook/widgets/top_appbar.dart';
 import 'package:letmecook/auth.dart';
 
 class ProfilePage extends StatefulWidget {
