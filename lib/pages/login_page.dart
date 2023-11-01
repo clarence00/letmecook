@@ -28,8 +28,6 @@ class _LogInPageState extends State<LogInPage> {
   final TextEditingController _controllerPassword = TextEditingController();
   final TextEditingController _controllerUsername = TextEditingController();
 
-  Future<void> checkUsername() async {}
-
   Future<void> signInWithEmailAndPassword() async {
     try {
       await Auth().signInWithEmailAndPassword(
@@ -56,13 +54,11 @@ class _LogInPageState extends State<LogInPage> {
       return;
     }
 
-    // Check if the username already exists
     final querySnapshot = await FirebaseFirestore.instance
         .collection('Usernames')
         .where('Username', isEqualTo: _controllerUsername.text)
         .get();
 
-    // If the result is empty
     if (querySnapshot.docs.isEmpty) {
       errorMessage = '';
       try {
@@ -137,7 +133,8 @@ class _LogInPageState extends State<LogInPage> {
                               : Container(
                                   alignment: Alignment.centerLeft,
                                   child: const StyledText(
-                                      text: 'Username', size: 18)),
+                                      text: 'Username', size: 18),
+                                ),
                           isLogin
                               ? const SizedBox(height: 0)
                               : Container(
@@ -147,7 +144,8 @@ class _LogInPageState extends State<LogInPage> {
                                   decoration: ShapeDecoration(
                                     color: AppColors.background,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8)),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                   child: StyledTextbox(
                                     controller: _controllerUsername,
@@ -164,7 +162,8 @@ class _LogInPageState extends State<LogInPage> {
                             decoration: ShapeDecoration(
                               color: AppColors.background,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                             child: StyledTextbox(
                               controller: _controllerEmail,
@@ -181,7 +180,8 @@ class _LogInPageState extends State<LogInPage> {
                             decoration: ShapeDecoration(
                               color: AppColors.background,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                             child: StyledTextbox(
                               controller: _controllerPassword,
@@ -233,7 +233,7 @@ class _LogInPageState extends State<LogInPage> {
                           children: [
                             StyledText(
                                 text: isLogin
-                                    ? 'Don\'t have an account yet? '
+                                    ? 'Don\'t have an account? '
                                     : 'Already have an account? ',
                                 size: 18),
                             StyledButton(

@@ -12,10 +12,10 @@ import 'package:letmecook/widget_tree.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
-import 'package:letmecook/widgets/textField.dart';
+import 'package:letmecook/widgets/text_field.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/widgets/wall_post.dart';
-import 'package:letmecook/widgets/topAppBar.dart';
+import 'package:letmecook/widgets/top_appbar.dart';
 import 'package:letmecook/auth.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -120,7 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const myAppBar(),
+      appBar: const MyAppBar(),
       backgroundColor: Colors.grey[300],
       body: Center(
         child: Container(
