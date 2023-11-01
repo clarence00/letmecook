@@ -151,7 +151,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         padding: const EdgeInsets.only(top: 10),
                         child: const StyledText(
                           text: 'Username',
-                          size: 20,
+                          size: 18,
                         ),
                       ),
                       Container(
@@ -171,11 +171,13 @@ class _SettingsPageState extends State<SettingsPage> {
                       usernameError
                           ? const StyledText(
                               text: 'Username is already taken!',
+                              size: 16,
                               color: Colors.red,
                             )
                           : usernameSuccess
                               ? const StyledText(
                                   text: 'Username changed!',
+                                  size: 16,
                                   color: Colors.green,
                                 )
                               : const SizedBox(height: 0),
@@ -218,11 +220,12 @@ class _SettingsPageState extends State<SettingsPage> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: const StyledText(
                           text: 'Change Password',
-                          size: 20,
+                          size: 18,
                         ),
                       ),
                       const StyledText(
                         text: 'Old Password',
+                        size: 16,
                         weight: FontWeight.bold,
                       ),
                       Container(
@@ -240,6 +243,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       const StyledText(
                         text: 'New Password',
+                        size: 16,
                         weight: FontWeight.bold,
                       ),
                       Container(
@@ -258,11 +262,13 @@ class _SettingsPageState extends State<SettingsPage> {
                       passwordError
                           ? StyledText(
                               text: errorMessage,
+                              size: 16,
                               color: Colors.red,
                             )
                           : passwordSuccess
                               ? const StyledText(
                                   text: 'Password changed!',
+                                  size: 16,
                                   color: Colors.green,
                                 )
                               : const SizedBox(height: 0),
@@ -274,46 +280,6 @@ class _SettingsPageState extends State<SettingsPage> {
                           text: 'Change Password',
                           size: 18,
                           buttonStyle: 'primary',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
-                      )
-                    ],
-                  ),
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        padding: const EdgeInsets.all(4),
-                        margin: const EdgeInsets.symmetric(vertical: 12),
-                        child: IconButton(
-                          onPressed: toWidgetTree,
-                          icon: const Icon(Icons.arrow_back),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          child: const StyledText(
-                            text: 'Back',
-                          ),
                         ),
                       ),
                     ],

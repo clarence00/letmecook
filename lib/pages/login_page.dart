@@ -203,7 +203,7 @@ class _LogInPageState extends State<LogInPage> {
                             alignment: Alignment.centerLeft,
                             child: StyledText(
                                 text: errorMessage == '' ? '' : '$errorMessage',
-                                size: 14,
+                                size: 16,
                                 color: Colors.red),
                           ),
                         ],
@@ -214,7 +214,7 @@ class _LogInPageState extends State<LogInPage> {
                             alignment: Alignment.center,
                             child: StyledButton(
                                 text: isLogin ? 'Log In' : 'Sign Up',
-                                buttonStyle: 'primary',
+                                buttonStyle: 'login',
                                 onPressed: isLogin
                                     ? signInWithEmailAndPassword
                                     : createUserWithEmailAndPassword),
