@@ -3,14 +3,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 
 class CustomIcons {
-  static Widget arrowRight({Color? color, double? size}) {
+  static Widget arrowRight({Color? color}) {
     return SvgPicture.asset(
       'lib/assets/icons/custom_icons/arrow_right.svg',
       semanticsLabel: 'Arrow Right',
       colorFilter:
           color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
-      height: size,
-      width: size,
+      height: 30,
+      width: 30,
     );
   }
 
