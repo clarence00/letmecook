@@ -10,24 +10,24 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.dark,
-
-      // LET ME COOK TEXT //
+      elevation: 16,
       title: Center(
-          child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Logos.letMeCookLogoSmall,
-          const SizedBox(
-            width: 15,
-          ),
-          const StyledText(
-            text: 'LET ME COOK',
-            color: AppColors.light,
-            size: 32,
-            weight: FontWeight.w700,
-          )
-        ],
-      )),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Logos.letMeCookLogoSmall,
+            const SizedBox(
+              width: 15,
+            ),
+            const StyledText(
+              text: 'LET ME COOK',
+              color: AppColors.light,
+              size: 32,
+              weight: FontWeight.w700,
+            )
+          ],
+        ),
+      ),
     );
   }
 
