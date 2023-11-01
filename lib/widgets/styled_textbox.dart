@@ -44,7 +44,7 @@ class StyledTextbox extends StatelessWidget {
         ),
         obscureText: obscureText,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+          contentPadding: const EdgeInsets.only(left: 10, right: 10, bottom: 6),
           border: InputBorder.none,
           hintText: hintText,
         ),
