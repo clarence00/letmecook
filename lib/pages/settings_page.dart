@@ -156,7 +156,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       Container(
                         height: 40,
-                        margin: const EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(top: 10, bottom: 10),
                         decoration: ShapeDecoration(
                           color: AppColors.background,
                           shape: RoundedRectangleBorder(
@@ -185,7 +185,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: StyledButton(
                           onPressed: saveUsername,
-                          icon: const Icon(Icons.check),
                           text: 'Save',
                           size: 18,
                           buttonStyle: 'primary',
@@ -248,7 +247,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       Container(
                         height: 40,
-                        margin: const EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(top: 10, bottom: 10),
                         decoration: ShapeDecoration(
                           color: AppColors.background,
                           shape: RoundedRectangleBorder(
@@ -276,7 +275,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: StyledButton(
                           onPressed: changePassword,
-                          icon: const Icon(Icons.check),
                           text: 'Change Password',
                           size: 18,
                           buttonStyle: 'primary',
