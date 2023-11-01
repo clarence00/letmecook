@@ -115,145 +115,142 @@ class _LogInPageState extends State<LogInPage> {
                     topRight: Radius.circular(24),
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      width: 325,
-                      child: StyledText(
-                        text: isLogin ? 'LOG IN' : 'SIGN UP',
-                        size: 42,
-                        weight: FontWeight.w700,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: StyledText(
+                          text: isLogin ? 'LOG IN' : 'SIGN UP',
+                          size: 42,
+                          weight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        isLogin
-                            ? const SizedBox(height: 0)
-                            : const SizedBox(
-                                width: 325,
-                                child: StyledText(text: 'Username', size: 18)),
-                        isLogin
-                            ? const SizedBox(height: 0)
-                            : Container(
-                                width: 325,
-                                height: 40,
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                decoration: ShapeDecoration(
-                                  color: AppColors.background,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
-                                ),
-                                child: StyledTextbox(
-                                  controller: _controllerUsername,
-                                  type: 'username',
-                                ),
-                              ),
-                        const SizedBox(
-                          width: 325,
-                          child: StyledText(text: 'Email', size: 18),
-                        ),
-                        Container(
-                          width: 325,
-                          height: 40,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: ShapeDecoration(
-                            color: AppColors.background,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          child: StyledTextbox(
-                            controller: _controllerEmail,
-                            type: 'email',
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 325,
-                          child: StyledText(text: 'Password', size: 18),
-                        ),
-                        Container(
-                          width: 325,
-                          height: 40,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: ShapeDecoration(
-                            color: AppColors.background,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          child: StyledTextbox(
-                            controller: _controllerPassword,
-                            type: 'password',
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          width: 325,
-                          alignment: Alignment.centerRight,
-                          child: isLogin
-                              ? StyledButton(
-                                  text: 'Forgot Password?',
-                                  buttonStyle: 'text',
-                                  onPressed: forgotPassword)
-                              : const SizedBox(),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          width: 325,
-                          alignment: Alignment.centerLeft,
-                          child: StyledText(
-                              text: errorMessage == '' ? '' : '$errorMessage',
-                              size: 14,
-                              color: Colors.red),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          width: 325,
-                          alignment: Alignment.center,
-                          child: StyledButton(
-                              text: isLogin ? 'Log In' : 'Sign Up',
-                              buttonStyle: 'primary',
-                              onPressed: isLogin
-                                  ? signInWithEmailAndPassword
-                                  : createUserWithEmailAndPassword),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          width: 325,
-                          height: 3,
-                          color: AppColors.dark,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 325,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Column(
                         children: [
-                          StyledText(
-                              text: isLogin
-                                  ? 'Don\'t have an account yet? '
-                                  : 'Already have an account? ',
-                              size: 18),
-                          StyledButton(
-                              text: isLogin ? 'Sign up' : 'Log in',
-                              buttonStyle: 'text',
-                              onPressed: () {
-                                setState(() {
-                                  errorMessage = '';
-                                  isLogin = !isLogin;
-                                });
-                              }),
+                          isLogin
+                              ? const SizedBox(height: 0)
+                              : Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: const StyledText(
+                                      text: 'Username', size: 18)),
+                          isLogin
+                              ? const SizedBox(height: 0)
+                              : Container(
+                                  height: 40,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: ShapeDecoration(
+                                    color: AppColors.background,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8)),
+                                  ),
+                                  child: StyledTextbox(
+                                    controller: _controllerUsername,
+                                    type: 'username',
+                                  ),
+                                ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: const StyledText(text: 'Email', size: 18),
+                          ),
+                          Container(
+                            height: 40,
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: ShapeDecoration(
+                              color: AppColors.background,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                            ),
+                            child: StyledTextbox(
+                              controller: _controllerEmail,
+                              type: 'email',
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: const StyledText(text: 'Password', size: 18),
+                          ),
+                          Container(
+                            height: 40,
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: ShapeDecoration(
+                              color: AppColors.background,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                            ),
+                            child: StyledTextbox(
+                              controller: _controllerPassword,
+                              type: 'password',
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: isLogin
+                                ? StyledButton(
+                                    text: 'Forgot Password?',
+                                    buttonStyle: 'text',
+                                    onPressed: forgotPassword)
+                                : const SizedBox(),
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: StyledText(
+                                text: errorMessage == '' ? '' : '$errorMessage',
+                                size: 14,
+                                color: Colors.red),
+                          ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
+                      Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: StyledButton(
+                                text: isLogin ? 'Log In' : 'Sign Up',
+                                buttonStyle: 'primary',
+                                onPressed: isLogin
+                                    ? signInWithEmailAndPassword
+                                    : createUserWithEmailAndPassword),
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            height: 3,
+                            color: AppColors.dark,
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            StyledText(
+                                text: isLogin
+                                    ? 'Don\'t have an account yet? '
+                                    : 'Already have an account? ',
+                                size: 18),
+                            StyledButton(
+                                text: isLogin ? 'Sign up' : 'Log in',
+                                buttonStyle: 'text',
+                                onPressed: () {
+                                  setState(() {
+                                    errorMessage = '';
+                                    isLogin = !isLogin;
+                                  });
+                                }),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ),
             ),
