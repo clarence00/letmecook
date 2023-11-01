@@ -127,6 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               padding: const EdgeInsets.all(10),
                               child: StyledText(
                                 text: username,
+                                size: 20,
                               ),
                             ),
                           ),
@@ -175,6 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           padding: const EdgeInsets.all(10),
                           child: const StyledText(
                             text: 'Log out',
+                            size: 20,
                           ),
                         ),
                       ),

@@ -31,6 +31,9 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _controllerNewPassword = TextEditingController();
   bool usernameError = false;
   bool passwordError = false;
+  bool usernameSuccess = false;
+  bool passwordSuccess = false;
+  String errorMessage = '';
   late String username = '';
 
   void toHub() {
@@ -60,10 +63,35 @@ class _SettingsPageState extends State<SettingsPage> {
       setState(() {
         username = _controllerUsername.text;
         usernameError = false;
+        usernameSuccess = true;
       });
     } else {
       setState(() {
         usernameError = true;
+      });
+    }
+  }
+
+  void changePassword() async {
+    try {
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: currentUser!.email!,
+        password: _controllerOldPassword.text,
+      );
+      await currentUser!.reauthenticateWithCredential(credential);
+      await currentUser!.updatePassword(_controllerNewPassword.text);
+      setState(() {
+        passwordError = false;
+        passwordSuccess = true;
+      });
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        passwordError = true;
+        if (e.message == 'Error') {
+          errorMessage = 'Wrong password!';
+        } else {
+          errorMessage = e.message ?? 'An error occurred';
+        }
       });
     }
   }
@@ -73,6 +101,9 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
     fetchUsername();
     usernameError = false;
+    usernameSuccess = false;
+    passwordError = false;
+    passwordSuccess = false;
   }
 
   void fetchUsername() async {
@@ -141,7 +172,12 @@ class _SettingsPageState extends State<SettingsPage> {
                               text: 'Username is already taken!',
                               color: Colors.red,
                             )
-                          : const SizedBox(height: 0),
+                          : usernameSuccess
+                              ? const StyledText(
+                                  text: 'Username changed!',
+                                  color: Colors.green,
+                                )
+                              : const SizedBox(height: 0),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: StyledButton(
@@ -219,15 +255,20 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                       passwordError
-                          ? const StyledText(
-                              text: 'Wrong password!',
+                          ? StyledText(
+                              text: errorMessage,
                               color: Colors.red,
                             )
-                          : const SizedBox(height: 0),
+                          : passwordSuccess
+                              ? const StyledText(
+                                  text: 'Password changed!',
+                                  color: Colors.green,
+                                )
+                              : const SizedBox(height: 0),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: StyledButton(
-                          onPressed: saveUsername,
+                          onPressed: changePassword,
                           icon: const Icon(Icons.check),
                           text: 'Change Password',
                           size: 18,
