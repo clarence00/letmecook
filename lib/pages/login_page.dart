@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/assets/icons/logos.dart';
-import 'package:letmecook/pages/login_page.dart';
 import 'package:letmecook/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,18 +18,6 @@ class LogInPage extends StatefulWidget {
 class _LogInPageState extends State<LogInPage> {
   void forgotPassword() {
     print('Forgot password');
-  }
-
-  void logInWithGoogle() {
-    print('Log in with Google');
-  }
-
-  void logInWithFacebook() {
-    print('Log in with Facebook');
-  }
-
-  void logInWithTwitter() {
-    print('Log in with Twitter');
   }
 
   String? errorMessage = '';
