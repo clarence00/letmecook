@@ -111,22 +111,22 @@ class _LogInPageState extends State<LogInPage> {
                     topRight: Radius.circular(24),
                   ),
                 ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: StyledText(
-                          text: isLogin ? 'LOG IN' : 'SIGN UP',
-                          size: 42,
-                          weight: FontWeight.w700,
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      alignment: Alignment.centerLeft,
+                      child: StyledText(
+                        text: isLogin ? 'LOG IN' : 'SIGN UP',
+                        size: 42,
+                        weight: FontWeight.w700,
                       ),
-                      Column(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Column(
                         children: [
                           isLogin
                               ? const SizedBox(height: 0)
@@ -175,7 +175,10 @@ class _LogInPageState extends State<LogInPage> {
                           ),
                         ],
                       ),
-                      Column(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Column(
                         children: [
                           Container(
                             alignment: Alignment.center,
@@ -186,38 +189,37 @@ class _LogInPageState extends State<LogInPage> {
                                     ? signInWithEmailAndPassword
                                     : createUserWithEmailAndPassword),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 20),
                           Container(
                             height: 3,
                             color: AppColors.dark,
-                            margin: const EdgeInsets.symmetric(vertical: 10),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            StyledText(
-                                text: isLogin
-                                    ? 'Don\'t have an account? '
-                                    : 'Already have an account? ',
-                                size: 18),
-                            StyledButton(
-                                text: isLogin ? 'Sign up' : 'Log in',
-                                buttonStyle: 'text',
-                                onPressed: () {
-                                  setState(() {
-                                    errorMessage = '';
-                                    isLogin = !isLogin;
-                                  });
-                                }),
-                          ],
-                        ),
+                    ),
+                    SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          StyledText(
+                              text: isLogin
+                                  ? 'Don\'t have an account? '
+                                  : 'Already have an account? ',
+                              size: 18),
+                          StyledButton(
+                              text: isLogin ? 'Sign up' : 'Log in',
+                              buttonStyle: 'text',
+                              onPressed: () {
+                                setState(() {
+                                  errorMessage = '';
+                                  isLogin = !isLogin;
+                                });
+                              }),
+                        ],
                       ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
             ),
