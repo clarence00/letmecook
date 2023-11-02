@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -17,6 +18,9 @@ import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/widgets/wall_post.dart';
 import 'package:letmecook/widgets/top_appbar.dart';
 import 'package:letmecook/auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -34,8 +38,12 @@ class _SettingsPageState extends State<SettingsPage> {
   bool passwordError = false;
   bool usernameSuccess = false;
   bool passwordSuccess = false;
+  bool uploadPhotoError = false;
+  bool uploadPhotoSuccess = false;
   String errorMessage = '';
   late String username = '';
+  String profilePicURL = '';
+  PlatformFile? pickedFile;
 
   void toWidgetTree() {
     Navigator.push(
@@ -43,6 +51,10 @@ class _SettingsPageState extends State<SettingsPage> {
       MaterialPageRoute(builder: (context) => const WidgetTree()),
     );
   }
+
+  void selectPhoto() async {}
+
+  void uploadPhoto() async {}
 
   void saveUsername() async {
     // Check if the username already exists
@@ -105,6 +117,8 @@ class _SettingsPageState extends State<SettingsPage> {
     usernameSuccess = false;
     passwordError = false;
     passwordSuccess = false;
+    uploadPhotoError = false;
+    uploadPhotoSuccess = false;
   }
 
   void fetchUsername() async {
@@ -126,6 +140,72 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Container(
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 25, bottom: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.light,
+                    borderRadius: BorderRadius.circular(100),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      )
+                    ],
+                  ),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.all(5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        child: Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 64,
+                              child: pickedFile != null
+                                  ? Image.file(File(pickedFile!.path!),
+                                      fit: BoxFit.cover)
+                                  : const Text('None'),
+                            ),
+                            Positioned(
+                              bottom: -10,
+                              left: 80,
+                              child: IconButton(
+                                onPressed: selectPhoto,
+                                icon: const Icon(Icons.add_a_photo),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              uploadPhotoError
+                  ? const StyledText(
+                      text: 'Unable to upload!',
+                      size: 16,
+                      color: Colors.red,
+                    )
+                  : uploadPhotoSuccess
+                      ? const StyledText(
+                          text: 'Photo uploaded!',
+                          size: 16,
+                          color: Colors.green,
+                        )
+                      : const SizedBox(height: 0),
+              const SizedBox(height: 10),
+              StyledButton(
+                text: 'Upload',
+                size: 18,
+                buttonStyle: 'primary',
+                onPressed: uploadPhoto,
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
                 child: Container(
