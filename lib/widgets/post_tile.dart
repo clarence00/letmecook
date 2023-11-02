@@ -19,8 +19,8 @@ class PostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 16, right: 16, top: 10),
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.light,
         borderRadius: BorderRadius.circular(16),
@@ -60,8 +60,8 @@ class PostTile extends StatelessWidget {
                             color: AppColors.dark),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 5, right: 5),
                       child: Icon(
                         Icons.circle_rounded,
                         color: AppColors.accent,
@@ -78,7 +78,7 @@ class PostTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
+              const Icon(
                 Icons.more_vert,
                 color: AppColors.dark,
                 size: 24,
@@ -87,7 +87,7 @@ class PostTile extends StatelessWidget {
           ),
           // Second Div (Title)
           Container(
-            margin: EdgeInsets.symmetric(vertical: 5),
+            margin: const EdgeInsets.symmetric(vertical: 5),
             alignment: Alignment.centerLeft,
             child: Text(
               post,
@@ -99,7 +99,7 @@ class PostTile extends StatelessWidget {
           ),
           // Third Div (Image)
           Container(
-            margin: EdgeInsets.symmetric(vertical: 10),
+            margin: const EdgeInsets.symmetric(vertical: 10),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.network(
@@ -119,7 +119,7 @@ class PostTile extends StatelessWidget {
                     icon: CustomIcons.heart(color: _heartColor),
                   ),
                   Container(
-                    padding: EdgeInsets.only(right: 12),
+                    padding: const EdgeInsets.only(right: 12),
                     child: Text(
                       "12",
                       style: GoogleFonts.poppins(
@@ -138,7 +138,7 @@ class PostTile extends StatelessWidget {
                     icon: CustomIcons.comment(color: _heartColor),
                   ),
                   Container(
-                    padding: EdgeInsets.only(right: 12),
+                    padding: const EdgeInsets.only(right: 12),
                     child: Text(
                       "12",
                       style: GoogleFonts.poppins(
@@ -157,7 +157,7 @@ class PostTile extends StatelessWidget {
                     icon: CustomIcons.bookmark(color: _heartColor),
                   ),
                   Container(
-                    padding: EdgeInsets.only(right: 12),
+                    padding: const EdgeInsets.only(right: 12),
                     child: Text(
                       "12",
                       style: GoogleFonts.poppins(
