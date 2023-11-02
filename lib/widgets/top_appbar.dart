@@ -10,27 +10,24 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.dark,
-      elevation: 16,
-      title: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Logos.letMeCookLogoSmall,
-            const SizedBox(
-              width: 15,
-            ),
-            const StyledText(
-              text: 'LET ME COOK',
-              color: AppColors.light,
-              size: 32,
-              weight: FontWeight.w700,
-            )
-          ],
-        ),
+      elevation: 10,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: Logos.letMeCookLogoSmall),
+          const StyledText(
+            text: 'LET ME COOK',
+            color: AppColors.light,
+            size: 32,
+            weight: FontWeight.w700,
+          )
+        ],
       ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(60);
 }
