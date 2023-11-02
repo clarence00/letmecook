@@ -9,6 +9,7 @@ import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/pages/post_page.dart';
 import 'package:letmecook/pages/profile_page.dart';
 import 'package:letmecook/pages/search_page.dart';
+import 'package:letmecook/widgets/post_tile.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/widgets/text_field.dart';
@@ -31,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   final _controllerPost = TextEditingController();
 
   //FUNCTIONS
+
   void postMessage() {
     if (_controllerPost.text.isNotEmpty) {
       FirebaseFirestore.instance.collection("User Posts").add({
@@ -61,48 +63,46 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.light,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.dark.withOpacity(0.25),
-                      spreadRadius: 0,
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
-                    )
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 15, bottom: 15, left: 15, right: 5),
-                      child: CustomIcons.profile(
-                        color: AppColors.dark,
-                        size: 40,
-                      ),
+            Container(
+              margin: EdgeInsets.only(left: 16, right: 16, top: 20),
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: AppColors.light,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.dark.withOpacity(0.25),
+                    spreadRadius: 0,
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  )
+                ],
+              ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: CustomIcons.profile(
+                      color: AppColors.dark,
+                      size: 40,
                     ),
-                    Expanded(
-                      child: StyledTextbox(
-                        maxLines: 50,
-                        height: 40,
-                        controller: _controllerPost,
-                        obscureText: false,
-                        hintText: "Write a recipe...",
-                      ),
+                  ),
+                  Expanded(
+                    child: StyledTextbox(
+                      maxLines: 50,
+                      height: 40,
+                      controller: _controllerPost,
+                      obscureText: false,
+                      hintText: "Write a recipe...",
                     ),
-                    IconButton(
-                      padding: const EdgeInsets.only(left: 5, right: 15),
-                      onPressed: postMessage,
-                      icon: CustomIcons.arrowRight(color: AppColors.dark),
-                      iconSize: 30,
-                    ),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                    padding: const EdgeInsets.only(left: 5),
+                    onPressed: postMessage,
+                    icon: CustomIcons.arrowRight(color: AppColors.dark),
+                    iconSize: 30,
+                  ),
+                ],
               ),
             ),
 
@@ -122,14 +122,14 @@ class _HomePageState extends State<HomePage> {
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: ((context, index) {
                           final post = snapshot.data!.docs[index];
-                          return WallPost(
-                            message: post['Message'],
+                          return PostTile(
+                            post: post['Message'],
                             user: post['UserEmail'],
                           );
                         }));
                   } else if (snapshot.hasError) {
                     return Center(
-                      child: Text('Error:' + snapshot.error.toString()),
+                      child: Text('Error:${snapshot.error}'),
                     );
                   }
                   return const Center(
