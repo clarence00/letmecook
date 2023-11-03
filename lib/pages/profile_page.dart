@@ -78,94 +78,83 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Container(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.light,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
-                      )
-                    ],
-                  ),
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 12),
-                            child: CircleAvatar(
-                              radius: 24,
-                              backgroundImage: NetworkImage(profilePictureUrl),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              child: StyledText(
-                                text: username,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: toSettings,
-                            icon: const Icon(Icons.settings),
-                          ),
-                        ],
+              Container(
+                margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: AppColors.light,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.dark.withOpacity(0.25),
+                      spreadRadius: 0,
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    )
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 5),
+                      child: CircleAvatar(
+                        radius: 24,
+                        backgroundImage: NetworkImage(profilePictureUrl),
                       ),
-                    ],
-                  ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: StyledText(
+                          text: username,
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: toSettings,
+                      icon: const Icon(Icons.settings),
+                    ),
+                  ],
                 ),
               ),
               GestureDetector(
                 onTap: () {
                   Auth().signOut();
                 },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.light,
-                      borderRadius: BorderRadius.circular(25),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3),
-                        )
-                      ],
-                    ),
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      children: [
-                        Container(
-                          decoration:
-                              const BoxDecoration(shape: BoxShape.circle),
-                          padding: const EdgeInsets.all(4),
-                          margin: const EdgeInsets.symmetric(vertical: 12),
-                          child: const Icon(Icons.arrow_back),
-                        ),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            child: const StyledText(
-                              text: 'Log out',
-                              size: 18,
-                            ),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: AppColors.light,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.dark.withOpacity(0.25),
+                        spreadRadius: 0,
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
+                      )
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        padding: const EdgeInsets.all(4),
+                        margin: const EdgeInsets.only(right: 5),
+                        child: const Icon(Icons.arrow_back),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: const StyledText(
+                            text: 'Log out',
+                            size: 18,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

@@ -183,198 +183,187 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Container(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 25, bottom: 10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.light,
-                    borderRadius: BorderRadius.circular(100),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
-                      )
-                    ],
-                  ),
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.all(5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(5),
-                        child: _image != null
-                            ? CircleAvatar(
-                                radius: 64,
-                                backgroundImage: MemoryImage(_image!),
-                              )
-                            : CircleAvatar(
-                                radius: 64,
-                                backgroundImage:
-                                    NetworkImage(profilePictureUrl),
-                              ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              uploadImageError
-                  ? const StyledText(
-                      text: 'Unable to upload!',
-                      size: 16,
-                      color: Colors.red,
+              Container(
+                margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: AppColors.light,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.dark.withOpacity(0.25),
+                      spreadRadius: 0,
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
                     )
-                  : uploadImageSuccess
-                      ? const StyledText(
-                          text: 'Image uploaded!',
-                          size: 16,
-                          color: Colors.green,
-                        )
-                      : const SizedBox(height: 0),
-              const SizedBox(height: 10),
-              StyledButton(
-                text: 'Select Image',
-                size: 16,
-                buttonStyle: 'primary',
-                onPressed: selectImage,
-              ),
-              const SizedBox(height: 10),
-              StyledButton(
-                text: 'Upload',
-                size: 16,
-                buttonStyle: 'primary',
-                onPressed: uploadImage,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.light,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
-                      )
-                    ],
-                  ),
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: const StyledText(
-                          text: 'Username',
-                          size: 18,
-                        ),
-                      ),
-                      StyledTextbox(
-                        controller: _controllerUsername,
-                        text: username,
-                      ),
-                      usernameError
-                          ? const StyledText(
-                              text: 'Username is already taken!',
-                              size: 16,
-                              color: Colors.red,
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      alignment: Alignment.center,
+                      child: _image != null
+                          ? CircleAvatar(
+                              radius: 64,
+                              backgroundImage: MemoryImage(_image!),
                             )
-                          : usernameSuccess
-                              ? const StyledText(
-                                  text: 'Username changed!',
-                                  size: 16,
-                                  color: Colors.green,
-                                )
-                              : const SizedBox(height: 0),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        child: StyledButton(
-                          onPressed: saveUsername,
-                          text: 'Save',
-                          size: 18,
-                          buttonStyle: 'primary',
-                        ),
-                      ),
-                    ],
-                  ),
+                          : CircleAvatar(
+                              radius: 64,
+                              backgroundImage: NetworkImage(profilePictureUrl),
+                            ),
+                    ),
+                    uploadImageError
+                        ? const StyledText(
+                            text: 'Unable to upload!',
+                            size: 16,
+                            color: Colors.red,
+                          )
+                        : uploadImageSuccess
+                            ? const StyledText(
+                                text: 'Image uploaded!',
+                                size: 16,
+                                color: Colors.green,
+                              )
+                            : const SizedBox(height: 0),
+                    const SizedBox(height: 10),
+                    StyledButton(
+                      text: 'Select Image',
+                      size: 16,
+                      buttonStyle: 'primary',
+                      onPressed: selectImage,
+                    ),
+                    const SizedBox(height: 10),
+                    StyledButton(
+                      text: 'Upload',
+                      size: 16,
+                      buttonStyle: 'primary',
+                      onPressed: uploadImage,
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.light,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
-                      )
-                    ],
-                  ),
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: const StyledText(
-                          text: 'Change Password',
-                          size: 18,
-                        ),
+              Container(
+                margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: AppColors.light,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.dark.withOpacity(0.25),
+                      spreadRadius: 0,
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    )
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: const StyledText(
+                        text: 'Username',
+                        size: 18,
                       ),
-                      const StyledText(
-                        text: 'Old Password',
-                        size: 16,
-                        weight: FontWeight.bold,
+                    ),
+                    StyledTextbox(
+                      controller: _controllerUsername,
+                      text: username,
+                    ),
+                    usernameError
+                        ? const StyledText(
+                            text: 'Username is already taken!',
+                            size: 16,
+                            color: Colors.red,
+                          )
+                        : usernameSuccess
+                            ? const StyledText(
+                                text: 'Username changed!',
+                                size: 16,
+                                color: Colors.green,
+                              )
+                            : const SizedBox(height: 0),
+                    Container(
+                      padding: const EdgeInsets.only(top: 15, bottom: 5),
+                      child: StyledButton(
+                        onPressed: saveUsername,
+                        text: 'Save',
+                        size: 18,
+                        buttonStyle: 'primary',
                       ),
-                      StyledTextbox(
-                        controller: _controllerOldPassword,
-                        obscureText: true,
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: AppColors.light,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.dark.withOpacity(0.25),
+                      spreadRadius: 0,
+                      blurRadius: 15,
+                      offset: const Offset(0, 5),
+                    )
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: const StyledText(
+                        text: 'Change Password',
+                        size: 18,
                       ),
-                      const StyledText(
-                        text: 'New Password',
-                        size: 16,
-                        weight: FontWeight.bold,
+                    ),
+                    const StyledText(
+                      text: 'Old Password',
+                      size: 16,
+                      weight: FontWeight.bold,
+                    ),
+                    StyledTextbox(
+                      controller: _controllerOldPassword,
+                      obscureText: true,
+                    ),
+                    const StyledText(
+                      text: 'New Password',
+                      size: 16,
+                      weight: FontWeight.bold,
+                    ),
+                    StyledTextbox(
+                      controller: _controllerNewPassword,
+                      obscureText: true,
+                    ),
+                    passwordError
+                        ? StyledText(
+                            text: errorMessage,
+                            size: 16,
+                            color: Colors.red,
+                          )
+                        : passwordSuccess
+                            ? const StyledText(
+                                text: 'Password changed!',
+                                size: 16,
+                                color: Colors.green,
+                              )
+                            : const SizedBox(height: 0),
+                    Container(
+                      padding: const EdgeInsets.only(top: 15, bottom: 5),
+                      child: StyledButton(
+                        onPressed: changePassword,
+                        text: 'Change Password',
+                        size: 18,
+                        buttonStyle: 'primary',
                       ),
-                      StyledTextbox(
-                        controller: _controllerNewPassword,
-                        obscureText: true,
-                      ),
-                      passwordError
-                          ? StyledText(
-                              text: errorMessage,
-                              size: 16,
-                              color: Colors.red,
-                            )
-                          : passwordSuccess
-                              ? const StyledText(
-                                  text: 'Password changed!',
-                                  size: 16,
-                                  color: Colors.green,
-                                )
-                              : const SizedBox(height: 0),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        child: StyledButton(
-                          onPressed: changePassword,
-                          text: 'Change Password',
-                          size: 18,
-                          buttonStyle: 'primary',
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],
