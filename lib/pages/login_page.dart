@@ -143,6 +143,7 @@ class _LogInPageState extends State<LogInPage> {
                                   controller: _controllerUsername,
                                 ),
                           Container(
+                            margin: const EdgeInsets.only(top: 10),
                             alignment: Alignment.centerLeft,
                             child: const StyledText(text: 'Email', size: 18),
                           ),
@@ -150,6 +151,7 @@ class _LogInPageState extends State<LogInPage> {
                             controller: _controllerEmail,
                           ),
                           Container(
+                            margin: const EdgeInsets.only(top: 10),
                             alignment: Alignment.centerLeft,
                             child: const StyledText(text: 'Password', size: 18),
                           ),
