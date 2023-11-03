@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:letmecook/widgets/textField.dart';
-import 'package:letmecook/widgets/topAppBar.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key});
@@ -69,8 +68,8 @@ class _PostPageState extends State<PostPage> {
                   Container(
                     decoration: BoxDecoration(
                         shape: BoxShape.circle, color: Colors.grey[400]),
-                    padding: EdgeInsets.all(10),
-                    child: Icon(
+                    padding: const EdgeInsets.all(10),
+                    child: const Icon(
                       Icons.person,
                       color: Colors.white,
                     ),
