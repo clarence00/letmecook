@@ -2,17 +2,66 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
-class PostTile extends StatelessWidget {
-  const PostTile({
-    super.key,
+class PostTile extends StatefulWidget {
+  PostTile({
+    Key? key,
     required this.post,
     required this.user,
-  });
+    required this.timestamp,
+    required this.imageUrl,
+  }) : super(key: key);
 
   // Variables
   final String post;
   final String user;
+  final Timestamp timestamp;
+  final String imageUrl;
+
+  @override
+  _PostTileState createState() => _PostTileState();
+}
+
+class _PostTileState extends State<PostTile> {
+  late String username;
+  late String profilePictureUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  void fetchUserData() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(widget.user)
+        .get();
+    setState(() {
+      username = snapshot.data()?['Username'] ?? widget.user;
+      profilePictureUrl = snapshot.data()?['ProfilePicture'] ?? widget.user;
+    });
+  }
+
+  String getPostTimeDisplay(Timestamp timestamp) {
+    DateTime postTime = timestamp.toDate();
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(postTime);
+
+    print('Post time: $postTime | Now: $now | Difference: $difference');
+
+    if (difference.inMinutes < 60) {
+      return 'Less than an hour ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} ${difference.inHours == 1 ? 'hour' : 'hours'} ago';
+    } else if (difference.inDays < 4) {
+      return '${difference.inDays} days ago';
+    } else {
+      return DateFormat('MMM d').format(postTime);
+    }
+  }
 
   final Color _heartColor = AppColors.dark;
 
@@ -40,11 +89,11 @@ class PostTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // First Div (Profile)
-              Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: CustomIcons.profile(
-                  color: AppColors.dark,
-                  size: 40,
+              Container(
+                margin: const EdgeInsets.only(right: 5),
+                child: CircleAvatar(
+                  radius: 16,
+                  backgroundImage: NetworkImage(profilePictureUrl),
                 ),
               ),
               Expanded(
@@ -52,7 +101,7 @@ class PostTile extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        user,
+                        username,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             fontSize: 16,
@@ -69,7 +118,7 @@ class PostTile extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "12 hrs",
+                      getPostTimeDisplay(widget.timestamp),
                       style: GoogleFonts.poppins(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
@@ -90,7 +139,7 @@ class PostTile extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 5),
             alignment: Alignment.centerLeft,
             child: Text(
-              post,
+              widget.post,
               style: GoogleFonts.poppins(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -147,7 +196,7 @@ class PostTile extends StatelessWidget {
                         color: AppColors.dark,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               Row(
@@ -166,11 +215,11 @@ class PostTile extends StatelessWidget {
                         color: AppColors.dark,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ],
-          )
+          ),
         ],
       ),
     );

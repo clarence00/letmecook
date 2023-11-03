@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
         'UserEmail': currentUser!.email,
         'Message': _controllerPost.text,
         'TimeStamp': Timestamp.now(),
+        'ImageUrl': '',
       });
     }
 
@@ -125,6 +126,8 @@ class _HomePageState extends State<HomePage> {
                           return PostTile(
                             post: post['Message'],
                             user: post['UserEmail'],
+                            timestamp: post['TimeStamp'],
+                            imageUrl: 'ImageUrl',
                           );
                         }));
                   } else if (snapshot.hasError) {

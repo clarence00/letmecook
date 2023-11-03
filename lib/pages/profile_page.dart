@@ -41,33 +41,19 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    fetchUsername();
-    fetchProfilePicture();
+    fetchUserData();
   }
 
-  void fetchUsername() async {
+  void fetchUserData() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('Usernames')
         .doc(currentUser!.email)
         .get();
     setState(() {
       username = snapshot.data()?['Username'] ?? currentUser!.email;
+      profilePictureUrl =
+          snapshot.data()?['ProfilePicture'] ?? currentUser!.email;
     });
-  }
-
-  void fetchProfilePicture() async {
-    try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('Usernames')
-          .doc(currentUser!.email)
-          .get();
-      setState(() {
-        profilePictureUrl =
-            snapshot.data()?['ProfilePicture'] ?? currentUser!.email;
-      });
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
