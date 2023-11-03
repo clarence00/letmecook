@@ -10,16 +10,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.dark,
-
-      // LET ME COOK TEXT //
-      title: Center(
-          child: Row(
+      elevation: 10,
+      title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Logos.letMeCookLogoSmall,
-          const SizedBox(
-            width: 15,
-          ),
+          Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: Logos.letMeCookLogoSmall),
           const StyledText(
             text: 'LET ME COOK',
             color: AppColors.light,
@@ -27,10 +24,10 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             weight: FontWeight.w700,
           )
         ],
-      )),
+      ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(60);
 }

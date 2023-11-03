@@ -3,39 +3,49 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 
 class CustomIcons {
-  static final Widget arrowRight = SvgPicture.asset(
-    'lib/assets/icons/custom_icons/arrow_right.svg',
-    semanticsLabel: 'Arrow Right',
-    color: AppColors.dark,
-    height: 28,
-    width: 28,
-  );
-
-  static Widget heart({Color? color = AppColors.dark}) {
+  static Widget arrowRight({Color? color}) {
     return SvgPicture.asset(
-      'lib/assets/icons/custom_icons/heart.svg',
-      semanticsLabel: 'Heart',
-      color: color,
-      height: 24,
-      width: 24,
+      'lib/assets/icons/custom_icons/arrow_right.svg',
+      semanticsLabel: 'Arrow Right',
+      colorFilter:
+          color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      height: 30,
+      width: 30,
     );
   }
 
-  static final Widget comment = SvgPicture.asset(
-    'lib/assets/icons/custom_icons/comment.svg',
-    semanticsLabel: 'Comment',
-    color: AppColors.dark,
-    height: 24,
-    width: 24,
-  );
+  static Widget heart({Color? color}) {
+    return SvgPicture.asset(
+      'lib/assets/icons/custom_icons/heart.svg',
+      semanticsLabel: 'Heart',
+      colorFilter:
+          color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      height: 25,
+      width: 25,
+    );
+  }
 
-  static final Widget bookmark = SvgPicture.asset(
-    'lib/assets/icons/custom_icons/bookmark.svg',
-    semanticsLabel: 'Bookmark',
-    color: AppColors.dark,
-    height: 24,
-    width: 24,
-  );
+  static Widget comment({Color? color}) {
+    return SvgPicture.asset(
+      'lib/assets/icons/custom_icons/comment.svg',
+      semanticsLabel: 'Comment',
+      colorFilter:
+          color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      height: 25,
+      width: 25,
+    );
+  }
+
+  static Widget bookmark({Color? color}) {
+    return SvgPicture.asset(
+      'lib/assets/icons/custom_icons/bookmark.svg',
+      semanticsLabel: 'Bookmark',
+      colorFilter:
+          color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      height: 25,
+      width: 25,
+    );
+  }
 
   static Widget home({Color? color = AppColors.dark}) {
     return SvgPicture.asset(
@@ -57,13 +67,14 @@ class CustomIcons {
     );
   }
 
-  static Widget profile({Color? color = AppColors.dark}) {
+  static Widget profile({Color? color, double? size}) {
     return SvgPicture.asset(
       'lib/assets/icons/custom_icons/profile.svg',
       semanticsLabel: 'Profile',
-      color: color,
-      height: 24,
-      width: 24,
+      colorFilter:
+          color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      height: size,
+      width: size,
     );
   }
 
