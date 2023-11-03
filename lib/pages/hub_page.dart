@@ -1,17 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/pages/home_page.dart';
 import 'package:letmecook/pages/post_page.dart';
 import 'package:letmecook/pages/profile_page.dart';
 import 'package:letmecook/pages/search_page.dart';
-import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/text_field.dart';
-import 'package:letmecook/assets/icons/custom_icons.dart';
-import 'package:letmecook/widgets/wall_post.dart';
 import 'package:letmecook/widgets/top_appbar.dart';
 
 class HubPage extends StatefulWidget {
@@ -101,7 +94,7 @@ class _HubPageState extends State<HubPage> {
           ),
         ),
       ),
-      appBar: MyAppBar(),
+      appBar: const MyAppBar(),
       body: _children[_selectedIndex],
     );
   }
