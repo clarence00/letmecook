@@ -64,7 +64,7 @@ class _HubPageState extends State<HubPage> {
                     fontWeight: FontWeight.w700),
               ),
               GButton(
-                icon: Icons.search_outlined,
+                icon: Icons.search_rounded,
                 iconSize: 24,
                 text: "SEARCH",
                 textStyle: TextStyle(
