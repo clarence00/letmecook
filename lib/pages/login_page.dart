@@ -72,6 +72,8 @@ class _LogInPageState extends State<LogInPage> {
             .set({
           'Username': _controllerUsername.text,
           'UserEmail': _controllerEmail.text,
+          'ProfilePicture':
+              'https://firebasestorage.googleapis.com/v0/b/letmecook-65d6f.appspot.com/o/images%2Fprofile_pictures%2Fno_profile_pic.jpg?alt=media&token=c3641180-3263-436e-ab63-1fb79066d474', //Here
         });
       } on FirebaseAuthException catch (e) {
         setState(() {
