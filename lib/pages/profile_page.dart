@@ -29,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _controllerUsername = TextEditingController();
   bool usernameError = false;
   late String username = '';
+  late String profilePictureUrl = '';
 
   void toSettings() {
     Navigator.push(
@@ -37,39 +38,11 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void saveUsername() async {
-    // Check if the username already exists
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('Usernames')
-        .where('Username', isEqualTo: _controllerUsername.text)
-        .get();
-
-    // If the result is empty or the username is still the same
-    if (querySnapshot.docs.isEmpty ||
-        querySnapshot.docs.first.get('Username') == username) {
-      await FirebaseFirestore.instance
-          .collection('Usernames')
-          .doc(currentUser!.email)
-          .set({
-        'Username': _controllerUsername.text,
-        'UserEmail': currentUser!.email,
-      });
-      setState(() {
-        username = _controllerUsername.text;
-        usernameError = false;
-      });
-    } else {
-      setState(() {
-        usernameError = true;
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     fetchUsername();
-    usernameError = false;
+    fetchProfilePicture();
   }
 
   void fetchUsername() async {
@@ -80,6 +53,21 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       username = snapshot.data()?['Username'] ?? currentUser!.email;
     });
+  }
+
+  void fetchProfilePicture() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('Usernames')
+          .doc(currentUser!.email)
+          .get();
+      setState(() {
+        profilePictureUrl =
+            snapshot.data()?['ProfilePicture'] ?? currentUser!.email;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -112,14 +100,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       Row(
                         children: [
                           Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.grey[400]),
-                            padding: const EdgeInsets.all(10),
                             margin: const EdgeInsets.symmetric(vertical: 12),
-                            child: const Icon(
-                              Icons.person,
-                              color: AppColors.light,
+                            child: CircleAvatar(
+                              radius: 24,
+                              backgroundImage: NetworkImage(profilePictureUrl),
                             ),
                           ),
                           Expanded(
@@ -141,46 +125,47 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.light,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
-                      )
-                    ],
-                  ),
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        padding: const EdgeInsets.all(4),
-                        margin: const EdgeInsets.symmetric(vertical: 12),
-                        child: IconButton(
-                          onPressed: () {
-                            Auth().signOut();
-                          },
-                          icon: const Icon(Icons.arrow_back),
+              GestureDetector(
+                onTap: () {
+                  Auth().signOut();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.light,
+                      borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        )
+                      ],
+                    ),
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle),
+                          padding: const EdgeInsets.all(4),
+                          margin: const EdgeInsets.symmetric(vertical: 12),
+                          child: const Icon(Icons.arrow_back),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          child: const StyledText(
-                            text: 'Log out',
-                            size: 18,
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            child: const StyledText(
+                              text: 'Log out',
+                              size: 18,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
