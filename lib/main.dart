@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Let Me Cook',
       home: WidgetTree(),
       // home: TestPage(),

@@ -11,7 +11,6 @@ import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/textField.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/widgets/wall_post.dart';
-import 'package:letmecook/widgets/topAppBar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,47 +27,46 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      // WALL POST
-      body: Center(
-        child: Container(
-          child: Column(
-            children: [
+        backgroundColor: Colors.grey[300],
+        // WALL POST
+        body: Center(
+          child: Container(
+            child: Column(children: [
               // Wall Display (boxes)
               Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection("User Posts")
-                  .orderBy(
-                    "TimeStamp",
-                    descending: false,
-                  )
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: ((context, index) {
-                        final post = snapshot.data!.docs[index];
-                        return WallPost(
-                          message: post['Message'],
-                          user: post['UserEmail'],
-                        );
-                      }));
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error:' + snapshot.error.toString()),
-                  );
-                }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            ),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection("User Posts")
+                      .orderBy(
+                        "TimeStamp",
+                        descending: false,
+                      )
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: ((context, index) {
+                            final post = snapshot.data!.docs[index];
+                            return WallPost(
+                              message: post['Message'],
+                              user: post['UserEmail'],
+                            );
+                          }));
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error:' + snapshot.error.toString()),
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ),
+              // Logged in as : section
+            ]),
           ),
-          // Logged in as : section
-        ),
-      ),
-    );
+        ));
   }
 }

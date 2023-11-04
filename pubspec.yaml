@@ -41,6 +41,10 @@ dependencies:
   google_nav_bar: ^5.0.6
   flutter_animate: ^4.2.0+1
   firebase_auth: ^4.10.1
+  image_picker: ^1.0.4
+  firebase_storage: ^11.2.8
+  file_picker: ^6.0.0
+  image_picker_web: ^3.1.1
 
 dev_dependencies:
   flutter_test:

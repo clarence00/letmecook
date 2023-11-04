@@ -28,6 +28,8 @@ class StyledButton extends StatelessWidget {
       return _buildCircleButton();
     } else if (buttonStyle == 'icon') {
       return _buildIconButton();
+    } else if (buttonStyle == 'primary') {
+      return _buildPrimaryButton();
     } else {
       return _buildElevatedButton();
     }
@@ -46,6 +48,21 @@ class StyledButton extends StatelessWidget {
         minimumSize: const Size(double.infinity, 55),
       ),
       child: StyledText(text: text, size: 26, weight: FontWeight.w700),
+    );
+  }
+
+  Widget _buildPrimaryButton() {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.accent,
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
+        elevation: 4,
+      ),
+      child: StyledText(text: text, size: size, weight: FontWeight.w700),
     );
   }
 
