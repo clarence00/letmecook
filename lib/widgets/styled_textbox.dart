@@ -9,6 +9,8 @@ class StyledTextbox extends StatelessWidget {
       this.text = '',
       this.hintText = '',
       this.height = 40,
+      this.size = 16,
+      this.weight = FontWeight.w400,
       this.minLines = 1,
       this.maxLines = 1,
       required this.controller})
@@ -19,6 +21,8 @@ class StyledTextbox extends StatelessWidget {
   final String text;
   final String hintText;
   final double height;
+  final double size;
+  final FontWeight weight;
   final int minLines;
   final int maxLines;
 
@@ -28,7 +32,6 @@ class StyledTextbox extends StatelessWidget {
 
     return Container(
       height: height,
-      // margin: const EdgeInsets.only(top: 10, bottom: 10),
       decoration: ShapeDecoration(
         color: AppColors.background,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -38,8 +41,8 @@ class StyledTextbox extends StatelessWidget {
         maxLines: maxLines,
         controller: controller,
         style: GoogleFonts.poppins(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
+          fontSize: size,
+          fontWeight: weight,
           color: AppColors.dark,
         ),
         obscureText: obscureText,
