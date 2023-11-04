@@ -33,8 +33,8 @@ class _SettingsPageState extends State<SettingsPage> {
   bool uploadImageError = false;
   bool uploadImageSuccess = false;
   String errorMessage = '';
-  late String username = '';
-  late String profilePictureUrl = '';
+  String username = '';
+  String profilePictureUrl = '';
   String profilePicURL = '';
   PlatformFile? pickedFile;
   Widget? fromPicker;
@@ -125,8 +125,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    fetchUsername();
-    fetchProfilePicture();
+    fetchUserData();
     usernameError = false;
     usernameSuccess = false;
     passwordError = false;
@@ -135,29 +134,16 @@ class _SettingsPageState extends State<SettingsPage> {
     uploadImageSuccess = false;
   }
 
-  void fetchUsername() async {
+  void fetchUserData() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('Usernames')
         .doc(currentUser!.email)
         .get();
     setState(() {
       username = snapshot.data()?['Username'] ?? currentUser!.email;
+      profilePictureUrl =
+          snapshot.data()?['ProfilePicture'] ?? currentUser!.email;
     });
-  }
-
-  void fetchProfilePicture() async {
-    try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('Usernames')
-          .doc(currentUser!.email)
-          .get();
-      setState(() {
-        profilePictureUrl =
-            snapshot.data()?['ProfilePicture'] ?? currentUser!.email;
-      });
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
@@ -180,10 +166,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             radius: 64,
                             backgroundImage: MemoryImage(_image!),
                           )
-                        : CircleAvatar(
-                            radius: 64,
-                            backgroundImage: NetworkImage(profilePictureUrl),
-                          ),
+                        : profilePictureUrl != ''
+                            ? CircleAvatar(
+                                radius: 64,
+                                backgroundImage:
+                                    NetworkImage(profilePictureUrl),
+                              )
+                            : const CircleAvatar(
+                                radius: 64,
+                                backgroundColor: AppColors.light,
+                                child: CircularProgressIndicator(),
+                              ),
                   ),
                   uploadImageError
                       ? const StyledText(

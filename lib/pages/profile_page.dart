@@ -19,8 +19,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final currentUser = FirebaseAuth.instance.currentUser;
   final TextEditingController _controllerUsername = TextEditingController();
   bool usernameError = false;
-  late String username = '';
-  late String profilePictureUrl = '';
+  String username = '';
+  String profilePictureUrl = '';
 
   void toSettings() {
     Navigator.push(
@@ -32,33 +32,19 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    fetchUsername();
-    fetchProfilePicture();
+    fetchUserData();
   }
 
-  void fetchUsername() async {
+  void fetchUserData() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('Usernames')
         .doc(currentUser!.email)
         .get();
     setState(() {
       username = snapshot.data()?['Username'] ?? currentUser!.email;
+      profilePictureUrl =
+          snapshot.data()?['ProfilePicture'] ?? currentUser!.email;
     });
-  }
-
-  void fetchProfilePicture() async {
-    try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('Usernames')
-          .doc(currentUser!.email)
-          .get();
-      setState(() {
-        profilePictureUrl =
-            snapshot.data()?['ProfilePicture'] ?? currentUser!.email;
-      });
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
@@ -72,10 +58,16 @@ class _ProfilePageState extends State<ProfilePage> {
             StyledContainer(
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(profilePictureUrl),
-                  ),
+                  profilePictureUrl != ''
+                      ? CircleAvatar(
+                          radius: 20,
+                          backgroundImage: NetworkImage(profilePictureUrl),
+                        )
+                      : const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: AppColors.light,
+                          child: CircularProgressIndicator(),
+                        ),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.only(left: 10),

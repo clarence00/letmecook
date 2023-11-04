@@ -5,6 +5,7 @@ import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/post_tile.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
+import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,6 +30,7 @@ class _HomePageState extends State<HomePage> {
         'UserEmail': currentUser!.email,
         'Message': _controllerPost.text,
         'TimeStamp': Timestamp.now(),
+        'ImageUrl': '',
       });
     }
 
@@ -100,11 +102,13 @@ class _HomePageState extends State<HomePage> {
                         return PostTile(
                           post: post['Message'],
                           user: post['UserEmail'],
+                          timestamp: post['TimeStamp'],
+                          imageUrl: 'imageUrl',
                         );
                       }));
                 } else if (snapshot.hasError) {
                   return Center(
-                    child: Text('Error:${snapshot.error}'),
+                    child: StyledText(text: 'Error:${snapshot.error}'),
                   );
                 }
                 return const Center(
@@ -115,7 +119,7 @@ class _HomePageState extends State<HomePage> {
           ),
           // Logged in as : section
 
-          Text("Logged in as : ${currentUser!.email}")
+          StyledText(text: 'Logged in as : ${currentUser!.email}')
         ],
       ),
     );

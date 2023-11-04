@@ -1,18 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
+import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
-class PostTile extends StatelessWidget {
-  const PostTile({
-    super.key,
+class PostTile extends StatefulWidget {
+  PostTile({
+    Key? key,
     required this.post,
     required this.user,
-  });
+    required this.timestamp,
+    required this.imageUrl,
+  }) : super(key: key);
 
   // Variables
   final String post;
   final String user;
+  final Timestamp timestamp;
+  final String imageUrl;
+
+  @override
+  _PostTileState createState() => _PostTileState();
+}
+
+class _PostTileState extends State<PostTile> {
+  String username = '';
+  String profilePictureUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  void fetchUserData() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(widget.user)
+        .get();
+    setState(() {
+      username = snapshot.data()?['Username'] ?? widget.user;
+      profilePictureUrl = snapshot.data()?['ProfilePicture'] ?? widget.user;
+    });
+  }
+
+  String getPostTimeDisplay(Timestamp timestamp) {
+    DateTime postTime = timestamp.toDate();
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(postTime);
+
+    if (difference.inMinutes < 60) {
+      return 'Less than an hour ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} ${difference.inHours == 1 ? 'hour' : 'hours'} ago';
+    } else if (difference.inDays < 4) {
+      return '${difference.inDays} days ago';
+    } else {
+      return DateFormat('MMM d').format(postTime);
+    }
+  }
 
   final Color _heartColor = AppColors.dark;
 
@@ -40,24 +88,25 @@ class PostTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // First Div (Profile)
-              Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: CustomIcons.profile(
-                  color: AppColors.dark,
-                  size: 40,
-                ),
+              Container(
+                margin: const EdgeInsets.only(right: 5),
+                child: profilePictureUrl != ''
+                    ? CircleAvatar(
+                        radius: 16,
+                        backgroundImage: NetworkImage(profilePictureUrl),
+                      )
+                    : const CircleAvatar(
+                        radius: 16,
+                        backgroundColor: AppColors.light,
+                        child: CircularProgressIndicator(),
+                      ),
               ),
               Expanded(
                 child: Row(
                   children: [
                     Flexible(
-                      child: Text(
-                        user,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.dark),
+                      child: StyledText(
+                        text: username,
                       ),
                     ),
                     const Padding(
@@ -68,12 +117,10 @@ class PostTile extends StatelessWidget {
                         size: 8,
                       ),
                     ),
-                    Text(
-                      "12 hrs",
-                      style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.accent),
+                    StyledText(
+                      text: getPostTimeDisplay(widget.timestamp),
+                      size: 12,
+                      color: AppColors.accent,
                     ),
                   ],
                 ),
@@ -89,12 +136,10 @@ class PostTile extends StatelessWidget {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 5),
             alignment: Alignment.centerLeft,
-            child: Text(
-              post,
-              style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.dark),
+            child: StyledText(
+              text: widget.post,
+              size: 20,
+              weight: FontWeight.w700,
             ),
           ),
           // Third Div (Image)
@@ -120,13 +165,8 @@ class PostTile extends StatelessWidget {
                   ),
                   Container(
                     padding: const EdgeInsets.only(right: 12),
-                    child: Text(
-                      "12",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.dark,
-                      ),
+                    child: const StyledText(
+                      text: '12',
                     ),
                   ),
                 ],
@@ -139,15 +179,10 @@ class PostTile extends StatelessWidget {
                   ),
                   Container(
                     padding: const EdgeInsets.only(right: 12),
-                    child: Text(
-                      "12",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.dark,
-                      ),
+                    child: const StyledText(
+                      text: '12',
                     ),
-                  )
+                  ),
                 ],
               ),
               Row(
@@ -158,19 +193,14 @@ class PostTile extends StatelessWidget {
                   ),
                   Container(
                     padding: const EdgeInsets.only(right: 12),
-                    child: Text(
-                      "12",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.dark,
-                      ),
+                    child: const StyledText(
+                      text: '12',
                     ),
-                  )
+                  ),
                 ],
               ),
             ],
-          )
+          ),
         ],
       ),
     );
