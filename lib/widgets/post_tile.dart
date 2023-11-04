@@ -25,8 +25,8 @@ class PostTile extends StatefulWidget {
 }
 
 class _PostTileState extends State<PostTile> {
-  late String username;
-  late String profilePictureUrl = '';
+  String username = '';
+  String profilePictureUrl = '';
 
   @override
   void initState() {
@@ -91,10 +91,16 @@ class _PostTileState extends State<PostTile> {
               // First Div (Profile)
               Container(
                 margin: const EdgeInsets.only(right: 5),
-                child: CircleAvatar(
-                  radius: 16,
-                  backgroundImage: NetworkImage(profilePictureUrl),
-                ),
+                child: profilePictureUrl != ''
+                    ? CircleAvatar(
+                        radius: 16,
+                        backgroundImage: NetworkImage(profilePictureUrl),
+                      )
+                    : const CircleAvatar(
+                        radius: 16,
+                        backgroundColor: AppColors.light,
+                        child: CircularProgressIndicator(),
+                      ),
               ),
               Expanded(
                 child: Row(
