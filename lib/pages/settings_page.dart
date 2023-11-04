@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/utils.dart';
 import 'package:letmecook/widget_tree.dart';
+import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
@@ -164,24 +165,10 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: const MyAppBar(),
       backgroundColor: AppColors.background,
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: AppColors.light,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.dark.withOpacity(0.25),
-                    spreadRadius: 0,
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  )
-                ],
-              ),
+            StyledContainer(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -215,7 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.only(top: 10),
                     child: StyledButton(
                       text: 'Select Image',
-                      size: 16,
+                      size: 20,
                       buttonStyle: 'primary',
                       onPressed: selectImage,
                     ),
@@ -224,7 +211,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.only(top: 10),
                     child: StyledButton(
                       text: 'Upload',
-                      size: 16,
+                      size: 20,
                       buttonStyle: 'primary',
                       onPressed: uploadImage,
                     ),
@@ -233,29 +220,15 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             // Username Div
-            Container(
-              margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.light,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.dark.withOpacity(0.25),
-                    spreadRadius: 0,
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  )
-                ],
-              ),
+            StyledContainer(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    margin: const EdgeInsets.only(left: 5, bottom: 5),
                     child: const StyledText(
                       text: 'Username',
-                      size: 18,
+                      size: 20,
                     ),
                   ),
                   StyledTextbox(
@@ -276,11 +249,11 @@ class _SettingsPageState extends State<SettingsPage> {
                             )
                           : const SizedBox(height: 0),
                   Container(
-                    padding: const EdgeInsets.only(top: 15, bottom: 5),
+                    margin: const EdgeInsets.only(top: 10, bottom: 5),
                     child: StyledButton(
                       onPressed: saveUsername,
                       text: 'Save',
-                      size: 18,
+                      size: 20,
                       buttonStyle: 'primary',
                     ),
                   ),
@@ -288,48 +261,46 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             // Change Password Div
-            Container(
-              margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: AppColors.light,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.dark.withOpacity(0.25),
-                    spreadRadius: 0,
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  )
-                ],
-              ),
+            StyledContainer(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    margin: const EdgeInsets.only(left: 5, bottom: 5),
                     child: const StyledText(
                       text: 'Change Password',
-                      size: 18,
+                      size: 20,
                     ),
                   ),
-                  const StyledText(
-                    text: 'Old Password',
-                    size: 16,
-                    weight: FontWeight.bold,
+                  Container(
+                    margin: const EdgeInsets.only(left: 5, top: 5),
+                    child: const StyledText(
+                      text: 'Old Password',
+                      size: 16,
+                      weight: FontWeight.bold,
+                    ),
                   ),
-                  StyledTextbox(
-                    controller: _controllerOldPassword,
-                    obscureText: true,
+                  Container(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: StyledTextbox(
+                      controller: _controllerOldPassword,
+                      obscureText: true,
+                    ),
                   ),
-                  const StyledText(
-                    text: 'New Password',
-                    size: 16,
-                    weight: FontWeight.bold,
+                  Container(
+                    margin: const EdgeInsets.only(left: 5, top: 5),
+                    child: const StyledText(
+                      text: 'New Password',
+                      size: 16,
+                      weight: FontWeight.bold,
+                    ),
                   ),
-                  StyledTextbox(
-                    controller: _controllerNewPassword,
-                    obscureText: true,
+                  Container(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: StyledTextbox(
+                      controller: _controllerNewPassword,
+                      obscureText: true,
+                    ),
                   ),
                   passwordError
                       ? StyledText(
@@ -345,11 +316,11 @@ class _SettingsPageState extends State<SettingsPage> {
                             )
                           : const SizedBox(height: 0),
                   Container(
-                    padding: const EdgeInsets.only(top: 15, bottom: 5),
+                    padding: const EdgeInsets.only(top: 10, bottom: 5),
                     child: StyledButton(
                       onPressed: changePassword,
                       text: 'Change Password',
-                      size: 18,
+                      size: 20,
                       buttonStyle: 'primary',
                     ),
                   ),
