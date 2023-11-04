@@ -77,6 +77,7 @@ class _PostPageState extends State<PostPage> {
                 Expanded(
                     child: MyTextField(
                   minLines: 1,
+                  maxLines: 20,
                   controller: textController,
                   hintText: 'Post a new recipe!',
                   obscureText: false,

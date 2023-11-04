@@ -20,6 +20,7 @@ class StyledText extends StatelessWidget {
   Widget build(context) {
     return Text(
       text,
+      overflow: TextOverflow.ellipsis,
       style: GoogleFonts.poppins(
         fontSize: size,
         fontWeight: weight,
