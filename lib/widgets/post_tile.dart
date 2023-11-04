@@ -92,7 +92,7 @@ class PostTile extends StatelessWidget {
             child: Text(
               post,
               style: GoogleFonts.poppins(
-                  fontSize: 16,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: AppColors.dark),
             ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/pages/settings_page.dart';
 import 'package:letmecook/widgets/preview_tile.dart';
+import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/auth.dart';
 
@@ -68,21 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: [
             // Profile Div
-            Container(
-              margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              decoration: BoxDecoration(
-                color: AppColors.light,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.dark.withOpacity(0.25),
-                    spreadRadius: 0,
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  )
-                ],
-              ),
+            StyledContainer(
               child: Row(
                 children: [
                   CircleAvatar(
@@ -112,22 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
             // Bookmark Div
             GestureDetector(
               onTap: () {},
-              child: Container(
-                margin: const EdgeInsets.only(left: 16, right: 16, top: 15),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                decoration: BoxDecoration(
-                  color: AppColors.light,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.dark.withOpacity(0.25),
-                      spreadRadius: 0,
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
-                    )
-                  ],
-                ),
+              child: StyledContainer(
                 child: Row(
                   children: [
                     const Icon(
@@ -136,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: AppColors.dark,
                     ),
                     Container(
-                      padding: const EdgeInsets.only(left: 15),
+                      padding: const EdgeInsets.only(left: 10),
                       child: const StyledText(
                         text: 'Bookmarks',
                         size: 20,
@@ -151,22 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onTap: () {
                 Auth().signOut();
               },
-              child: Container(
-                margin: const EdgeInsets.only(left: 16, right: 16, top: 15),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                decoration: BoxDecoration(
-                  color: AppColors.light,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.dark.withOpacity(0.25),
-                      spreadRadius: 0,
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
-                    )
-                  ],
-                ),
+              child: StyledContainer(
                 child: Row(
                   children: [
                     const Icon(
@@ -175,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: AppColors.dark,
                     ),
                     Container(
-                      padding: const EdgeInsets.only(left: 15),
+                      padding: const EdgeInsets.only(left: 10),
                       child: const StyledText(
                         text: 'Log Out',
                         size: 20,
@@ -187,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             // Post Div
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               padding: const EdgeInsets.only(bottom: 15),
               decoration: BoxDecoration(
                 color: AppColors.light,
