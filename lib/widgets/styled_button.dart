@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
-import 'package:letmecook/assets/icons/logos.dart';
-import 'package:letmecook/pages/login_page.dart';
 
 class StyledButton extends StatelessWidget {
   const StyledButton({
@@ -36,33 +34,56 @@ class StyledButton extends StatelessWidget {
   }
 
   Widget _buildElevatedButton() {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.accent,
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
-        elevation: 4,
-        minimumSize: const Size(double.infinity, 55),
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.dark.withOpacity(0.25),
+            spreadRadius: 0,
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          )
+        ],
       ),
-      child: StyledText(text: text, size: 26, weight: FontWeight.w700),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.accent,
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          elevation: 4,
+          minimumSize: const Size(double.infinity, 55),
+        ),
+        child: StyledText(text: text, size: 26, weight: FontWeight.w700),
+      ),
     );
   }
 
   Widget _buildPrimaryButton() {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.accent,
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
-        elevation: 4,
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.dark.withOpacity(0.25),
+            spreadRadius: 0,
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          )
+        ],
       ),
-      child: StyledText(text: text, size: size, weight: FontWeight.w700),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.accent,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        child: StyledText(text: text, size: size, weight: FontWeight.w700),
+      ),
     );
   }
 
