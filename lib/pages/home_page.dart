@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/post_tile.dart';
+import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 
@@ -51,21 +52,7 @@ class _HomePageState extends State<HomePage> {
       // WALL POST
       body: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: AppColors.light,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.dark.withOpacity(0.25),
-                  spreadRadius: 0,
-                  blurRadius: 15,
-                  offset: const Offset(0, 5),
-                )
-              ],
-            ),
+          StyledContainer(
             child: Row(
               children: [
                 Padding(
