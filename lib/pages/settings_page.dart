@@ -33,8 +33,8 @@ class _SettingsPageState extends State<SettingsPage> {
   bool uploadImageError = false;
   bool uploadImageSuccess = false;
   String errorMessage = '';
-  late String username = '';
-  late String profilePictureUrl = '';
+  String username = '';
+  String profilePictureUrl = '';
   String profilePicURL = '';
   PlatformFile? pickedFile;
   Widget? fromPicker;
@@ -166,10 +166,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             radius: 64,
                             backgroundImage: MemoryImage(_image!),
                           )
-                        : CircleAvatar(
-                            radius: 64,
-                            backgroundImage: NetworkImage(profilePictureUrl),
-                          ),
+                        : profilePictureUrl != ''
+                            ? CircleAvatar(
+                                radius: 64,
+                                backgroundImage:
+                                    NetworkImage(profilePictureUrl),
+                              )
+                            : const CircleAvatar(
+                                radius: 64,
+                                backgroundColor: AppColors.light,
+                                child: CircularProgressIndicator(),
+                              ),
                   ),
                   uploadImageError
                       ? const StyledText(

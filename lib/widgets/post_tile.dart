@@ -51,8 +51,6 @@ class _PostTileState extends State<PostTile> {
     DateTime now = DateTime.now();
     Duration difference = now.difference(postTime);
 
-    print('Post time: $postTime | Now: $now | Difference: $difference');
-
     if (difference.inMinutes < 60) {
       return 'Less than an hour ago';
     } else if (difference.inHours < 24) {

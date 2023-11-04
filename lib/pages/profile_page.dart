@@ -19,8 +19,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final currentUser = FirebaseAuth.instance.currentUser;
   final TextEditingController _controllerUsername = TextEditingController();
   bool usernameError = false;
-  late String username = '';
-  late String profilePictureUrl = '';
+  String username = '';
+  String profilePictureUrl = '';
 
   void toSettings() {
     Navigator.push(
@@ -58,10 +58,16 @@ class _ProfilePageState extends State<ProfilePage> {
             StyledContainer(
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(profilePictureUrl),
-                  ),
+                  profilePictureUrl != ''
+                      ? CircleAvatar(
+                          radius: 20,
+                          backgroundImage: NetworkImage(profilePictureUrl),
+                        )
+                      : const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: AppColors.light,
+                          child: CircularProgressIndicator(),
+                        ),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.only(left: 10),
