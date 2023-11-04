@@ -5,6 +5,7 @@ import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/post_tile.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
+import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 
 class HomePage extends StatefulWidget {
@@ -107,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                       }));
                 } else if (snapshot.hasError) {
                   return Center(
-                    child: Text('Error:${snapshot.error}'),
+                    child: StyledText(text: 'Error:${snapshot.error}'),
                   );
                 }
                 return const Center(
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage> {
           ),
           // Logged in as : section
 
-          Text("Logged in as : ${currentUser!.email}")
+          StyledText(text: 'Logged in as : ${currentUser!.email}')
         ],
       ),
     );

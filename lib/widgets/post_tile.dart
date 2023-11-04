@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
+import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -106,13 +107,8 @@ class _PostTileState extends State<PostTile> {
                 child: Row(
                   children: [
                     Flexible(
-                      child: Text(
-                        username,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.dark),
+                      child: StyledText(
+                        text: username,
                       ),
                     ),
                     const Padding(
@@ -123,12 +119,10 @@ class _PostTileState extends State<PostTile> {
                         size: 8,
                       ),
                     ),
-                    Text(
-                      getPostTimeDisplay(widget.timestamp),
-                      style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.accent),
+                    StyledText(
+                      text: getPostTimeDisplay(widget.timestamp),
+                      size: 12,
+                      color: AppColors.accent,
                     ),
                   ],
                 ),
@@ -144,12 +138,10 @@ class _PostTileState extends State<PostTile> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 5),
             alignment: Alignment.centerLeft,
-            child: Text(
-              widget.post,
-              style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.dark),
+            child: StyledText(
+              text: widget.post,
+              size: 20,
+              weight: FontWeight.w700,
             ),
           ),
           // Third Div (Image)
@@ -175,13 +167,8 @@ class _PostTileState extends State<PostTile> {
                   ),
                   Container(
                     padding: const EdgeInsets.only(right: 12),
-                    child: Text(
-                      "12",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.dark,
-                      ),
+                    child: const StyledText(
+                      text: '12',
                     ),
                   ),
                 ],
@@ -194,13 +181,8 @@ class _PostTileState extends State<PostTile> {
                   ),
                   Container(
                     padding: const EdgeInsets.only(right: 12),
-                    child: Text(
-                      "12",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.dark,
-                      ),
+                    child: const StyledText(
+                      text: '12',
                     ),
                   ),
                 ],
@@ -213,13 +195,8 @@ class _PostTileState extends State<PostTile> {
                   ),
                   Container(
                     padding: const EdgeInsets.only(right: 12),
-                    child: Text(
-                      "12",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.dark,
-                      ),
+                    child: const StyledText(
+                      text: '12',
                     ),
                   ),
                 ],
