@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letmecook/widgets/textField.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
@@ -86,7 +87,6 @@ class _PostPageState extends State<PostPage> {
                 Expanded(
                     child: MyTextField(
                   minLines: 1,
-                  maxLines: 150,
                   controller: textController,
                   hintText: 'Post a new recipe!',
                   obscureText: false,

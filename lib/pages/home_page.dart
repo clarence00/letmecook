@@ -28,16 +28,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //bottomNavigationBar: botNav,
-
       backgroundColor: Colors.grey[300],
-      //appBar: _appBar,
-
       // WALL POST
       body: Center(
         child: Container(
-          child:
-
+          child: Column(
+            children: [
               // Wall Display (boxes)
               Expanded(
             child: StreamBuilder<QuerySnapshot>(
