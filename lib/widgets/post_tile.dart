@@ -141,7 +141,7 @@ class _PostTileState extends State<PostTile> {
             child: Text(
               widget.post,
               style: GoogleFonts.poppins(
-                  fontSize: 16,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: AppColors.dark),
             ),
