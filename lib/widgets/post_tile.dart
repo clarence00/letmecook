@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
-import 'package:letmecook/pages/viewpost_post.dart';
+import 'package:letmecook/pages/viewpost_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
