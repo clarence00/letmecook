@@ -4,7 +4,6 @@ import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/widgets/top_appbar.dart';
 
 import '../widgets/comment_tile.dart';
@@ -231,6 +230,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
+                            // This Column can be change into ListView in the future
                             child: const Column(
                               children: [
                                 // Comments
