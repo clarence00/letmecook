@@ -7,6 +7,8 @@ import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/top_appbar.dart';
 
+import '../widgets/comment_tile.dart';
+
 class ViewPostPage extends StatefulWidget {
   const ViewPostPage({super.key});
 
@@ -132,7 +134,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                   ),
                   // Title Div
                   Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    margin: const EdgeInsets.only(top: 5),
                     child: const StyledText(
                       text: 'Title',
                       size: 20,
@@ -141,7 +143,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                   ),
                   // Description Div
                   Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    margin: const EdgeInsets.only(top: 5),
                     child: const StyledText(
                       text: 'Description blah blah blah',
                       size: 16,
@@ -225,64 +227,25 @@ class _ViewPostPageState extends State<ViewPostPage> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: AppColors.dark,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      children: [
-                        // Comments
-
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 5),
-                              child: CustomIcons.profile(
-                                color: AppColors.dark,
-                                size: 40,
-                              ),
-                            ),
-                            Column(
-                              children: [
-                                const Row(
-                                  children: [
-                                    StyledText(
-                                      text: 'Username',
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 5, right: 5),
-                                      child: Icon(
-                                        Icons.circle_rounded,
-                                        color: AppColors.accent,
-                                        size: 8,
-                                      ),
-                                    ),
-                                    StyledText(
-                                      text: 'time',
-                                      size: 12,
-                                      color: AppColors.accent,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const Icon(
-                              Icons.more_vert,
-                              color: AppColors.dark,
-                              size: 24,
-                            ),
-                          ],
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.dark,
+                          width: 2,
                         ),
-                      ],
-                    ),
-                  ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Column(
+                        children: [
+                          CommentTile(),
+                          CommentTile(),
+                          CommentTile(),
+                          CommentTile(),
+                          CommentTile(),
+                        ],
+                      )),
                 ],
               ),
             ),
