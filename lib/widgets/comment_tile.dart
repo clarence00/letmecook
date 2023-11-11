@@ -24,6 +24,7 @@ class CommentTile extends StatelessWidget {
               const Expanded(
                 child: Row(
                   children: [
+                    // Username
                     StyledText(
                       text: 'Username',
                     ),
@@ -35,6 +36,7 @@ class CommentTile extends StatelessWidget {
                         size: 8,
                       ),
                     ),
+                    // Time
                     StyledText(
                       text: 'time',
                       size: 12,
@@ -51,6 +53,7 @@ class CommentTile extends StatelessWidget {
               ),
             ],
           ),
+          // Comment
           Container(
             margin: const EdgeInsets.only(left: 30, right: 25),
             padding: const EdgeInsets.symmetric(horizontal: 5),
