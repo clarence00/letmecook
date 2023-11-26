@@ -5,19 +5,84 @@ import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/top_appbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 import '../widgets/comment_tile.dart';
 
 class ViewPostPage extends StatefulWidget {
-  const ViewPostPage({super.key});
+  const ViewPostPage({
+    Key? key,
+    required this.postId,
+  }) : super(key: key);
+
+  final String postId;
 
   @override
   State<ViewPostPage> createState() => _ViewPostPageState();
 }
 
 class _ViewPostPageState extends State<ViewPostPage> {
-  // Variable for UI only (should be changed accordingly)
   final _controllerCommentInput = TextEditingController();
+  String username = '';
+  String profilePictureUrl = '';
+  String title = '';
+  String message = '';
+  String imageUrl = '';
+  String userEmail = '';
+  Timestamp timestamp = Timestamp.fromDate(DateTime.now());
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPostData();
+  }
+
+  void fetchPostData() async {
+    final postDoc = await FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .get();
+    setState(() {
+      title = postDoc.data()?['Title'];
+      userEmail = postDoc.data()?['UserEmail'];
+      message = postDoc.data()?['Message'];
+      imageUrl = postDoc.data()?['ImageUrl'];
+      timestamp = postDoc.data()?['TimeStamp'];
+      fetchUserData();
+    });
+  }
+
+  void fetchUserData() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(userEmail)
+        .get();
+    setState(() {
+      username = snapshot.data()?['Username'] ?? userEmail;
+      profilePictureUrl = snapshot.data()?['ProfilePicture'] ?? userEmail;
+    });
+  }
+
+  String getPostTimeDisplay(Timestamp timestamp) {
+    DateTime postTime = timestamp.toDate();
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(postTime);
+
+    if (difference.inMinutes < 1) {
+      return 'Just now';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays}d';
+    } else if (difference.inDays < 365) {
+      return DateFormat('MMM d').format(postTime);
+    } else {
+      return DateFormat('MMMM d, y').format(postTime);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,20 +113,27 @@ class _ViewPostPageState extends State<ViewPostPage> {
                           // First Div (Profile)
                           Padding(
                             padding: const EdgeInsets.only(right: 5),
-                            child: CustomIcons.profile(
-                              color: AppColors.dark,
-                              size: 40,
-                            ),
+                            child: profilePictureUrl != ''
+                                ? CircleAvatar(
+                                    radius: 16,
+                                    backgroundImage:
+                                        NetworkImage(profilePictureUrl),
+                                  )
+                                : const CircleAvatar(
+                                    radius: 16,
+                                    backgroundColor: AppColors.light,
+                                    child: CircularProgressIndicator(),
+                                  ),
                           ),
-                          const Expanded(
+                          Expanded(
                             child: Row(
                               children: [
                                 Flexible(
                                   child: StyledText(
-                                    text: 'Username',
+                                    text: username,
                                   ),
                                 ),
-                                Padding(
+                                const Padding(
                                   padding: EdgeInsets.only(left: 5, right: 5),
                                   child: Icon(
                                     Icons.circle_rounded,
@@ -70,7 +142,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                   ),
                                 ),
                                 StyledText(
-                                  text: 'time',
+                                  text: getPostTimeDisplay(timestamp),
                                   size: 12,
                                   color: AppColors.accent,
                                 ),
@@ -125,8 +197,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
                           // Title Div
                           Container(
                             margin: const EdgeInsets.only(top: 5),
-                            child: const StyledText(
-                              text: 'Title',
+                            child: StyledText(
+                              text: title,
                               size: 20,
                               weight: FontWeight.w700,
                             ),
@@ -134,8 +206,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
                           // Description Div
                           Container(
                             margin: const EdgeInsets.only(top: 5),
-                            child: const StyledText(
-                              text: 'Description blah blah blah',
+                            child: StyledText(
+                              text: message,
                               size: 16,
                               weight: FontWeight.w400,
                             ),

@@ -9,17 +9,19 @@ import 'package:intl/intl.dart';
 class PostTile extends StatefulWidget {
   PostTile({
     Key? key,
-    required this.post,
+    required this.title,
     required this.user,
     required this.timestamp,
     required this.imageUrl,
+    required this.postId,
   }) : super(key: key);
 
   // Variables
-  final String post;
+  final String title;
   final String user;
   final Timestamp timestamp;
   final String imageUrl;
+  final String postId;
 
   @override
   _PostTileState createState() => _PostTileState();
@@ -37,7 +39,9 @@ class _PostTileState extends State<PostTile> {
 
   void toViewPost() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const ViewPostPage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => ViewPostPage(postId: widget.postId)));
   }
 
   void fetchUserData() async {
@@ -56,14 +60,18 @@ class _PostTileState extends State<PostTile> {
     DateTime now = DateTime.now();
     Duration difference = now.difference(postTime);
 
-    if (difference.inMinutes < 60) {
-      return 'Less than an hour ago';
+    if (difference.inMinutes < 1) {
+      return 'Just now';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m';
     } else if (difference.inHours < 24) {
-      return '${difference.inHours} ${difference.inHours == 1 ? 'hour' : 'hours'} ago';
-    } else if (difference.inDays < 4) {
-      return '${difference.inDays} days ago';
-    } else {
+      return '${difference.inHours}h';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays}d';
+    } else if (difference.inDays < 365) {
       return DateFormat('MMM d').format(postTime);
+    } else {
+      return DateFormat('MMMM d, y').format(postTime);
     }
   }
 
@@ -146,7 +154,7 @@ class _PostTileState extends State<PostTile> {
               margin: const EdgeInsets.symmetric(vertical: 5),
               alignment: Alignment.centerLeft,
               child: StyledText(
-                text: widget.post,
+                text: widget.title,
                 size: 20,
                 weight: FontWeight.w700,
               ),

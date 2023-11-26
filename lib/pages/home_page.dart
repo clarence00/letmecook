@@ -96,16 +96,18 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: ((context, index) {
-                        final post = snapshot.data!.docs[index];
-                        return PostTile(
-                          post: post['Message'],
-                          user: post['UserEmail'],
-                          timestamp: post['TimeStamp'],
-                          imageUrl: 'imageUrl',
-                        );
-                      }));
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: ((context, index) {
+                      final post = snapshot.data!.docs[index];
+                      return PostTile(
+                        title: post['Title'],
+                        user: post['UserEmail'],
+                        timestamp: post['TimeStamp'],
+                        imageUrl: 'imageUrl',
+                        postId: post.id,
+                      );
+                    }),
+                  );
                 } else if (snapshot.hasError) {
                   return Center(
                     child: StyledText(text: 'Error:${snapshot.error}'),
@@ -117,9 +119,6 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          // Logged in as : section
-
-          StyledText(text: 'Logged in as : ${currentUser!.email}')
         ],
       ),
     );
