@@ -9,17 +9,19 @@ import 'package:intl/intl.dart';
 class PostTile extends StatefulWidget {
   PostTile({
     Key? key,
-    required this.post,
+    required this.title,
     required this.user,
     required this.timestamp,
     required this.imageUrl,
+    required this.postId,
   }) : super(key: key);
 
   // Variables
-  final String post;
+  final String title;
   final String user;
   final Timestamp timestamp;
   final String imageUrl;
+  final String postId;
 
   @override
   _PostTileState createState() => _PostTileState();
@@ -146,7 +148,7 @@ class _PostTileState extends State<PostTile> {
               margin: const EdgeInsets.symmetric(vertical: 5),
               alignment: Alignment.centerLeft,
               child: StyledText(
-                text: widget.post,
+                text: widget.title,
                 size: 20,
                 weight: FontWeight.w700,
               ),
