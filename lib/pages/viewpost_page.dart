@@ -5,19 +5,64 @@ import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/top_appbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 import '../widgets/comment_tile.dart';
 
 class ViewPostPage extends StatefulWidget {
-  const ViewPostPage({super.key});
+  const ViewPostPage({
+    Key? key,
+    required this.postId,
+  }) : super(key: key);
+
+  final String postId;
 
   @override
   State<ViewPostPage> createState() => _ViewPostPageState();
 }
 
 class _ViewPostPageState extends State<ViewPostPage> {
-  // Variable for UI only (should be changed accordingly)
   final _controllerCommentInput = TextEditingController();
+  String title = '';
+  String message = '';
+  String imageUrl = '';
+  Timestamp timestamp = Timestamp.fromDate(DateTime.now());
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPostData();
+  }
+
+  void fetchPostData() async {
+    final postDoc = await FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .get();
+    setState(() {
+      title = postDoc.data()?['Title'];
+      message = postDoc.data()?['Message'];
+      imageUrl = postDoc.data()?['ImageUrl'];
+      timestamp = postDoc.data()?['TimeStamp'];
+    });
+  }
+
+  String getPostTimeDisplay(Timestamp timestamp) {
+    DateTime postTime = timestamp.toDate();
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(postTime);
+
+    if (difference.inMinutes < 60) {
+      return 'Less than an hour ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} ${difference.inHours == 1 ? 'hour' : 'hours'} ago';
+    } else if (difference.inDays < 4) {
+      return '${difference.inDays} days ago';
+    } else {
+      return DateFormat('MMM d').format(postTime);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,15 +98,15 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               size: 40,
                             ),
                           ),
-                          const Expanded(
+                          Expanded(
                             child: Row(
                               children: [
-                                Flexible(
+                                const Flexible(
                                   child: StyledText(
                                     text: 'Username',
                                   ),
                                 ),
-                                Padding(
+                                const Padding(
                                   padding: EdgeInsets.only(left: 5, right: 5),
                                   child: Icon(
                                     Icons.circle_rounded,
@@ -70,7 +115,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                   ),
                                 ),
                                 StyledText(
-                                  text: 'time',
+                                  text: getPostTimeDisplay(timestamp),
                                   size: 12,
                                   color: AppColors.accent,
                                 ),
@@ -125,8 +170,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
                           // Title Div
                           Container(
                             margin: const EdgeInsets.only(top: 5),
-                            child: const StyledText(
-                              text: 'Title',
+                            child: StyledText(
+                              text: title,
                               size: 20,
                               weight: FontWeight.w700,
                             ),
@@ -134,8 +179,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
                           // Description Div
                           Container(
                             margin: const EdgeInsets.only(top: 5),
-                            child: const StyledText(
-                              text: 'Description blah blah blah',
+                            child: StyledText(
+                              text: message,
                               size: 16,
                               weight: FontWeight.w400,
                             ),

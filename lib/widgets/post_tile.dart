@@ -39,7 +39,9 @@ class _PostTileState extends State<PostTile> {
 
   void toViewPost() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const ViewPostPage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => ViewPostPage(postId: widget.postId)));
   }
 
   void fetchUserData() async {
