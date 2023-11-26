@@ -24,9 +24,12 @@ class ViewPostPage extends StatefulWidget {
 
 class _ViewPostPageState extends State<ViewPostPage> {
   final _controllerCommentInput = TextEditingController();
+  String username = '';
+  String profilePictureUrl = '';
   String title = '';
   String message = '';
   String imageUrl = '';
+  String userEmail = '';
   Timestamp timestamp = Timestamp.fromDate(DateTime.now());
 
   @override
@@ -42,9 +45,22 @@ class _ViewPostPageState extends State<ViewPostPage> {
         .get();
     setState(() {
       title = postDoc.data()?['Title'];
+      userEmail = postDoc.data()?['UserEmail'];
       message = postDoc.data()?['Message'];
       imageUrl = postDoc.data()?['ImageUrl'];
       timestamp = postDoc.data()?['TimeStamp'];
+      fetchUserData();
+    });
+  }
+
+  void fetchUserData() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(userEmail)
+        .get();
+    setState(() {
+      username = snapshot.data()?['Username'] ?? userEmail;
+      profilePictureUrl = snapshot.data()?['ProfilePicture'] ?? userEmail;
     });
   }
 
@@ -97,17 +113,24 @@ class _ViewPostPageState extends State<ViewPostPage> {
                           // First Div (Profile)
                           Padding(
                             padding: const EdgeInsets.only(right: 5),
-                            child: CustomIcons.profile(
-                              color: AppColors.dark,
-                              size: 40,
-                            ),
+                            child: profilePictureUrl != ''
+                                ? CircleAvatar(
+                                    radius: 16,
+                                    backgroundImage:
+                                        NetworkImage(profilePictureUrl),
+                                  )
+                                : const CircleAvatar(
+                                    radius: 16,
+                                    backgroundColor: AppColors.light,
+                                    child: CircularProgressIndicator(),
+                                  ),
                           ),
                           Expanded(
                             child: Row(
                               children: [
-                                const Flexible(
+                                Flexible(
                                   child: StyledText(
-                                    text: 'Username',
+                                    text: username,
                                   ),
                                 ),
                                 const Padding(
