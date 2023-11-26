@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: ((context, index) {
                         final post = snapshot.data!.docs[index];
                         return PostTile(
-                          post: post['Message'],
+                          post: post['Title'],
                           user: post['UserEmail'],
                           timestamp: post['TimeStamp'],
                           imageUrl: 'imageUrl',
@@ -117,9 +117,6 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          // Logged in as : section
-
-          StyledText(text: 'Logged in as : ${currentUser!.email}')
         ],
       ),
     );
