@@ -16,8 +16,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late final Future<DocumentSnapshot> userData;
   final currentUser = FirebaseAuth.instance.currentUser;
-  final TextEditingController _controllerUsername = TextEditingController();
   bool usernameError = false;
   String username = '';
   String profilePictureUrl = '';
@@ -32,19 +32,14 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    fetchUserData();
+    userData = fetchUserData();
   }
 
-  void fetchUserData() async {
-    final snapshot = await FirebaseFirestore.instance
+  Future<DocumentSnapshot> fetchUserData() async {
+    return FirebaseFirestore.instance
         .collection('Usernames')
         .doc(currentUser!.email)
         .get();
-    setState(() {
-      username = snapshot.data()?['Username'] ?? currentUser!.email;
-      profilePictureUrl =
-          snapshot.data()?['ProfilePicture'] ?? currentUser!.email;
-    });
   }
 
   @override
@@ -56,36 +51,54 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             // Profile Div
             StyledContainer(
-              child: Row(
-                children: [
-                  profilePictureUrl != ''
-                      ? CircleAvatar(
+              child: FutureBuilder(
+                future: userData,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Row(
+                      children: [
+                        CircularProgressIndicator(),
+                        Expanded(
+                          child: SizedBox(
+                            height: 45,
+                          ),
+                        )
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Text('Error loading data');
+                  } else {
+                    var username =
+                        snapshot.data?['Username'] ?? currentUser!.email;
+                    var profilePictureUrl =
+                        snapshot.data?['ProfilePicture'] ?? currentUser!.email;
+                    return Row(
+                      children: [
+                        CircleAvatar(
                           radius: 20,
                           backgroundImage: NetworkImage(profilePictureUrl),
-                        )
-                      : const CircleAvatar(
-                          radius: 20,
-                          backgroundColor: AppColors.light,
-                          child: CircularProgressIndicator(),
                         ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: StyledText(
-                        text: username,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: toSettings,
-                    iconSize: 30,
-                    color: AppColors.dark,
-                    icon: const Icon(
-                      Icons.settings,
-                    ),
-                  ),
-                ],
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: StyledText(
+                              text: username,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: toSettings,
+                          iconSize: 30,
+                          color: AppColors.dark,
+                          icon: const Icon(
+                            Icons.settings,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                },
               ),
             ),
             // Bookmark Div
