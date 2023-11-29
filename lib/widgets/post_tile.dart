@@ -141,9 +141,7 @@ class _PostTileState extends State<PostTile> {
                             child: CircularProgressIndicator(),
                           );
                         } else {
-                          username = snapshot.data?['Username'] ?? widget.user;
-                          profilePictureUrl =
-                              snapshot.data?['ProfilePicture'] ?? widget.user;
+                          profilePictureUrl = snapshot.data?['ProfilePicture'];
                           return CircleAvatar(
                             radius: 16,
                             backgroundImage: NetworkImage(profilePictureUrl),
@@ -154,11 +152,26 @@ class _PostTileState extends State<PostTile> {
                 Expanded(
                   child: Row(
                     children: [
-                      Flexible(
-                        child: StyledText(
-                          text: username,
-                        ),
-                      ),
+                      FutureBuilder(
+                          future: userData,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Flexible(
+                                child: StyledText(
+                                  text: '',
+                                ),
+                              );
+                            } else {
+                              username =
+                                  snapshot.data?['Username'] ?? widget.user;
+                              return Flexible(
+                                child: StyledText(
+                                  text: username,
+                                ),
+                              );
+                            }
+                          }),
                       const Padding(
                         padding: EdgeInsets.only(left: 5, right: 5),
                         child: Icon(
