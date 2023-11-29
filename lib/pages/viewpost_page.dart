@@ -6,6 +6,7 @@ import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/top_appbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 import '../widgets/comment_tile.dart';
@@ -23,7 +24,8 @@ class ViewPostPage extends StatefulWidget {
 }
 
 class _ViewPostPageState extends State<ViewPostPage> {
-  final _controllerCommentInput = TextEditingController();
+  final _controllerComment = TextEditingController();
+  final currentUser = FirebaseAuth.instance.currentUser;
   String username = '';
   String profilePictureUrl = '';
   String title = '';
@@ -35,7 +37,23 @@ class _ViewPostPageState extends State<ViewPostPage> {
   @override
   void initState() {
     super.initState();
+    _controllerComment.text = '';
     fetchPostData();
+  }
+
+  void addComment() {
+    FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .collection('Comments')
+        .add({
+      'UserEmail': currentUser!.email,
+      'Comment': _controllerComment.text,
+      'TimeStamp': Timestamp.now()
+    });
+    setState(() {
+      _controllerComment.clear();
+    });
   }
 
   void fetchPostData() async {
@@ -302,17 +320,35 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            // This Column can be change into ListView in the future
-                            child: const Column(
-                              children: [
-                                // Comments
-                                CommentTile(),
-                                CommentTile(),
-                                CommentTile(),
-                                CommentTile(),
-                                CommentTile(),
-                              ],
-                            ),
+                            child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('User Posts')
+                                    .doc(widget.postId)
+                                    .collection('Comments')
+                                    .orderBy('TimeStamp', descending: true)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListView(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        children:
+                                            snapshot.data!.docs.map((doc) {
+                                          final commentData = doc.data()
+                                              as Map<String, dynamic>;
+                                          return CommentTile(
+                                            text: commentData['Comment'],
+                                            user: commentData['UserEmail'],
+                                            time: commentData['TimeStamp'],
+                                          );
+                                        }).toList());
+                                  } else {
+                                    return const Expanded(
+                                      child: SizedBox(height: 15),
+                                    );
+                                  }
+                                }),
                           ),
                         ],
                       ),
@@ -349,14 +385,15 @@ class _ViewPostPageState extends State<ViewPostPage> {
                     ),
                     child: TextField(
                       maxLines: null,
-                      controller: _controllerCommentInput,
+                      controller: _controllerComment,
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         color: AppColors.dark,
                       ),
                       decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        contentPadding:
+                            EdgeInsets.only(left: 10, right: 10, bottom: 7),
                         border: InputBorder.none,
                         hintText: 'Add Comments',
                       ),
@@ -364,7 +401,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: addComment,
                   icon: const Icon(Icons.send_rounded),
                   color: AppColors.light,
                 ),

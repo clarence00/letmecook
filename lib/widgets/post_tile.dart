@@ -233,12 +233,9 @@ class _PostTileState extends State<PostTile> {
                 ),
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: CustomIcons.comment(color: _heartColor),
-                    ),
+                    CustomIcons.comment(),
                     Container(
-                      padding: const EdgeInsets.only(right: 12),
+                      padding: const EdgeInsets.only(left: 5, right: 12),
                       child: const StyledText(
                         text: '12',
                       ),
