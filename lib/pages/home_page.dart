@@ -104,6 +104,7 @@ class _HomePageState extends State<HomePage> {
                         user: post['UserEmail'],
                         timestamp: post['TimeStamp'],
                         imageUrl: 'imageUrl',
+                        likes: List<String>.from(post['Likes'] ?? []),
                         postId: post.id,
                       );
                     }),
