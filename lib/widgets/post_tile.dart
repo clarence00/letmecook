@@ -28,13 +28,14 @@ class PostTile extends StatefulWidget {
 }
 
 class _PostTileState extends State<PostTile> {
+  late final Future<DocumentSnapshot> userData;
   String username = '';
   String profilePictureUrl = '';
 
   @override
   void initState() {
     super.initState();
-    fetchUserData();
+    userData = fetchUserData();
   }
 
   void toViewPost() {
@@ -44,15 +45,11 @@ class _PostTileState extends State<PostTile> {
             builder: (context) => ViewPostPage(postId: widget.postId)));
   }
 
-  void fetchUserData() async {
-    final snapshot = await FirebaseFirestore.instance
+  Future<DocumentSnapshot> fetchUserData() async {
+    return FirebaseFirestore.instance
         .collection('Usernames')
         .doc(widget.user)
         .get();
-    setState(() {
-      username = snapshot.data()?['Username'] ?? widget.user;
-      profilePictureUrl = snapshot.data()?['ProfilePicture'] ?? widget.user;
-    });
   }
 
   String getPostTimeDisplay(Timestamp timestamp) {
@@ -107,16 +104,26 @@ class _PostTileState extends State<PostTile> {
                 // First Div (Profile)
                 Container(
                   margin: const EdgeInsets.only(right: 5),
-                  child: profilePictureUrl != ''
-                      ? CircleAvatar(
-                          radius: 16,
-                          backgroundImage: NetworkImage(profilePictureUrl),
-                        )
-                      : const CircleAvatar(
-                          radius: 16,
-                          backgroundColor: AppColors.light,
-                          child: CircularProgressIndicator(),
-                        ),
+                  child: FutureBuilder(
+                      future: userData,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircleAvatar(
+                            radius: 16,
+                            backgroundColor: AppColors.light,
+                            child: CircularProgressIndicator(),
+                          );
+                        } else {
+                          username = snapshot.data?['Username'] ?? widget.user;
+                          profilePictureUrl =
+                              snapshot.data?['ProfilePicture'] ?? widget.user;
+                          return CircleAvatar(
+                            radius: 16,
+                            backgroundImage: NetworkImage(profilePictureUrl),
+                          );
+                        }
+                      }),
                 ),
                 Expanded(
                   child: Row(
