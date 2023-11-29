@@ -33,27 +33,39 @@ class _ViewPostPageState extends State<ViewPostPage> {
   String imageUrl = '';
   String userEmail = '';
   Timestamp timestamp = Timestamp.fromDate(DateTime.now());
+  int counter = 0;
 
   @override
   void initState() {
     super.initState();
     _controllerComment.text = '';
+    counter = 0;
     fetchPostData();
   }
 
   void addComment() {
-    FirebaseFirestore.instance
-        .collection('User Posts')
-        .doc(widget.postId)
-        .collection('Comments')
-        .add({
-      'UserEmail': currentUser!.email,
-      'Comment': _controllerComment.text,
-      'TimeStamp': Timestamp.now()
-    });
-    setState(() {
-      _controllerComment.clear();
-    });
+    if (_controllerComment.text.trim().isNotEmpty) {
+      FirebaseFirestore.instance
+          .collection('User Posts')
+          .doc(widget.postId)
+          .collection('Comments')
+          .add({
+        'UserEmail': currentUser!.email,
+        'Comment': _controllerComment.text,
+        'TimeStamp': Timestamp.now()
+      });
+      setState(() {
+        _controllerComment.clear();
+      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) =>
+              ViewPostPage(postId: widget.postId),
+        ),
+      );
+    }
   }
 
   void fetchPostData() async {
@@ -337,6 +349,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                             snapshot.data!.docs.map((doc) {
                                           final commentData = doc.data()
                                               as Map<String, dynamic>;
+                                          counter++;
                                           return CommentTile(
                                             text: commentData['Comment'],
                                             user: commentData['UserEmail'],
