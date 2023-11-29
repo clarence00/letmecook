@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/pages/viewpost_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
+import 'package:letmecook/widgets/heart_button.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class PostTile extends StatefulWidget {
@@ -14,6 +16,7 @@ class PostTile extends StatefulWidget {
     required this.timestamp,
     required this.imageUrl,
     required this.postId,
+    required this.likes,
   }) : super(key: key);
 
   // Variables
@@ -22,6 +25,7 @@ class PostTile extends StatefulWidget {
   final Timestamp timestamp;
   final String imageUrl;
   final String postId;
+  final List<String> likes;
 
   @override
   _PostTileState createState() => _PostTileState();
@@ -29,20 +33,42 @@ class PostTile extends StatefulWidget {
 
 class _PostTileState extends State<PostTile> {
   late final Future<DocumentSnapshot> userData;
+  final currentUser = FirebaseAuth.instance.currentUser;
+  bool isLiked = false;
   String username = '';
   String profilePictureUrl = '';
-
-  @override
-  void initState() {
-    super.initState();
-    userData = fetchUserData();
-  }
 
   void toViewPost() {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ViewPostPage(postId: widget.postId)));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    userData = fetchUserData();
+    isLiked = widget.likes.contains(currentUser!.email);
+  }
+
+  void toggleLike() {
+    setState(() {
+      isLiked = !isLiked;
+    });
+
+    DocumentReference postRef =
+        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+
+    if (isLiked) {
+      postRef.update({
+        'Likes': FieldValue.arrayUnion([currentUser!.email])
+      });
+    } else {
+      postRef.update({
+        'Likes': FieldValue.arrayRemove([currentUser!.email])
+      });
+    }
   }
 
   Future<DocumentSnapshot> fetchUserData() async {
@@ -183,14 +209,11 @@ class _PostTileState extends State<PostTile> {
               children: [
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: CustomIcons.heart(color: _heartColor),
-                    ),
+                    LikeButton(onTap: toggleLike, isLiked: isLiked),
                     Container(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: const StyledText(
-                        text: '12',
+                      padding: const EdgeInsets.only(left: 5, right: 12),
+                      child: StyledText(
+                        text: widget.likes.length.toString(),
                       ),
                     ),
                   ],
