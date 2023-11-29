@@ -7,6 +7,7 @@ import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/top_appbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:letmecook/widgets/heart_button.dart';
 import 'package:intl/intl.dart';
 
 import '../widgets/comment_tile.dart';
@@ -32,15 +33,34 @@ class _ViewPostPageState extends State<ViewPostPage> {
   String message = '';
   String imageUrl = '';
   String userEmail = '';
+  bool isLiked = false;
   Timestamp timestamp = Timestamp.fromDate(DateTime.now());
-  int counter = 0;
+  String likes = '0';
 
   @override
   void initState() {
     super.initState();
     _controllerComment.text = '';
-    counter = 0;
     fetchPostData();
+  }
+
+  void toggleLike() {
+    setState(() {
+      isLiked = !isLiked;
+    });
+
+    DocumentReference postRef =
+        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+
+    if (isLiked) {
+      postRef.update({
+        'Likes': FieldValue.arrayUnion([currentUser!.email])
+      });
+    } else {
+      postRef.update({
+        'Likes': FieldValue.arrayRemove([currentUser!.email])
+      });
+    }
   }
 
   void addComment() {
@@ -79,6 +99,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
       message = postDoc.data()?['Message'];
       imageUrl = postDoc.data()?['ImageUrl'];
       timestamp = postDoc.data()?['TimeStamp'];
+      isLiked = postDoc.data()?['Likes'].contains(currentUser!.email);
+      likes = postDoc.data()?['Likes'].length.toString() ?? '0';
       fetchUserData();
     });
   }
@@ -259,15 +281,12 @@ class _ViewPostPageState extends State<ViewPostPage> {
                             children: [
                               Row(
                                 children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: CustomIcons.heart(
-                                        color: AppColors.dark),
-                                  ),
+                                  LikeButton(onTap: () {}, isLiked: isLiked),
                                   Container(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: const StyledText(
-                                      text: '12',
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 12),
+                                    child: StyledText(
+                                      text: likes,
                                     ),
                                   ),
                                 ],
@@ -349,7 +368,6 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                             snapshot.data!.docs.map((doc) {
                                           final commentData = doc.data()
                                               as Map<String, dynamic>;
-                                          counter++;
                                           return CommentTile(
                                             text: commentData['Comment'],
                                             user: commentData['UserEmail'],
