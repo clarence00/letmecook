@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
-import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
@@ -24,6 +23,7 @@ class _PostPageState extends State<PostPage> {
   final _controllerTitle = TextEditingController();
   final _controllerCategory = TextEditingController();
   final _controllerIngredients = TextEditingController();
+  List<TextEditingController> ingredientControllers = [TextEditingController()];
 
   void postMessage() {
     if (textController.text.isNotEmpty) {
@@ -95,74 +95,96 @@ class _PostPageState extends State<PostPage> {
                 child: Column(
                   children: [
                     const StyledText(
-                      text: 'Recipe',
+                      text: 'Ingredients',
                       size: 20,
                       weight: FontWeight.w700,
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 10),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.dark,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: ingredientControllers.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  decoration: ShapeDecoration(
+                                    color: AppColors.background,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: TextFormField(
+                                    maxLines: null,
+                                    controller: ingredientControllers[index],
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: AppColors.dark,
+                                    ),
+                                    decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.all(5),
+                                      border: InputBorder.none,
+                                      hintText: 'Add Ingredients',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (ingredientControllers.length > 1)
+                                const SizedBox(width: 10),
+                              if (ingredientControllers.length > 1)
+                                // Remove button
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      ingredientControllers.removeAt(index);
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.background,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const StyledText(
+                                      text: '-',
+                                      size: 16,
+                                      weight: FontWeight.w600,
+                                      color: AppColors.dark,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+
+                    // Add more button
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          ingredientControllers.add(TextEditingController());
+                        });
+                      },
                       child: Container(
-                        decoration: ShapeDecoration(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        decoration: BoxDecoration(
                           color: AppColors.background,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: TextField(
-                          maxLines: null,
-                          controller: _controllerIngredients,
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.dark,
-                          ),
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(5),
-                            border: InputBorder.none,
-                            hintText: 'Add Ingredients',
-                          ),
+                        child: const StyledText(
+                          text: 'Add',
+                          size: 16,
+                          weight: FontWeight.w600,
+                          color: AppColors.dark,
                         ),
                       ),
                     ),
-                    hasImage
-                        ? Container(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.network(
-                                'https://picsum.photos/id/1074/400/400',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          )
-                        : const SizedBox(height: 0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.image_rounded),
-                          color: AppColors.dark,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          child: StyledButton(
-                            onPressed: () {},
-                            buttonStyle: 'primary',
-                            size: 20,
-                            text: 'Post',
-                          ),
-                        )
-                      ],
-                    )
                   ],
                 ),
               )
