@@ -102,6 +102,7 @@ class _CommentTileState extends State<CommentTile> {
           Container(
             margin: const EdgeInsets.only(left: 30, right: 25),
             padding: const EdgeInsets.symmetric(horizontal: 5),
+            width: double.infinity,
             decoration: BoxDecoration(
               color: AppColors.background,
               borderRadius: BorderRadius.circular(8),
