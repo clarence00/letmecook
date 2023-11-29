@@ -116,6 +116,17 @@ class _ViewPostPageState extends State<ViewPostPage> {
     });
   }
 
+  Future<int> fetchCommentCount() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .collection('Comments') // Replace with your collection name
+        .get();
+
+    int documentCount = querySnapshot.docs.length;
+    return documentCount;
+  }
+
   String getPostTimeDisplay(Timestamp timestamp) {
     DateTime postTime = timestamp.toDate();
     DateTime now = DateTime.now();
@@ -293,15 +304,18 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               ),
                               Row(
                                 children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: CustomIcons.comment(
-                                        color: AppColors.dark),
-                                  ),
+                                  CustomIcons.comment(),
                                   Container(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: const StyledText(
-                                      text: '12',
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 12),
+                                    child: FutureBuilder<int>(
+                                      future: fetchCommentCount(),
+                                      builder: (context, snapshot) {
+                                        return StyledText(
+                                          text:
+                                              snapshot.data?.toString() ?? '0',
+                                        );
+                                      },
                                     ),
                                   ),
                                 ],
