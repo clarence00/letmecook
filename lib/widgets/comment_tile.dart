@@ -19,16 +19,24 @@ class CommentTile extends StatefulWidget {
 }
 
 class _CommentTileState extends State<CommentTile> {
-  String commentUser = '';
-  String commentText = '';
-  Timestamp commentTime = Timestamp.now();
+  String username = '';
+  String profilePictureUrl = '';
 
   @override
   void initState() {
     super.initState();
-    commentUser = widget.user;
-    commentText = widget.text;
-    commentTime = widget.time;
+    fetchUserData();
+  }
+
+  void fetchUserData() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(widget.user)
+        .get();
+    setState(() {
+      username = snapshot.data()?['Username'] ?? widget.user;
+      profilePictureUrl = snapshot.data()?['ProfilePicture'] ?? widget.user;
+    });
   }
 
   String getCommentTimeDisplay(Timestamp timestamp) {
@@ -61,17 +69,18 @@ class _CommentTileState extends State<CommentTile> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: CustomIcons.profile(
-                  color: AppColors.dark,
-                  size: 30,
-                ),
+                child: profilePictureUrl != ''
+                    ? CircleAvatar(
+                        radius: 14,
+                        backgroundImage: NetworkImage(profilePictureUrl),
+                      )
+                    : const CircularProgressIndicator(),
               ),
               Expanded(
                 child: Row(
                   children: [
-                    // Username
                     StyledText(
-                      text: commentUser,
+                      text: username,
                     ),
                     const Padding(
                       padding: EdgeInsets.only(left: 5, right: 5),
@@ -83,7 +92,7 @@ class _CommentTileState extends State<CommentTile> {
                     ),
                     // Time
                     StyledText(
-                      text: getCommentTimeDisplay(commentTime),
+                      text: getCommentTimeDisplay(widget.time),
                       size: 12,
                       color: AppColors.accent,
                     ),
@@ -107,7 +116,7 @@ class _CommentTileState extends State<CommentTile> {
               color: AppColors.background,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: StyledText(overflow: TextOverflow.clip, text: commentText),
+            child: StyledText(overflow: TextOverflow.clip, text: widget.text),
           ),
         ],
       ),
