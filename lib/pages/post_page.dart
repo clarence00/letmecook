@@ -22,7 +22,7 @@ class _PostPageState extends State<PostPage> {
   final bool hasImage = true;
   final _controllerTitle = TextEditingController();
   final _controllerCategory = TextEditingController();
-  final _controllerIngredients = TextEditingController();
+  final _controllerDescriptions = TextEditingController();
   List<TextEditingController> ingredientControllers = [TextEditingController()];
 
   void postMessage() {
@@ -70,11 +70,20 @@ class _PostPageState extends State<PostPage> {
                         size: 20,
                         hintText: 'Category',
                       ),
+                    ),
+                    //description box
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: StyledTextbox(
+                          controller: _controllerDescriptions,
+                          weight: FontWeight.w400,
+                          size: 15,
+                          hintText: 'Add Description'),
                     )
                   ],
                 ),
               ),
-              // Ingredients Div
+              // Ingredients Div --------------------------------------------------------
               Container(
                 margin:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -164,27 +173,52 @@ class _PostPageState extends State<PostPage> {
                     ),
 
                     // Add more button
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          ingredientControllers.add(TextEditingController());
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: AppColors.background,
-                          borderRadius: BorderRadius.circular(10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              ingredientControllers
+                                  .add(TextEditingController());
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: AppColors.background,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const StyledText(
+                              text: 'Add',
+                              size: 16,
+                              weight: FontWeight.w600,
+                              color: AppColors.dark,
+                            ),
+                          ),
                         ),
-                        child: const StyledText(
-                          text: 'Add',
-                          size: 16,
-                          weight: FontWeight.w600,
-                          color: AppColors.dark,
+                        const SizedBox(
+                          width: 20,
                         ),
-                      ),
-                    ),
+                        GestureDetector(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: AppColors.background,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const StyledText(
+                              text: 'Next',
+                              size: 16,
+                              weight: FontWeight.w600,
+                              color: AppColors.dark,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ),
               )
