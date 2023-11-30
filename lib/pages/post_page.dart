@@ -79,11 +79,28 @@ class _PostPageState extends State<PostPage> {
                           weight: FontWeight.w400,
                           size: 15,
                           hintText: 'Add Description'),
+                    ),
+                    GestureDetector(
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: AppColors.background,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const StyledText(
+                          text: 'Next',
+                          size: 16,
+                          weight: FontWeight.w600,
+                          color: AppColors.dark,
+                        ),
+                      ),
                     )
                   ],
                 ),
               ),
-              // Ingredients Div --------------------------------------------------------
+              // Ingredients Div -------------------------------------------------------
               Container(
                 margin:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -198,25 +215,6 @@ class _PostPageState extends State<PostPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        GestureDetector(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: AppColors.background,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const StyledText(
-                              text: 'Next',
-                              size: 16,
-                              weight: FontWeight.w600,
-                              color: AppColors.dark,
-                            ),
-                          ),
-                        )
                       ],
                     )
                   ],
