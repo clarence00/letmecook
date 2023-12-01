@@ -60,6 +60,7 @@ class _PostPageState extends State<PostPage> {
                       child: Column(
                         children: [
                           StyledTextbox(
+                            text: _controllerTitle.text,
                             controller: _controllerTitle,
                             weight: FontWeight.w700,
                             size: 20,
@@ -68,6 +69,7 @@ class _PostPageState extends State<PostPage> {
                           Container(
                             margin: const EdgeInsets.only(top: 10),
                             child: StyledTextbox(
+                              text: _controllerCategory.text,
                               controller: _controllerCategory,
                               weight: FontWeight.w700,
                               size: 20,
@@ -78,6 +80,7 @@ class _PostPageState extends State<PostPage> {
                           Container(
                             margin: const EdgeInsets.only(top: 10),
                             child: StyledTextbox(
+                                text: _controllerDescription.text,
                                 controller: _controllerDescription,
                                 weight: FontWeight.w400,
                                 size: 15,
@@ -219,6 +222,28 @@ class _PostPageState extends State<PostPage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        currentStep--;
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.background,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const StyledText(
+                                        text: 'Back',
+                                        size: 16,
+                                        weight: FontWeight.w600,
+                                        color: AppColors.dark,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -370,6 +395,28 @@ class _PostPageState extends State<PostPage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        currentStep--;
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.background,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const StyledText(
+                                        text: 'Back',
+                                        size: 16,
+                                        weight: FontWeight.w600,
+                                        color: AppColors.dark,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () {
                                       setState(() {
