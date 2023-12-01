@@ -3,10 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
+import 'package:letmecook/widget_tree.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
-import 'package:letmecook/widget_tree.dart';
+import 'package:multiselect/multiselect.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key});
@@ -29,6 +30,18 @@ class _PostPageState extends State<PostPage> {
 
   int currentStep = 1;
 
+  //Variables for Category Dropdown
+  List<String> _categories = [
+    'Pork',
+    'Chicken',
+    'Beef',
+    'Fish',
+    'Etc.',
+    'Below 100 Pesos ',
+    'Above 100 Pesos'
+  ];
+  List<String> _selectedCategories = [];
+
   void post() {
     List<String> ingredients =
         ingredientsController.map((controller) => controller.text).toList();
@@ -40,10 +53,11 @@ class _PostPageState extends State<PostPage> {
       'Title': _controllerTitle.text,
       'Message': _controllerDescription.text,
       'ImageUrl': '',
-      'Category': _controllerCategory.text,
+      'Category': _selectedCategories,
       'Ingredients': ingredients,
       'Steps': steps,
       'Likes': [],
+      'Bookmarks': [],
       'TimeStamp': Timestamp.now(),
     });
 
@@ -75,16 +89,28 @@ class _PostPageState extends State<PostPage> {
                             size: 20,
                             hintText: 'Add Title',
                           ),
+
                           Container(
-                            margin: const EdgeInsets.only(top: 10),
-                            child: StyledTextbox(
-                              text: _controllerCategory.text,
-                              controller: _controllerCategory,
-                              weight: FontWeight.w700,
-                              size: 20,
-                              hintText: 'Category',
-                            ),
-                          ),
+                              margin: const EdgeInsets.only(top: 10),
+                              decoration: ShapeDecoration(
+                                color: AppColors.background,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                              ),
+                              child: DropDownMultiSelect(
+                                options: _categories,
+                                selectedValues: _selectedCategories,
+                                onChanged: (value) {
+                                  print('Selected categories $value');
+                                  setState(() {
+                                    _selectedCategories = value;
+                                  });
+                                  print(
+                                      'You have selected $_selectedCategories');
+                                },
+                                whenEmpty: 'Please Select a Category!',
+                              )),
+
                           //description box
                           Container(
                             margin: const EdgeInsets.only(top: 10),
@@ -95,13 +121,14 @@ class _PostPageState extends State<PostPage> {
                                 size: 15,
                                 hintText: 'Add Description'),
                           ),
+
                           GestureDetector(
                             onTap: () {
                               if (_controllerTitle.text.trim().isNotEmpty &&
                                   _controllerDescription.text
                                       .trim()
                                       .isNotEmpty &&
-                                  _controllerCategory.text.trim().isNotEmpty) {
+                                  _selectedCategories.isNotEmpty) {
                                 setState(() {
                                   currentStep += 1;
                                 });
