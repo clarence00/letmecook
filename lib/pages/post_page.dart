@@ -246,6 +246,41 @@ class _PostPageState extends State<PostPage> {
                                   const SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () {
+                                      print('INGREDIENTS: ');
+                                      for (int index = 0;
+                                          index < ingredientsController.length;
+                                          index++) {
+                                        TextEditingController controller =
+                                            ingredientsController[index];
+
+                                        if (controller.text.isEmpty) {
+                                          print('$index: Empty');
+                                        } else if (controller.text.trim() ==
+                                            '') {
+                                          print('$index: Space');
+                                        } else {
+                                          print('$index: ${controller.text}');
+                                        }
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.accent,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const StyledText(
+                                        text: 'Print',
+                                        size: 16,
+                                        weight: FontWeight.w600,
+                                        color: AppColors.dark,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 20),
+                                  GestureDetector(
+                                    onTap: () {
                                       setState(() {
                                         ingredientsController
                                             .add(TextEditingController());
@@ -269,7 +304,9 @@ class _PostPageState extends State<PostPage> {
                                   const SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () {
-                                      if (ingredientsController.isNotEmpty) {
+                                      if (ingredientsController.every(
+                                          (controller) =>
+                                              controller.text.trim() != '')) {
                                         setState(() {
                                           currentStep += 1;
                                         });
@@ -419,6 +456,36 @@ class _PostPageState extends State<PostPage> {
                                   const SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () {
+                                      print('STEPS: ');
+                                      for (TextEditingController controller
+                                          in stepsController) {
+                                        if (controller.text == '') {
+                                          print('noSpace');
+                                        } else if (controller.text == ' ') {
+                                          print('space');
+                                        } else {
+                                          print(controller.text);
+                                        }
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.accent,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const StyledText(
+                                        text: 'Print',
+                                        size: 16,
+                                        weight: FontWeight.w600,
+                                        color: AppColors.dark,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 20),
+                                  GestureDetector(
+                                    onTap: () {
                                       setState(() {
                                         stepsController
                                             .add(TextEditingController());
@@ -456,8 +523,11 @@ class _PostPageState extends State<PostPage> {
                                       //   print(controller.text);
                                       // }
 
-                                      if (stepsController.isNotEmpty) {
-                                        print('Upload to database!');
+                                      if (stepsController.every((controller) =>
+                                          controller.text.trim() != '')) {
+                                        setState(() {
+                                          print('Upload to database!');
+                                        });
                                       }
                                     },
                                     child: Container(
