@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:letmecook/assets/icons/custom_icons.dart';
-import 'package:letmecook/pages/viewpost_page.dart';
-import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/heart_button.dart';
-import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:letmecook/assets/icons/custom_icons.dart';
+import 'package:letmecook/assets/themes/app_colors.dart';
+import 'package:letmecook/pages/viewpost_page.dart';
+import 'package:letmecook/widgets/bookmark_button.dart';
+import 'package:letmecook/widgets/heart_button.dart';
+import 'package:letmecook/widgets/styled_text.dart';
 
 class PostTile extends StatefulWidget {
   PostTile({
@@ -17,6 +18,7 @@ class PostTile extends StatefulWidget {
     required this.imageUrl,
     required this.postId,
     required this.likes,
+    required this.bookmarks,
   }) : super(key: key);
 
   // Variables
@@ -26,6 +28,7 @@ class PostTile extends StatefulWidget {
   final String imageUrl;
   final String postId;
   final List<String> likes;
+  final List<String> bookmarks;
 
   @override
   _PostTileState createState() => _PostTileState();
@@ -35,6 +38,7 @@ class _PostTileState extends State<PostTile> {
   late final Future<DocumentSnapshot> userData;
   final currentUser = FirebaseAuth.instance.currentUser;
   bool isLiked = false;
+  bool isBookmarked = false;
   String username = '';
   String profilePictureUrl = '';
   Future<int>? commentCount;
@@ -51,6 +55,7 @@ class _PostTileState extends State<PostTile> {
     super.initState();
     userData = fetchUserData();
     isLiked = widget.likes.contains(currentUser!.email);
+    isBookmarked = widget.bookmarks.contains(currentUser!.email);
     commentCount = fetchCommentCount();
   }
 
@@ -69,6 +74,43 @@ class _PostTileState extends State<PostTile> {
     } else {
       postRef.update({
         'Likes': FieldValue.arrayRemove([currentUser!.email])
+      });
+    }
+  }
+
+  void toggleBookmark() {
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+
+    DocumentReference postRef =
+        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+
+    if (isBookmarked) {
+      postRef.update({
+        'Bookmarks': FieldValue.arrayUnion([currentUser!.email])
+      });
+
+      // Add a new document to the Bookmarks collection for the user
+      FirebaseFirestore.instance.collection('Bookmarks').add({
+        'postId': widget.postId,
+        'userId': currentUser!.email,
+      });
+    } else {
+      postRef.update({
+        'Bookmarks': FieldValue.arrayRemove([currentUser!.email])
+      });
+
+      // Delete the document from the Bookmarks collection
+      FirebaseFirestore.instance
+          .collection('Bookmarks')
+          .where('postId', isEqualTo: widget.postId)
+          .where('userId', isEqualTo: currentUser!.email)
+          .get()
+          .then((snapshot) {
+        for (DocumentSnapshot doc in snapshot.docs) {
+          doc.reference.delete();
+        }
       });
     }
   }
@@ -267,16 +309,16 @@ class _PostTileState extends State<PostTile> {
                     ),
                   ],
                 ),
+
+                //bookmark
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: CustomIcons.bookmark(color: _heartColor),
-                    ),
+                    bookmarkButton(
+                        onTap: toggleBookmark, isBookmarked: isBookmarked),
                     Container(
                       padding: const EdgeInsets.only(right: 12),
-                      child: const StyledText(
-                        text: '12',
+                      child: StyledText(
+                        text: widget.bookmarks.length.toString(),
                       ),
                     ),
                   ],
