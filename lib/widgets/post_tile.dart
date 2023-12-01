@@ -18,7 +18,6 @@ class PostTile extends StatefulWidget {
       required this.imageUrl,
       required this.postId,
       required this.likes,
-      required this.bookmarks,
       required this.bookmarkCount})
       : super(key: key);
 
@@ -29,7 +28,6 @@ class PostTile extends StatefulWidget {
   final String imageUrl;
   final String postId;
   final List<String> likes;
-  final List<String> bookmarks;
   final int bookmarkCount;
 
   @override
@@ -58,9 +56,37 @@ class _PostTileState extends State<PostTile> {
     super.initState();
     userData = fetchUserData();
     isLiked = widget.likes.contains(currentUser!.email);
-    isBookmarked = widget.bookmarks.contains(currentUser!.email);
+    fetchIsBookmarked();
     commentCount = fetchCommentCount();
     bookmarkCount = widget.bookmarkCount;
+    fetchBookmarkCount();
+  }
+
+  Future<void> fetchIsBookmarked() async {
+    DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(currentUser!.email)
+        .get();
+
+    if (userSnapshot.exists) {
+      setState(() {
+        isBookmarked = (userSnapshot['Bookmarks'] as List<dynamic>)
+            .contains(widget.postId);
+      });
+    }
+  }
+
+  Future<void> fetchBookmarkCount() async {
+    DocumentSnapshot postSnapshot = await FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .get();
+
+    if (postSnapshot.exists) {
+      setState(() {
+        bookmarkCount = postSnapshot['BookmarkCount'] ?? 0;
+      });
+    }
   }
 
   void toggleLike() {
@@ -85,15 +111,6 @@ class _PostTileState extends State<PostTile> {
   void toggleBookmark() {
     setState(() {
       isBookmarked = !isBookmarked;
-      if (isBookmarked) {
-        // Add the current user's email to the bookmarks list if not null
-        if (currentUser?.email != null) {
-          widget.bookmarks.add(currentUser!.email!);
-        }
-      } else {
-        // Remove the current user's email from the bookmarks list if not null
-        widget.bookmarks.remove(currentUser?.email);
-      }
     });
 
     DocumentReference userRef = FirebaseFirestore.instance
@@ -107,8 +124,6 @@ class _PostTileState extends State<PostTile> {
       userRef.update({
         'Bookmarks': FieldValue.arrayUnion([widget.postId]),
       });
-
-      // Increment BookmarkCount in the user post collection
       postRef.update({
         'BookmarkCount': FieldValue.increment(1),
       });
@@ -116,22 +131,11 @@ class _PostTileState extends State<PostTile> {
       userRef.update({
         'Bookmarks': FieldValue.arrayRemove([widget.postId]),
       });
-
       postRef.update({
         'BookmarkCount': FieldValue.increment(-1),
       });
     }
-    FirebaseFirestore.instance
-        .collection('User Posts')
-        .doc(widget.postId)
-        .get()
-        .then((postSnapshot) {
-      if (postSnapshot.exists) {
-        setState(() {
-          bookmarkCount = postSnapshot['BookmarkCount'] ?? 0;
-        });
-      }
-    });
+    fetchBookmarkCount();
   }
 
   Future<DocumentSnapshot> fetchUserData() async {
@@ -330,7 +334,7 @@ class _PostTileState extends State<PostTile> {
                   ],
                 ),
 
-                //bookmark
+                // Bookmark
                 Row(
                   children: [
                     bookmarkButton(

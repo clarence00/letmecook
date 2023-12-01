@@ -54,35 +54,6 @@ class _HomePageState extends State<HomePage> {
       // WALL POST
       body: Column(
         children: [
-          StyledContainer(
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 5),
-                  child: CustomIcons.profile(
-                    color: AppColors.dark,
-                    size: 40,
-                  ),
-                ),
-                Expanded(
-                  child: StyledTextbox(
-                    maxLines: 50,
-                    height: 40,
-                    controller: _controllerPost,
-                    obscureText: false,
-                    hintText: "Write a recipe...",
-                  ),
-                ),
-                IconButton(
-                  padding: const EdgeInsets.only(left: 5),
-                  onPressed: postMessage,
-                  icon: CustomIcons.arrowRight(color: AppColors.dark),
-                  iconSize: 30,
-                ),
-              ],
-            ),
-          ),
-
           // Wall Display (boxes)
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
@@ -105,7 +76,6 @@ class _HomePageState extends State<HomePage> {
                         timestamp: post['TimeStamp'],
                         imageUrl: 'imageUrl',
                         likes: List<String>.from(post['Likes'] ?? []),
-                        bookmarks: List<String>.from(post['Bookmarks'] ?? []),
                         bookmarkCount: post['BookmarkCount'],
                         postId: post.id,
                       );
