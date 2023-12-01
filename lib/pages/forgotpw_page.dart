@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:letmecook/utils.dart';
+import 'package:letmecook/widget_tree.dart';
 
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -67,7 +69,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 style: TextStyle(fontSize: 24),
               ),
 
-              onPressed: () {},
+              onPressed: resetPassword,
             )
 
           ],
@@ -77,11 +79,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
 
 
-    Future resetPasswrod() async {
+    Future resetPassword() async {
+
+    try{
       await FirebaseAuth.instance.sendPasswordResetEmail(email: (emailController.text.trim()));
-    
       //insert snackbar or popup to indicate email has been sent
-    
-    
+      Utils.showSnackBar('Password Reset Email has been sent.');
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => WidgetTree()));
+
+    } on FirebaseAuthException catch (e) {
+      print(e);
+
+
+      Utils.showSnackBar(e.message);
     }
-}
+    }
+    }

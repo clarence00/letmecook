@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:letmecook/pages/hub_page.dart';
 import 'package:letmecook/pages/login_page.dart';
 import 'package:letmecook/pages/test_page.dart';
+import 'package:letmecook/utils.dart';
 import 'package:letmecook/widget_tree.dart';
 
 import 'pages/home_page.dart';
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    return const MaterialApp(
+    return MaterialApp(
+      scaffoldMessengerKey: Utils.messengerKey,
       debugShowCheckedModeBanner: false,
       title: 'Let Me Cook',
       home: WidgetTree(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:letmecook/pages/forgotpw_page.dart';
 import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/widgets/styled_text.dart';
@@ -169,8 +170,14 @@ class _LogInPageState extends State<LogInPage> {
                                 fontSize: 16,
                               ) 
                             ),
-                            
-                          ),
+                            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ForgotPasswordPage(),
+                              )
+                              )
+                              ),
+                        ]
+                      )
+                    ),
 
 
 
@@ -198,9 +205,7 @@ class _LogInPageState extends State<LogInPage> {
                           //       size: 16,
                           //       color: Colors.red),
                           // ),
-                        ],
-                      ),
-                    ),
+           
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: Column(
