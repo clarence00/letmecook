@@ -37,6 +37,7 @@ class _PostTileState extends State<PostTile> {
   bool isLiked = false;
   String username = '';
   String profilePictureUrl = '';
+  Future<int>? commentCount;
 
   void toViewPost() {
     Navigator.push(
@@ -50,6 +51,7 @@ class _PostTileState extends State<PostTile> {
     super.initState();
     userData = fetchUserData();
     isLiked = widget.likes.contains(currentUser!.email);
+    commentCount = fetchCommentCount();
   }
 
   void toggleLike() {
@@ -76,6 +78,17 @@ class _PostTileState extends State<PostTile> {
         .collection('Usernames')
         .doc(widget.user)
         .get();
+  }
+
+  Future<int> fetchCommentCount() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .collection('Comments') // Replace with your collection name
+        .get();
+
+    int documentCount = querySnapshot.docs.length;
+    return documentCount;
   }
 
   String getPostTimeDisplay(Timestamp timestamp) {
@@ -233,14 +246,23 @@ class _PostTileState extends State<PostTile> {
                 ),
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: CustomIcons.comment(color: _heartColor),
-                    ),
+                    CustomIcons.comment(),
                     Container(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: const StyledText(
-                        text: '12',
+                      padding: const EdgeInsets.only(left: 5, right: 12),
+                      child: FutureBuilder<int>(
+                        future: commentCount,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const StyledText(
+                              text: '0',
+                            );
+                          } else {
+                            return StyledText(
+                              text: snapshot.data?.toString() ?? '0',
+                            );
+                          }
+                        },
                       ),
                     ),
                   ],
