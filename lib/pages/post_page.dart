@@ -368,6 +368,22 @@ class _PostPageState extends State<PostPage> {
                                         const EdgeInsets.symmetric(vertical: 5),
                                     child: Row(
                                       children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.background,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: StyledText(
+                                            text: '${index + 1}',
+                                            size: 16,
+                                            weight: FontWeight.w600,
+                                            color: AppColors.dark,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                           child: Container(
                                             decoration: ShapeDecoration(
@@ -390,7 +406,7 @@ class _PostPageState extends State<PostPage> {
                                                 contentPadding:
                                                     EdgeInsets.all(5),
                                                 border: InputBorder.none,
-                                                hintText: 'Add Ingredients',
+                                                hintText: 'Add Steps',
                                               ),
                                             ),
                                           ),
@@ -457,14 +473,19 @@ class _PostPageState extends State<PostPage> {
                                   GestureDetector(
                                     onTap: () {
                                       print('STEPS: ');
-                                      for (TextEditingController controller
-                                          in stepsController) {
-                                        if (controller.text == '') {
-                                          print('noSpace');
-                                        } else if (controller.text == ' ') {
-                                          print('space');
+                                      for (int index = 0;
+                                          index < stepsController.length;
+                                          index++) {
+                                        TextEditingController controller =
+                                            stepsController[index];
+
+                                        if (controller.text.isEmpty) {
+                                          print('$index: Empty');
+                                        } else if (controller.text.trim() ==
+                                            '') {
+                                          print('$index: Space');
                                         } else {
-                                          print(controller.text);
+                                          print('$index: ${controller.text}');
                                         }
                                       }
                                     },
@@ -509,20 +530,6 @@ class _PostPageState extends State<PostPage> {
                                   const SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () {
-                                      // print(_controllerTitle.text);
-                                      // print(_controllerCategory.text);
-                                      // print(_controllerDescription.text);
-                                      // print('Ingredients:');
-                                      // for (TextEditingController controller
-                                      //     in ingredientsController) {
-                                      //   print(controller.text);
-                                      // }
-                                      // print('Steps: ');
-                                      // for (TextEditingController controller
-                                      //     in stepsController) {
-                                      //   print(controller.text);
-                                      // }
-
                                       if (stepsController.every((controller) =>
                                           controller.text.trim() != '')) {
                                         setState(() {
@@ -538,7 +545,7 @@ class _PostPageState extends State<PostPage> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: const StyledText(
-                                        text: 'Done',
+                                        text: 'Post',
                                         size: 16,
                                         weight: FontWeight.w600,
                                         color: AppColors.dark,
