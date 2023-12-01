@@ -64,15 +64,15 @@ class _PostTileState extends State<PostTile> {
       isLiked = !isLiked;
     });
 
-    DocumentReference postRef =
+    DocumentReference userRef =
         FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
 
     if (isLiked) {
-      postRef.update({
+      userRef.update({
         'Likes': FieldValue.arrayUnion([currentUser!.email])
       });
     } else {
-      postRef.update({
+      userRef.update({
         'Likes': FieldValue.arrayRemove([currentUser!.email])
       });
     }
@@ -83,12 +83,13 @@ class _PostTileState extends State<PostTile> {
       isBookmarked = !isBookmarked;
     });
 
-    DocumentReference postRef =
-        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+    DocumentReference userRef = FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(currentUser!.email);
 
     if (isBookmarked) {
-      postRef.update({
-        'Bookmarks': FieldValue.arrayUnion([currentUser!.email])
+      userRef.update({
+        'Bookmarks': FieldValue.arrayUnion([widget.postId])
       });
 
       // Add a new document to the Bookmarks collection for the user
@@ -97,8 +98,8 @@ class _PostTileState extends State<PostTile> {
         'userId': currentUser!.email,
       });
     } else {
-      postRef.update({
-        'Bookmarks': FieldValue.arrayRemove([currentUser!.email])
+      userRef.update({
+        'Bookmarks': FieldValue.arrayRemove([widget.postId])
       });
 
       // Delete the document from the Bookmarks collection
