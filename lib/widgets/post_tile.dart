@@ -216,6 +216,7 @@ class _PostTileState extends State<PostTile> {
                 text: widget.title,
                 size: 20,
                 weight: FontWeight.w700,
+                overflow: TextOverflow.clip,
               ),
             ),
             // Third Div (Image)

@@ -33,6 +33,9 @@ class _ViewPostPageState extends State<ViewPostPage> {
   String message = '';
   String imageUrl = '';
   String userEmail = '';
+  List<dynamic> ingredients = [];
+  List<dynamic> steps = [];
+  String category = '';
   bool isLiked = false;
   Timestamp timestamp = Timestamp.fromDate(DateTime.now());
   String likes = '0';
@@ -99,6 +102,9 @@ class _ViewPostPageState extends State<ViewPostPage> {
       message = postDoc.data()?['Message'];
       imageUrl = postDoc.data()?['ImageUrl'];
       timestamp = postDoc.data()?['TimeStamp'];
+      ingredients = postDoc.data()?['Ingredients'] ?? [];
+      steps = postDoc.data()?['Steps'] ?? [];
+      category = postDoc.data()?['Category'] ?? [];
       isLiked = postDoc.data()?['Likes'].contains(currentUser!.email);
       likes = postDoc.data()?['Likes'].length.toString() ?? '0';
       fetchUserData();
@@ -125,6 +131,14 @@ class _ViewPostPageState extends State<ViewPostPage> {
 
     int documentCount = querySnapshot.docs.length;
     return documentCount;
+  }
+
+  String formatList(List<dynamic> list) {
+    return list
+        .asMap()
+        .entries
+        .map((entry) => '${entry.key + 1}. ${entry.value}')
+        .join('\n');
   }
 
   String getPostTimeDisplay(Timestamp timestamp) {
@@ -237,21 +251,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                   color: AppColors.dark,
                                   borderRadius: BorderRadius.circular(16),
                                 ),
-                                child: const StyledText(
-                                  text: 'Wild',
-                                  color: AppColors.light,
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 5, right: 5),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: AppColors.dark,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: const StyledText(
-                                  text: 'Raw Meat',
+                                child: StyledText(
+                                  text: category,
                                   color: AppColors.light,
                                 ),
                               ),
@@ -264,6 +265,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               text: title,
                               size: 20,
                               weight: FontWeight.w700,
+                              overflow: TextOverflow.clip,
                             ),
                           ),
                           // Description Div
@@ -273,6 +275,41 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               text: message,
                               size: 16,
                               weight: FontWeight.w400,
+                              overflow: TextOverflow.clip,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: const StyledText(
+                              text: 'Ingredients: ',
+                              size: 20,
+                              weight: FontWeight.w700,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: StyledText(
+                              text: formatList(ingredients),
+                              size: 16,
+                              weight: FontWeight.w400,
+                              overflow: TextOverflow.clip,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: const StyledText(
+                              text: 'Steps: ',
+                              size: 20,
+                              weight: FontWeight.w700,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: StyledText(
+                              text: formatList(steps),
+                              size: 16,
+                              weight: FontWeight.w400,
+                              overflow: TextOverflow.clip,
                             ),
                           ),
                           // Image Div
