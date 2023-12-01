@@ -6,6 +6,7 @@ import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
+import 'package:letmecook/widget_tree.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key});
@@ -28,20 +29,28 @@ class _PostPageState extends State<PostPage> {
 
   int currentStep = 1;
 
-  void postMessage() {
-    if (textController.text.isNotEmpty) {
-      FirebaseFirestore.instance.collection("User Posts").add({
-        'UserEmail': currentUser!.email,
-        'Message': textController.text,
-        'TimeStamp': Timestamp.now(),
-        'ImageUrl': '',
-      });
-    }
+  void post() {
+    List<String> ingredients =
+        ingredientsController.map((controller) => controller.text).toList();
+    List<String> steps =
+        stepsController.map((controller) => controller.text).toList();
 
-    // Clear Text after sending
-    setState(() {
-      textController.clear();
+    FirebaseFirestore.instance.collection("User Posts").add({
+      'UserEmail': currentUser!.email,
+      'Title': _controllerTitle.text,
+      'Message': _controllerDescription.text,
+      'ImageUrl': '',
+      'Category': _controllerCategory.text,
+      'Ingredients': ingredients,
+      'Steps': steps,
+      'Likes': [],
+      'TimeStamp': Timestamp.now(),
     });
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const WidgetTree()),
+    );
   }
 
   void attachImage() {}
@@ -246,41 +255,6 @@ class _PostPageState extends State<PostPage> {
                                   const SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () {
-                                      print('INGREDIENTS: ');
-                                      for (int index = 0;
-                                          index < ingredientsController.length;
-                                          index++) {
-                                        TextEditingController controller =
-                                            ingredientsController[index];
-
-                                        if (controller.text.isEmpty) {
-                                          print('$index: Empty');
-                                        } else if (controller.text.trim() ==
-                                            '') {
-                                          print('$index: Space');
-                                        } else {
-                                          print('$index: ${controller.text}');
-                                        }
-                                      }
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 10),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.accent,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: const StyledText(
-                                        text: 'Print',
-                                        size: 16,
-                                        weight: FontWeight.w600,
-                                        color: AppColors.dark,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 20),
-                                  GestureDetector(
-                                    onTap: () {
                                       setState(() {
                                         ingredientsController
                                             .add(TextEditingController());
@@ -472,41 +446,6 @@ class _PostPageState extends State<PostPage> {
                                   const SizedBox(width: 20),
                                   GestureDetector(
                                     onTap: () {
-                                      print('STEPS: ');
-                                      for (int index = 0;
-                                          index < stepsController.length;
-                                          index++) {
-                                        TextEditingController controller =
-                                            stepsController[index];
-
-                                        if (controller.text.isEmpty) {
-                                          print('$index: Empty');
-                                        } else if (controller.text.trim() ==
-                                            '') {
-                                          print('$index: Space');
-                                        } else {
-                                          print('$index: ${controller.text}');
-                                        }
-                                      }
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 10),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.accent,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: const StyledText(
-                                        text: 'Print',
-                                        size: 16,
-                                        weight: FontWeight.w600,
-                                        color: AppColors.dark,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 20),
-                                  GestureDetector(
-                                    onTap: () {
                                       setState(() {
                                         stepsController
                                             .add(TextEditingController());
@@ -532,9 +471,7 @@ class _PostPageState extends State<PostPage> {
                                     onTap: () {
                                       if (stepsController.every((controller) =>
                                           controller.text.trim() != '')) {
-                                        setState(() {
-                                          print('Upload to database!');
-                                        });
+                                        post();
                                       }
                                     },
                                     child: Container(
