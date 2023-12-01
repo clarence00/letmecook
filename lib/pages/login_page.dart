@@ -160,23 +160,44 @@ class _LogInPageState extends State<LogInPage> {
                             obscureText: true,
                           ),
                           const SizedBox(height: 10),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            child: isLogin
-                                ? StyledButton(
-                                    text: 'Forgot Password?',
-                                    buttonStyle: 'text',
-                                    onPressed: forgotPassword)
-                                : const SizedBox(),
+                          GestureDetector(
+                            child: Text(
+                              'Forgot Password',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 16,
+                              ) 
+                            ),
+                            
                           ),
-                          const SizedBox(height: 10),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: StyledText(
-                                text: errorMessage == '' ? '' : '$errorMessage',
-                                size: 16,
-                                color: Colors.red),
-                          ),
+
+
+
+
+
+                          // Container(
+                          //   alignment: Alignment.centerRight,
+                          //   child: isLogin
+                          //       ? StyledButton(
+                          //           text: 'Forgot Password?',
+                          //           buttonStyle: 'text',
+                          //           onPressed: forgotPassword)
+                          //       : const SizedBox(),
+                          // ),
+
+
+
+
+
+                          // const SizedBox(height: 10),
+                          // Container(
+                          //   alignment: Alignment.centerLeft,
+                          //   child: StyledText(
+                          //       text: errorMessage == '' ? '' : '$errorMessage',
+                          //       size: 16,
+                          //       color: Colors.red),
+                          // ),
                         ],
                       ),
                     ),
