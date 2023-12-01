@@ -81,6 +81,15 @@ class _PostTileState extends State<PostTile> {
   void toggleBookmark() {
     setState(() {
       isBookmarked = !isBookmarked;
+      if (isBookmarked) {
+        // Add the current user's email to the bookmarks list if not null
+        if (currentUser?.email != null) {
+          widget.bookmarks.add(currentUser!.email!);
+        }
+      } else {
+        // Remove the current user's email from the bookmarks list if not null
+        widget.bookmarks.remove(currentUser?.email);
+      }
     });
 
     DocumentReference userRef = FirebaseFirestore.instance
@@ -90,12 +99,6 @@ class _PostTileState extends State<PostTile> {
     if (isBookmarked) {
       userRef.update({
         'Bookmarks': FieldValue.arrayUnion([widget.postId])
-      });
-
-      // Add a new document to the Bookmarks collection for the user
-      FirebaseFirestore.instance.collection('Bookmarks').add({
-        'postId': widget.postId,
-        'userId': currentUser!.email,
       });
     } else {
       userRef.update({
