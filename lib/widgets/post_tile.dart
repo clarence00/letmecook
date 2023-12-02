@@ -176,8 +176,6 @@ class _PostTileState extends State<PostTile> {
     }
   }
 
-  final Color _heartColor = AppColors.dark;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
