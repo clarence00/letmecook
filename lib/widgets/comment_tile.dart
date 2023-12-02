@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class CommentTile extends StatefulWidget {
@@ -68,7 +66,7 @@ class _CommentTileState extends State<CommentTile> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 5),
+                padding: const EdgeInsets.only(left: 10, right: 5),
                 child: profilePictureUrl != ''
                     ? CircleAvatar(
                         radius: 14,
@@ -100,16 +98,19 @@ class _CommentTileState extends State<CommentTile> {
                   ],
                 ),
               ),
-              const Icon(
-                Icons.more_vert,
-                color: AppColors.dark,
-                size: 24,
+              const Padding(
+                padding: EdgeInsets.only(right: 5),
+                child: Icon(
+                  Icons.more_vert,
+                  color: AppColors.dark,
+                  size: 24,
+                ),
               ),
             ],
           ),
           // Comment
           Container(
-            margin: const EdgeInsets.only(left: 30, right: 25),
+            margin: const EdgeInsets.only(left: 35, right: 15, top: 5),
             padding: const EdgeInsets.symmetric(horizontal: 5),
             width: double.infinity,
             decoration: BoxDecoration(

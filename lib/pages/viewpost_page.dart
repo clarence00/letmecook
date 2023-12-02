@@ -393,8 +393,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                           ),
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 5),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 10),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: AppColors.dark,
@@ -449,7 +448,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
         child: Container(
           color: AppColors.background,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding:
+                const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 10),
             decoration: const BoxDecoration(
               color: AppColors.dark,
               borderRadius: BorderRadius.only(
