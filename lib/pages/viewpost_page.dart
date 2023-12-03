@@ -39,6 +39,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
   bool isLiked = false;
   Timestamp timestamp = Timestamp.fromDate(DateTime.now());
   String likes = '0';
+  int bookmarkCount = 0;
 
   @override
   void initState() {
@@ -107,6 +108,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
       category = postDoc.data()?['Category'] ?? [];
       isLiked = postDoc.data()?['Likes'].contains(currentUser!.email);
       likes = postDoc.data()?['Likes'].length.toString() ?? '0';
+      bookmarkCount = postDoc.data()?['BookmarkCount'] ?? 0;
       fetchUserData();
     });
   }
@@ -366,8 +368,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                   ),
                                   Container(
                                     padding: const EdgeInsets.only(right: 12),
-                                    child: const StyledText(
-                                      text: '12',
+                                    child: StyledText(
+                                      text: bookmarkCount.toString(),
                                     ),
                                   ),
                                 ],
