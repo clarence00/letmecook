@@ -35,7 +35,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
   String userEmail = '';
   List<dynamic> ingredients = [];
   List<dynamic> steps = [];
-  String category = '';
+  List<dynamic> categories = [];
   bool isLiked = false;
   Timestamp timestamp = Timestamp.fromDate(DateTime.now());
   String likes = '0';
@@ -105,7 +105,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
       timestamp = postDoc.data()?['TimeStamp'];
       ingredients = postDoc.data()?['Ingredients'] ?? [];
       steps = postDoc.data()?['Steps'] ?? [];
-      category = postDoc.data()?['Category'] ?? [];
+      categories = postDoc.data()?['Category'] ?? [];
       isLiked = postDoc.data()?['Likes'].contains(currentUser!.email);
       likes = postDoc.data()?['Likes'].length.toString() ?? '0';
       bookmarkCount = postDoc.data()?['BookmarkCount'] ?? 0;
@@ -245,19 +245,22 @@ class _ViewPostPageState extends State<ViewPostPage> {
                           // Category Div
                           Row(
                             children: [
-                              Container(
-                                margin: const EdgeInsets.only(top: 5, right: 5),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: AppColors.dark,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: StyledText(
-                                  text: category,
-                                  color: AppColors.light,
-                                ),
-                              ),
+                              // from here
+                              for (var category in categories)
+                                Container(
+                                  margin:
+                                      const EdgeInsets.only(top: 5, right: 5),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.dark,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: StyledText(
+                                    text: category,
+                                    color: AppColors.light,
+                                  ),
+                                ), // to here
                             ],
                           ),
                           // Title Div

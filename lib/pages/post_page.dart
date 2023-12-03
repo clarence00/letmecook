@@ -23,7 +23,6 @@ class _PostPageState extends State<PostPage> {
   // Variable for UI only (should be changed accordingly)
   final bool hasImage = true;
   final _controllerTitle = TextEditingController();
-  final _controllerCategory = TextEditingController();
   final _controllerDescription = TextEditingController();
   List<TextEditingController> ingredientsController = [TextEditingController()];
   List<TextEditingController> stepsController = [TextEditingController()];
@@ -31,7 +30,7 @@ class _PostPageState extends State<PostPage> {
   int currentStep = 1;
 
   //Variables for Category Dropdown
-  List<String> _categories = [
+  final List<String> _categories = [
     'Pork',
     'Chicken',
     'Beef',
@@ -57,7 +56,7 @@ class _PostPageState extends State<PostPage> {
       'Ingredients': ingredients,
       'Steps': steps,
       'Likes': [],
-      'Bookmarks': [],
+      'BookmarkCount': 0,
       'TimeStamp': Timestamp.now(),
     });
 
