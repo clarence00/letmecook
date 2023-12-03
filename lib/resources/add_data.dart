@@ -58,12 +58,13 @@ class StoreData {
     }
   }
 
-  Future<String?> saveDataPost(
-      {required Uint8List file,
-      required String? email,
-      required String? title,
-      required String? fileName,
-      required String? imgURL}) async {
+  Future<String?> saveDataPost({
+    required Uint8List file,
+    required String? email,
+    required String? title,
+    required String? fileName,
+  }) async {
+    String _URLValue = '';
     String response = 'Some error occurred';
 
     try {
@@ -76,8 +77,10 @@ class StoreData {
       //   'ImageUrl': imageUrl,
       // });
 
-      imgURL = imageUrl;
-      return imgURL;
+      _URLValue = imageUrl;
+
+      print(imageUrl);
+      return _URLValue;
     } catch (e) {
       response = e.toString();
 

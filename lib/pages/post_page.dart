@@ -94,8 +94,8 @@ class _PostPageState extends State<PostPage> {
         title: _controllerTitle.text,
         email: currentUser!.email,
         fileName: fileName,
-        imgURL: imgURL,
       );
+      imgURL = response!;
       setState(() {
         uploadImageSuccess = true;
       });
