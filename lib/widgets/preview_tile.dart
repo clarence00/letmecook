@@ -2,11 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 
-class PreviewTile extends StatelessWidget {
-  const PreviewTile({
-    super.key,
-  });
+class PreviewTile extends StatefulWidget {
+  PreviewTile(
+      {Key? key,
+      required this.title,
+      required this.postId,
+      required this.likes,
+      required this.bookmarkCount})
+      : super(key: key);
 
+  // Variables
+  final String title;
+  final String postId;
+  final List<String> likes;
+  final int bookmarkCount;
+  @override
+  State<PreviewTile> createState() => _PreviewTileState();
+}
+
+class _PreviewTileState extends State<PreviewTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -98,25 +112,25 @@ class PreviewTile extends StatelessWidget {
               )
             ],
           ),
-          Container(
-            margin: const EdgeInsets.only(right: 15),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: AppColors.dark,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.network(
-                'https://picsum.photos/id/1074/400/400',
-                fit: BoxFit.cover,
-                width: 80,
-                height: 80,
-              ),
-            ),
-          ),
+          // Container(
+          //   margin: const EdgeInsets.only(right: 15),
+          //   decoration: BoxDecoration(
+          //     border: Border.all(
+          //       color: AppColors.dark,
+          //       width: 2,
+          //     ),
+          //     borderRadius: BorderRadius.circular(16),
+          //   ),
+          //   child: ClipRRect(
+          //     borderRadius: BorderRadius.circular(16),
+          //     child: Image.network(
+          //       'https://picsum.photos/id/1074/400/400',
+          //       fit: BoxFit.cover,
+          //       width: 80,
+          //       height: 80,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

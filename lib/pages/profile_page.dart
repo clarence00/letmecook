@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
-import 'package:letmecook/pages/settings_page.dart';
+import 'package:letmecook/auth.dart';
 import 'package:letmecook/pages/bookmarks_page.dart';
-import 'package:letmecook/widgets/preview_tile.dart';
+import 'package:letmecook/pages/settings_page.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/auth.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -15,6 +14,9 @@ class ProfilePage extends StatefulWidget {
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
+
+final currentUser = FirebaseAuth.instance.currentUser;
+final _controllerPost = TextEditingController();
 
 class _ProfilePageState extends State<ProfilePage> {
   late final Future<DocumentSnapshot> userData;
@@ -49,6 +51,40 @@ class _ProfilePageState extends State<ProfilePage> {
         .doc(currentUser!.email)
         .get();
   }
+
+  // Widget _buildUserPostsStream() {
+  //   return StreamBuilder<QuerySnapshot>(
+  //     stream: FirebaseFirestore.instance
+  //         .collection("User Posts")
+  //         .where('userEmail', isEqualTo: currentUser!.email)
+  //         .orderBy("TimeStamp", descending: false)
+  //         .snapshots(),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasData) {
+  //         return ListView.builder(
+  //           itemCount: snapshot.data!.docs.length,
+  //           itemBuilder: ((context, index) {
+  //             final post = snapshot.data!.docs[index];
+  //             return Previewtile(
+  //               title: post['Title'],
+  //               timestamp: post['TimeStamp'],
+  //               likes: List<String>.from(post['Likes'] ?? []),
+  //               bookmarkCount: post['BookmarkCount'],
+  //               postId: post.id,
+  //             );
+  //           }),
+  //         );
+  //       } else if (snapshot.hasError) {
+  //         return Center(
+  //           child: StyledText(text: 'Error:${snapshot.error}'),
+  //         );
+  //       }
+  //       return const Center(
+  //         child: CircularProgressIndicator(),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -183,9 +219,43 @@ class _ProfilePageState extends State<ProfilePage> {
                       weight: FontWeight.w700,
                     ),
                   ),
-                  const PreviewTile(),
-                  const PreviewTile(),
-                  const PreviewTile(),
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("User Posts")
+                          .orderBy(
+                            "TimeStamp",
+                            descending: false,
+                          )
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: ((context, index) {
+                              final post = snapshot.data!.docs[index];
+                              return PostTile(
+                                title: post['Title'],
+                                user: post['UserEmail'],
+                                timestamp: post['TimeStamp'],
+                                imageUrl: 'imageUrl',
+                                likes: List<String>.from(post['Likes'] ?? []),
+                                bookmarkCount: post['BookmarkCount'],
+                                postId: post.id,
+                              );
+                            }),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: StyledText(text: 'Error:${snapshot.error}'),
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
