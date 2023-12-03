@@ -8,6 +8,7 @@ class StyledText extends StatelessWidget {
     this.size = 16,
     this.weight = FontWeight.w400,
     this.color = AppColors.dark, // Add this line
+    this.overflow = TextOverflow.ellipsis,
     Key? key,
   }) : super(key: key);
 
@@ -15,11 +16,13 @@ class StyledText extends StatelessWidget {
   final double size;
   final FontWeight weight;
   final Color color;
+  final TextOverflow overflow;
 
   @override
   Widget build(context) {
     return Text(
       text,
+      overflow: overflow,
       style: GoogleFonts.poppins(
         fontSize: size,
         fontWeight: weight,

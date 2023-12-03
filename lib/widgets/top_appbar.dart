@@ -3,34 +3,31 @@ import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 
-class myAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const myAppBar({super.key});
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MyAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.grey[900],
-
-      // LET ME COOK TEXT //
-      title: Center(
-          child: Row(
+      backgroundColor: AppColors.dark,
+      elevation: 10,
+      title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Logos.letMeCookLogoSmall,
-          SizedBox(
-            width: 15,
-          ),
-          StyledText(
+          Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: Logos.letMeCookLogoSmall),
+          const StyledText(
             text: 'LET ME COOK',
             color: AppColors.light,
             size: 32,
             weight: FontWeight.w700,
           )
         ],
-      )),
+      ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(60);
 }

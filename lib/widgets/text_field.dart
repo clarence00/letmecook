@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
-  final controller;
+  final dynamic controller;
   final String hintText;
   final bool obscureText;
   final int minLines;
+  final int maxLines;
 
   const MyTextField({
     super.key,
@@ -12,6 +13,7 @@ class MyTextField extends StatelessWidget {
     required this.hintText,
     required this.obscureText,
     required this.minLines,
+    required this.maxLines,
   });
 
   @override
@@ -20,8 +22,7 @@ class MyTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: TextField(
         minLines: minLines,
-        maxLines: null,
-        keyboardType: TextInputType.multiline,
+        maxLines: maxLines,
         controller: controller,
         decoration: InputDecoration(
           enabledBorder: const OutlineInputBorder(

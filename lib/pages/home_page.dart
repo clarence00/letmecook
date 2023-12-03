@@ -1,17 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:letmecook/assets/icons/logos.dart';
-import 'package:letmecook/assets/themes/app_colors.dart';
-import 'package:letmecook/pages/post_page.dart';
-import 'package:letmecook/pages/profile_page.dart';
-import 'package:letmecook/pages/search_page.dart';
-import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/textField.dart';
 import 'package:letmecook/assets/icons/custom_icons.dart';
-import 'package:letmecook/widgets/wall_post.dart';
-import 'package:letmecook/widgets/topAppBar.dart';
+import 'package:letmecook/assets/themes/app_colors.dart';
+import 'package:letmecook/widgets/post_tile.dart';
+import 'package:letmecook/widgets/styled_container.dart';
+import 'package:letmecook/widgets/styled_text.dart';
+import 'package:letmecook/widgets/styled_textbox.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,21 +16,46 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //Variables
+
+  // Username display (uncomment as needed)
   final currentUser = FirebaseAuth.instance.currentUser;
+  final _controllerPost = TextEditingController();
+
+  //FUNCTIONS
+
+  void postMessage() {
+    if (_controllerPost.text.isNotEmpty) {
+      FirebaseFirestore.instance.collection("User Posts").add({
+        'UserEmail': currentUser!.email,
+        'Message': _controllerPost.text,
+        'TimeStamp': Timestamp.now(),
+        'ImageUrl': '',
+      });
+    }
+
+    // Clear Text after sending
+    setState(() {
+      _controllerPost.clear();
+    });
+
+    print(_controllerPost.text);
+  }
+
+  void attachImage() {}
 
   // CODE PROPER
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: AppColors.background,
+
       // WALL POST
-      body: Center(
-        child: Container(
-          child: Column(
-            children: [
-              // Wall Display (boxes)
-              Expanded(
+      body: Column(
+        children: [
+          // Wall Display (boxes)
+          Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("User Posts")
@@ -47,17 +67,23 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: ((context, index) {
-                        final post = snapshot.data!.docs[index];
-                        return WallPost(
-                          message: post['Message'],
-                          user: post['UserEmail'],
-                        );
-                      }));
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: ((context, index) {
+                      final post = snapshot.data!.docs[index];
+                      return PostTile(
+                        title: post['Title'],
+                        user: post['UserEmail'],
+                        timestamp: post['TimeStamp'],
+                        imageUrl: 'imageUrl',
+                        likes: List<String>.from(post['Likes'] ?? []),
+                        bookmarkCount: post['BookmarkCount'],
+                        postId: post.id,
+                      );
+                    }),
+                  );
                 } else if (snapshot.hasError) {
                   return Center(
-                    child: Text('Error:' + snapshot.error.toString()),
+                    child: StyledText(text: 'Error:${snapshot.error}'),
                   );
                 }
                 return const Center(
@@ -66,8 +92,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          // Logged in as : section
-        ),
+        ],
       ),
     );
   }

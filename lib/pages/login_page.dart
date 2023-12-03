@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:letmecook/widgets/styled_button.dart';
-import 'package:letmecook/widgets/styled_textbox.dart';
-import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/assets/themes/app_colors.dart';
-import 'package:letmecook/assets/icons/logos.dart';
-import 'package:letmecook/pages/login_page.dart';
-import 'package:letmecook/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:letmecook/assets/icons/logos.dart';
+import 'package:letmecook/assets/themes/app_colors.dart';
+import 'package:letmecook/auth.dart';
+import 'package:letmecook/widgets/styled_button.dart';
+import 'package:letmecook/widgets/styled_text.dart';
+import 'package:letmecook/widgets/styled_textbox.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -21,25 +20,13 @@ class _LogInPageState extends State<LogInPage> {
     print('Forgot password');
   }
 
-  void logInWithGoogle() {
-    print('Log in with Google');
-  }
-
-  void logInWithFacebook() {
-    print('Log in with Facebook');
-  }
-
-  void logInWithTwitter() {
-    print('Log in with Twitter');
-  }
-
   String? errorMessage = '';
   bool isLogin = true;
+  bool usernameError = false;
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-  final TextEditingController _controllerRepeatPassword =
-      TextEditingController();
+  final TextEditingController _controllerUsername = TextEditingController();
 
   Future<void> signInWithEmailAndPassword() async {
     try {
@@ -49,20 +36,54 @@ class _LogInPageState extends State<LogInPage> {
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message;
+        if (e.message == 'Error') {
+          errorMessage = 'Email or password is incorrect!';
+        } else {
+          errorMessage = e.message;
+        }
       });
     }
   }
 
   Future<void> createUserWithEmailAndPassword() async {
-    try {
-      await Auth().createUserWithEmailAndPassword(
-        email: _controllerEmail.text,
-        password: _controllerPassword.text,
-      );
-    } on FirebaseAuthException catch (e) {
+    if (_controllerUsername.text.isEmpty) {
       setState(() {
-        errorMessage = e.message;
+        usernameError = true;
+        errorMessage = 'Username cannot be empty!';
+      });
+      return;
+    }
+
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Usernames')
+        .where('Username', isEqualTo: _controllerUsername.text)
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      errorMessage = '';
+      try {
+        await Auth().createUserWithEmailAndPassword(
+          email: _controllerEmail.text,
+          password: _controllerPassword.text,
+        );
+        await FirebaseFirestore.instance
+            .collection('Usernames')
+            .doc(_controllerEmail.text)
+            .set({
+          'Username': _controllerUsername.text,
+          'UserEmail': _controllerEmail.text,
+          'ProfilePicture':
+              'https://firebasestorage.googleapis.com/v0/b/letmecook-65d6f.appspot.com/o/images%2Fprofile_pictures%2Fno_profile_pic.jpg?alt=media&token=c3641180-3263-436e-ab63-1fb79066d474', //Here
+        });
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          errorMessage = e.message;
+        });
+      }
+    } else {
+      setState(() {
+        usernameError = true;
+        errorMessage = 'Username is already taken!';
       });
     }
   }
@@ -77,14 +98,13 @@ class _LogInPageState extends State<LogInPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              flex: 1,
               child: Container(
                 decoration: const BoxDecoration(color: AppColors.dark),
                 child: Center(child: Logos.letMeCookLogo),
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: isLogin ? 2 : 3,
               child: Container(
                 decoration: const BoxDecoration(
                   color: AppColors.light,
@@ -95,120 +115,99 @@ class _LogInPageState extends State<LogInPage> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const SizedBox(height: 10),
                     Container(
-                      width: 325,
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      alignment: Alignment.centerLeft,
                       child: StyledText(
                         text: isLogin ? 'LOG IN' : 'SIGN UP',
                         size: 42,
                         weight: FontWeight.w700,
                       ),
                     ),
-                    Column(
-                      children: [
-                        Container(
-                          width: 325,
-                          child: const StyledText(text: 'Email', size: 18),
-                        ),
-                        Container(
-                          width: 325,
-                          height: 40,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: ShapeDecoration(
-                            color: AppColors.background,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          child: StyledTextbox(
-                            controller: _controllerEmail,
-                            type: 'email',
-                          ),
-                        ),
-                        Container(
-                          width: 325,
-                          child: const StyledText(text: 'Password', size: 18),
-                        ),
-                        Container(
-                          width: 325,
-                          height: 40,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: ShapeDecoration(
-                            color: AppColors.background,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          child: StyledTextbox(
-                            controller: _controllerPassword,
-                            type: 'password',
-                          ),
-                        ),
-                        Container(
-                          width: 325,
-                          alignment: Alignment.centerRight,
-                          child: isLogin
-                              ? StyledButton(
-                                  text: 'Forgot Password?',
-                                  buttonStyle: 'text',
-                                  onPressed: forgotPassword)
-                              : const SizedBox(),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          width: 325,
-                          alignment: Alignment.centerLeft,
-                          child: StyledText(
-                              text: errorMessage == '' ? '' : '$errorMessage',
-                              size: 14,
-                              color: Colors.red),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: 325,
-                      alignment: Alignment.center,
-                      child: StyledButton(
-                          text: isLogin ? 'Log In' : 'Sign Up',
-                          buttonStyle: 'primary',
-                          onPressed: isLogin
-                              ? signInWithEmailAndPassword
-                              : createUserWithEmailAndPassword),
-                    ),
-                    Container(
-                      width: 325,
-                      height: 3,
-                      color: AppColors.dark,
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                    ),
-                    Container(
-                      width: 325,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Column(
                         children: [
-                          StyledButton(
-                              icon: Logos.googleLogo,
-                              buttonStyle: 'circle',
-                              onPressed: logInWithGoogle),
-                          StyledButton(
-                              icon: Logos.facebookLogo,
-                              buttonStyle: 'circle',
-                              onPressed: logInWithFacebook),
-                          StyledButton(
-                              icon: Logos.twitterLogo,
-                              buttonStyle: 'circle',
-                              onPressed: logInWithTwitter),
+                          isLogin
+                              ? const SizedBox(height: 0)
+                              : Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: const StyledText(
+                                      text: 'Username', size: 18),
+                                ),
+                          isLogin
+                              ? const SizedBox(height: 0)
+                              : StyledTextbox(
+                                  controller: _controllerUsername,
+                                ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            alignment: Alignment.centerLeft,
+                            child: const StyledText(text: 'Email', size: 18),
+                          ),
+                          StyledTextbox(
+                            controller: _controllerEmail,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            alignment: Alignment.centerLeft,
+                            child: const StyledText(text: 'Password', size: 18),
+                          ),
+                          StyledTextbox(
+                            controller: _controllerPassword,
+                            obscureText: true,
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: isLogin
+                                ? StyledButton(
+                                    text: 'Forgot Password?',
+                                    buttonStyle: 'text',
+                                    onPressed: forgotPassword)
+                                : const SizedBox(),
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: StyledText(
+                                text: errorMessage == '' ? '' : '$errorMessage',
+                                size: 16,
+                                color: Colors.red),
+                          ),
                         ],
                       ),
                     ),
-                    Container(
-                      width: 325,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: StyledButton(
+                                text: isLogin ? 'Log In' : 'Sign Up',
+                                buttonStyle: 'login',
+                                onPressed: isLogin
+                                    ? signInWithEmailAndPassword
+                                    : createUserWithEmailAndPassword),
+                          ),
+                          const SizedBox(height: 20),
+                          Container(
+                            height: 3,
+                            color: AppColors.dark,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           StyledText(
                               text: isLogin
-                                  ? 'Don\'t have an account yet? '
+                                  ? 'Don\'t have an account? '
                                   : 'Already have an account? ',
                               size: 18),
                           StyledButton(

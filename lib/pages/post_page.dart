@@ -1,18 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letmecook/widgets/textField.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:letmecook/assets/icons/logos.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
-import 'package:letmecook/pages/post_page.dart';
-import 'package:letmecook/pages/profile_page.dart';
-import 'package:letmecook/pages/search_page.dart';
+import 'package:letmecook/widget_tree.dart';
+import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/textField.dart';
-import 'package:letmecook/assets/icons/custom_icons.dart';
-import 'package:letmecook/widgets/wall_post.dart';
-import 'package:letmecook/widgets/topAppBar.dart';
+import 'package:letmecook/widgets/styled_textbox.dart';
+import 'package:multiselect/multiselect.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key});
@@ -25,21 +20,51 @@ class _PostPageState extends State<PostPage> {
   final currentUser = FirebaseAuth.instance.currentUser;
   final textController = TextEditingController();
 
-  void postMessage() {
-    if (textController.text.isNotEmpty) {
-      FirebaseFirestore.instance.collection("User Posts").add({
-        'UserEmail': currentUser!.email,
-        'Message': textController.text,
-        'TimeStamp': Timestamp.now(),
-      });
-    }
+  // Variable for UI only (should be changed accordingly)
+  final bool hasImage = true;
+  final _controllerTitle = TextEditingController();
+  final _controllerCategory = TextEditingController();
+  final _controllerDescription = TextEditingController();
+  List<TextEditingController> ingredientsController = [TextEditingController()];
+  List<TextEditingController> stepsController = [TextEditingController()];
 
-    // Clear Text after sending
-    setState(() {
-      textController.clear();
+  int currentStep = 1;
+
+  //Variables for Category Dropdown
+  List<String> _categories = [
+    'Pork',
+    'Chicken',
+    'Beef',
+    'Fish',
+    'Etc.',
+    'Below 100 Pesos ',
+    'Above 100 Pesos'
+  ];
+  List<String> _selectedCategories = [];
+
+  void post() {
+    List<String> ingredients =
+        ingredientsController.map((controller) => controller.text).toList();
+    List<String> steps =
+        stepsController.map((controller) => controller.text).toList();
+
+    FirebaseFirestore.instance.collection("User Posts").add({
+      'UserEmail': currentUser!.email,
+      'Title': _controllerTitle.text,
+      'Message': _controllerDescription.text,
+      'ImageUrl': '',
+      'Category': _selectedCategories,
+      'Ingredients': ingredients,
+      'Steps': steps,
+      'Likes': [],
+      'Bookmarks': [],
+      'TimeStamp': Timestamp.now(),
     });
 
-    print(textController.text);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const WidgetTree()),
+    );
   }
 
   void attachImage() {}
@@ -47,63 +72,568 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-            child: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+      backgroundColor: AppColors.background,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Title and Category Div
+            currentStep == 1
+                ? Column(
+                    children: [
+                      // Page 1/3 Div
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: AppColors.light,
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(24),
+                            bottomRight: Radius.circular(24),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.dark.withOpacity(0.25),
+                              spreadRadius: 0,
+                              blurRadius: 15,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const StyledText(
+                              text: "Page 1/3",
+                              color: AppColors.dark,
+                              size: 20,
+                              weight: FontWeight.w700,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                if (_controllerTitle.text.trim().isNotEmpty &&
+                                    _controllerDescription.text
+                                        .trim()
+                                        .isNotEmpty &&
+                                    _selectedCategories.isNotEmpty) {
+                                  setState(() {
+                                    currentStep += 1;
+                                  });
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: AppColors.accent,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: const StyledText(
+                                  text: 'Next',
+                                  size: 16,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.dark,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      StyledContainer(
+                        child: Column(
+                          children: [
+                            // Title Box
+                            StyledTextbox(
+                              text: _controllerTitle.text,
+                              controller: _controllerTitle,
+                              weight: FontWeight.w700,
+                              size: 20,
+                              hintText: 'Add Title',
+                            ),
 
-          //BOX DECORATION
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
-                )
-              ],
-            ),
+                            // Category Box
+                            const SizedBox(height: 10),
+                            Container(
+                              decoration: ShapeDecoration(
+                                color: AppColors.background,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: DropDownMultiSelect(
+                                decoration: const InputDecoration(
+                                    focusedBorder: InputBorder.none,
+                                    border: InputBorder.none),
+                                options: _categories,
+                                selectedValues: _selectedCategories,
+                                onChanged: (value) {
+                                  print('Selected categories $value');
+                                  setState(() {
+                                    _selectedCategories = value;
+                                  });
+                                  print(
+                                      'You have selected $_selectedCategories');
+                                },
+                                whenEmpty: 'Please Select a Category!',
+                                selected_values_style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.dark,
+                                ),
+                              ),
+                            ),
 
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            padding: const EdgeInsets.all(15),
+                            // Description Box
+                            const SizedBox(height: 10),
+                            StyledTextbox(
+                              text: _controllerDescription.text,
+                              controller: _controllerDescription,
+                              weight: FontWeight.w400,
+                              size: 15,
+                              hintText: 'Add Description',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                : currentStep == 2
+                    ?
+                    // Ingredients Div -------------------------------------------------------
+                    Column(
+                        children: [
+                          // Page 2/3 Div
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: AppColors.light,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(24),
+                                bottomRight: Radius.circular(24),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.dark.withOpacity(0.25),
+                                  spreadRadius: 0,
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const StyledText(
+                                  text: "Page 2/3",
+                                  color: AppColors.dark,
+                                  size: 20,
+                                  weight: FontWeight.w700,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      currentStep--;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.background,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: const StyledText(
+                                      text: 'Back',
+                                      size: 16,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.dark,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      ingredientsController
+                                          .add(TextEditingController());
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.accent,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: const StyledText(
+                                      text: 'Add',
+                                      size: 16,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.dark,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (ingredientsController.every(
+                                        (controller) =>
+                                            controller.text.trim() != '')) {
+                                      setState(() {
+                                        currentStep += 1;
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.accent,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: const StyledText(
+                                      text: 'Next',
+                                      size: 16,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.dark,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
 
-            // PROFILE PICTURE
-            child: Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.grey[400]),
-                  padding: EdgeInsets.all(10),
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
-                ),
-                // POST MESSAGE
-                Expanded(
-                    child: MyTextField(
-                  minLines: 1,
-                  controller: textController,
-                  hintText: 'Post a new recipe!',
-                  obscureText: false,
-                )),
+                          // Ingredients Div
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 15),
+                            decoration: BoxDecoration(
+                              color: AppColors.light,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.dark.withOpacity(0.25),
+                                  spreadRadius: 0,
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                const StyledText(
+                                  text: 'Ingredients',
+                                  size: 20,
+                                  weight: FontWeight.w700,
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: ingredientsController.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              decoration: ShapeDecoration(
+                                                color: AppColors.background,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              child: TextFormField(
+                                                maxLines: null,
+                                                controller:
+                                                    ingredientsController[
+                                                        index],
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: AppColors.dark,
+                                                ),
+                                                decoration:
+                                                    const InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 5),
+                                                  border: InputBorder.none,
+                                                  hintText: 'Add Ingredients',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          if (ingredientsController.length > 1)
+                                            const SizedBox(width: 10),
+                                          if (ingredientsController.length > 1)
 
-                // POST BUTTON
-                IconButton(
-                    onPressed: postMessage,
-                    icon: const Icon(Icons.arrow_circle_up)),
-                IconButton(
-                    onPressed: attachImage,
-                    icon: const Icon(Icons.camera_alt_rounded))
-              ],
-            ),
-          ),
+                                            // Remove button
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(
+                                                  () {
+                                                    ingredientsController
+                                                        .removeAt(index);
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                width: 40,
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.background,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: const Center(
+                                                  child: StyledText(
+                                                    text: '-',
+                                                    size: 16,
+                                                    weight: FontWeight.w400,
+                                                    color: AppColors.dark,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    :
+                    // Page 3/3 Div
+                    Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: AppColors.light,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(24),
+                                bottomRight: Radius.circular(24),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.dark.withOpacity(0.25),
+                                  spreadRadius: 0,
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 5),
+                                )
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const StyledText(
+                                  text: "Page 3/3",
+                                  color: AppColors.dark,
+                                  size: 20,
+                                  weight: FontWeight.w700,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      currentStep--;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.background,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: const StyledText(
+                                      text: 'Back',
+                                      size: 16,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.dark,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      stepsController
+                                          .add(TextEditingController());
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.accent,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: const StyledText(
+                                      text: 'Add',
+                                      size: 16,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.dark,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (stepsController.every((controller) =>
+                                        controller.text.trim() != '')) {
+                                      post();
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.accent,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: const StyledText(
+                                      text: 'Post',
+                                      size: 16,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.dark,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+
+                          // Steps Div
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 15),
+                            decoration: BoxDecoration(
+                              color: AppColors.light,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.dark.withOpacity(0.25),
+                                  spreadRadius: 0,
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 5),
+                                )
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                const StyledText(
+                                  text: 'Steps',
+                                  size: 20,
+                                  weight: FontWeight.w700,
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: stepsController.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 40,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.background,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Center(
+                                              child: StyledText(
+                                                text: '${index + 1}',
+                                                size: 16,
+                                                weight: FontWeight.w400,
+                                                color: AppColors.dark,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Container(
+                                              decoration: ShapeDecoration(
+                                                color: AppColors.background,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              child: TextFormField(
+                                                maxLines: null,
+                                                controller:
+                                                    stepsController[index],
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: AppColors.dark,
+                                                ),
+                                                decoration:
+                                                    const InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 5),
+                                                  border: InputBorder.none,
+                                                  hintText: 'Add Steps',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          if (stepsController.length > 1)
+                                            const SizedBox(width: 10),
+                                          if (stepsController.length > 1)
+                                            // Remove button
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  stepsController
+                                                      .removeAt(index);
+                                                });
+                                              },
+                                              child: Container(
+                                                width: 40,
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.background,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: const Center(
+                                                  child: StyledText(
+                                                    text: '-',
+                                                    size: 16,
+                                                    weight: FontWeight.w400,
+                                                    color: AppColors.dark,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+          ],
         ),
-      ],
-    )));
+      ),
+    );
   }
 }

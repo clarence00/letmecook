@@ -1,17 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:letmecook/assets/icons/logos.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/pages/home_page.dart';
 import 'package:letmecook/pages/post_page.dart';
 import 'package:letmecook/pages/profile_page.dart';
 import 'package:letmecook/pages/search_page.dart';
-import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/textField.dart';
-import 'package:letmecook/assets/icons/custom_icons.dart';
-import 'package:letmecook/widgets/wall_post.dart';
-import 'package:letmecook/widgets/topAppBar.dart';
+import 'package:letmecook/widgets/top_appbar.dart';
 
 class HubPage extends StatefulWidget {
   const HubPage({super.key});
@@ -21,17 +15,15 @@ class HubPage extends StatefulWidget {
 }
 
 class _HubPageState extends State<HubPage> {
-
-
   int _selectedIndex = 0;
   final List<Widget> _children = [
-    HomePage(),
-    SearchPage(),
-    PostPage(),
-    ProfilePage(),
+    const HomePage(),
+    const SearchPage(),
+    const PostPage(),
+    const ProfilePage(),
   ];
 
-  void navigateBottomBar(int index){
+  void navigateBottomBar(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -41,47 +33,69 @@ class _HubPageState extends State<HubPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(
-      color: Colors.black,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-        child: GNav(
-          backgroundColor: Colors.black,
-          color: Colors.white,
-          activeColor: Colors.white,
-          tabBackgroundColor: Colors.grey.shade800,
-          onTabChange: (_selectedIndex){
-            navigateBottomBar(_selectedIndex);
-            print(_selectedIndex);
-          },
-          padding: EdgeInsets.all(15),
-          tabs: const [
-            GButton(
-              icon: Icons.home,
-              text: 'Home',
-              gap: 8,
+        color: AppColors.background,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          decoration: const BoxDecoration(
+            color: AppColors.dark,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
             ),
-            GButton(
-              icon: Icons.search,
-              text: 'Search',
-              gap: 8,
-            ),
-            GButton(
-              icon: Icons.add,
-              text: 'Post',
-              gap: 8,
-            ),
-            GButton(
-              icon: Icons.person,
-              text: 'Profile',
-              gap: 8,
-            ),
-          ],
+          ),
+          child: GNav(
+            color: AppColors.light,
+            activeColor: AppColors.dark,
+            tabBackgroundColor: AppColors.light,
+            tabBorderRadius: 20,
+            gap: 8,
+            padding: const EdgeInsets.all(10),
+            onTabChange: (selectedItem) {
+              navigateBottomBar(selectedItem);
+            },
+            tabs: const [
+              GButton(
+                icon: Icons.home_filled,
+                iconSize: 24,
+                text: "HOME",
+                textStyle: TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700),
+              ),
+              GButton(
+                icon: Icons.search_rounded,
+                iconSize: 24,
+                text: "SEARCH",
+                textStyle: TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700),
+              ),
+              GButton(
+                icon: Icons.add,
+                iconSize: 24,
+                text: "POST",
+                textStyle: TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700),
+              ),
+              GButton(
+                icon: Icons.account_circle_rounded,
+                iconSize: 24,
+                text: "PROFILE",
+                textStyle: TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-      appBar: myAppBar(),
-
-      body:_children[_selectedIndex],
+      appBar: const MyAppBar(),
+      body: _children[_selectedIndex],
     );
   }
 }
