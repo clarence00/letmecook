@@ -243,9 +243,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           // Category Div
-                          Row(
+                          Wrap(
                             children: [
-                              // from here
                               for (var category in categories)
                                 Container(
                                   margin:
@@ -260,7 +259,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                     text: category,
                                     color: AppColors.light,
                                   ),
-                                ), // to here
+                                ),
                             ],
                           ),
                           // Title Div
