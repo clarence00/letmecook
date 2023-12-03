@@ -6,6 +6,8 @@ import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/top_appbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:letmecook/widgets/heart_button.dart';
 import 'package:intl/intl.dart';
 
 import '../widgets/comment_tile.dart';
@@ -23,19 +25,71 @@ class ViewPostPage extends StatefulWidget {
 }
 
 class _ViewPostPageState extends State<ViewPostPage> {
-  final _controllerCommentInput = TextEditingController();
+  final _controllerComment = TextEditingController();
+  final currentUser = FirebaseAuth.instance.currentUser;
   String username = '';
   String profilePictureUrl = '';
   String title = '';
   String message = '';
   String imageUrl = '';
   String userEmail = '';
+  List<dynamic> ingredients = [];
+  List<dynamic> steps = [];
+  String category = '';
+  bool isLiked = false;
   Timestamp timestamp = Timestamp.fromDate(DateTime.now());
+  String likes = '0';
+  int bookmarkCount = 0;
 
   @override
   void initState() {
     super.initState();
+    _controllerComment.text = '';
     fetchPostData();
+  }
+
+  void toggleLike() {
+    setState(() {
+      isLiked = !isLiked;
+    });
+
+    DocumentReference postRef =
+        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+
+    if (isLiked) {
+      postRef.update({
+        'Likes': FieldValue.arrayUnion([currentUser!.email])
+      });
+    } else {
+      postRef.update({
+        'Likes': FieldValue.arrayRemove([currentUser!.email])
+      });
+    }
+  }
+
+  void addComment() {
+    if (_controllerComment.text.trim().isNotEmpty) {
+      FirebaseFirestore.instance
+          .collection('User Posts')
+          .doc(widget.postId)
+          .collection('Comments')
+          .add({
+        'UserEmail': currentUser!.email,
+        'Comment': _controllerComment.text,
+        'TimeStamp': Timestamp.now()
+      });
+      setState(() {
+        _controllerComment.clear();
+      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) =>
+              ViewPostPage(postId: widget.postId),
+        ),
+      );
+    }
   }
 
   void fetchPostData() async {
@@ -49,6 +103,12 @@ class _ViewPostPageState extends State<ViewPostPage> {
       message = postDoc.data()?['Message'];
       imageUrl = postDoc.data()?['ImageUrl'];
       timestamp = postDoc.data()?['TimeStamp'];
+      ingredients = postDoc.data()?['Ingredients'] ?? [];
+      steps = postDoc.data()?['Steps'] ?? [];
+      category = postDoc.data()?['Category'] ?? [];
+      isLiked = postDoc.data()?['Likes'].contains(currentUser!.email);
+      likes = postDoc.data()?['Likes'].length.toString() ?? '0';
+      bookmarkCount = postDoc.data()?['BookmarkCount'] ?? 0;
       fetchUserData();
     });
   }
@@ -62,6 +122,25 @@ class _ViewPostPageState extends State<ViewPostPage> {
       username = snapshot.data()?['Username'] ?? userEmail;
       profilePictureUrl = snapshot.data()?['ProfilePicture'] ?? userEmail;
     });
+  }
+
+  Future<int> fetchCommentCount() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .collection('Comments') // Replace with your collection name
+        .get();
+
+    int documentCount = querySnapshot.docs.length;
+    return documentCount;
+  }
+
+  String formatList(List<dynamic> list) {
+    return list
+        .asMap()
+        .entries
+        .map((entry) => '${entry.key + 1}. ${entry.value}')
+        .join('\n');
   }
 
   String getPostTimeDisplay(Timestamp timestamp) {
@@ -174,21 +253,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                   color: AppColors.dark,
                                   borderRadius: BorderRadius.circular(16),
                                 ),
-                                child: const StyledText(
-                                  text: 'Wild',
-                                  color: AppColors.light,
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 5, right: 5),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: AppColors.dark,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: const StyledText(
-                                  text: 'Raw Meat',
+                                child: StyledText(
+                                  text: category,
                                   color: AppColors.light,
                                 ),
                               ),
@@ -201,6 +267,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               text: title,
                               size: 20,
                               weight: FontWeight.w700,
+                              overflow: TextOverflow.clip,
                             ),
                           ),
                           // Description Div
@@ -210,6 +277,41 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               text: message,
                               size: 16,
                               weight: FontWeight.w400,
+                              overflow: TextOverflow.clip,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: const StyledText(
+                              text: 'Ingredients: ',
+                              size: 20,
+                              weight: FontWeight.w700,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: StyledText(
+                              text: formatList(ingredients),
+                              size: 16,
+                              weight: FontWeight.w400,
+                              overflow: TextOverflow.clip,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: const StyledText(
+                              text: 'Steps: ',
+                              size: 20,
+                              weight: FontWeight.w700,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
+                            child: StyledText(
+                              text: formatList(steps),
+                              size: 16,
+                              weight: FontWeight.w400,
+                              overflow: TextOverflow.clip,
                             ),
                           ),
                           // Image Div
@@ -229,30 +331,30 @@ class _ViewPostPageState extends State<ViewPostPage> {
                             children: [
                               Row(
                                 children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: CustomIcons.heart(
-                                        color: AppColors.dark),
-                                  ),
+                                  LikeButton(onTap: () {}, isLiked: isLiked),
                                   Container(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: const StyledText(
-                                      text: '12',
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 12),
+                                    child: StyledText(
+                                      text: likes,
                                     ),
                                   ),
                                 ],
                               ),
                               Row(
                                 children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: CustomIcons.comment(
-                                        color: AppColors.dark),
-                                  ),
+                                  CustomIcons.comment(),
                                   Container(
-                                    padding: const EdgeInsets.only(right: 12),
-                                    child: const StyledText(
-                                      text: '12',
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 12),
+                                    child: FutureBuilder<int>(
+                                      future: fetchCommentCount(),
+                                      builder: (context, snapshot) {
+                                        return StyledText(
+                                          text:
+                                              snapshot.data?.toString() ?? '0',
+                                        );
+                                      },
                                     ),
                                   ),
                                 ],
@@ -266,8 +368,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                   ),
                                   Container(
                                     padding: const EdgeInsets.only(right: 12),
-                                    child: const StyledText(
-                                      text: '12',
+                                    child: StyledText(
+                                      text: bookmarkCount.toString(),
                                     ),
                                   ),
                                 ],
@@ -293,8 +395,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                           ),
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 5),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 10),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: AppColors.dark,
@@ -302,17 +403,35 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            // This Column can be change into ListView in the future
-                            child: const Column(
-                              children: [
-                                // Comments
-                                CommentTile(),
-                                CommentTile(),
-                                CommentTile(),
-                                CommentTile(),
-                                CommentTile(),
-                              ],
-                            ),
+                            child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('User Posts')
+                                    .doc(widget.postId)
+                                    .collection('Comments')
+                                    .orderBy('TimeStamp', descending: true)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListView(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        children:
+                                            snapshot.data!.docs.map((doc) {
+                                          final commentData = doc.data()
+                                              as Map<String, dynamic>;
+                                          return CommentTile(
+                                            text: commentData['Comment'],
+                                            user: commentData['UserEmail'],
+                                            time: commentData['TimeStamp'],
+                                          );
+                                        }).toList());
+                                  } else {
+                                    return const Expanded(
+                                      child: SizedBox(height: 15),
+                                    );
+                                  }
+                                }),
                           ),
                         ],
                       ),
@@ -331,7 +450,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
         child: Container(
           color: AppColors.background,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding:
+                const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 10),
             decoration: const BoxDecoration(
               color: AppColors.dark,
               borderRadius: BorderRadius.only(
@@ -349,14 +469,15 @@ class _ViewPostPageState extends State<ViewPostPage> {
                     ),
                     child: TextField(
                       maxLines: null,
-                      controller: _controllerCommentInput,
+                      controller: _controllerComment,
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         color: AppColors.dark,
                       ),
                       decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        contentPadding:
+                            EdgeInsets.only(left: 10, right: 10, bottom: 7),
                         border: InputBorder.none,
                         hintText: 'Add Comments',
                       ),
@@ -364,7 +485,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: addComment,
                   icon: const Icon(Icons.send_rounded),
                   color: AppColors.light,
                 ),

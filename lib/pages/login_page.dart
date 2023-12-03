@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letmecook/pages/forgotpw_page.dart';
 import 'package:letmecook/widgets/styled_button.dart';
@@ -5,9 +7,11 @@ import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/assets/icons/logos.dart';
+import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:letmecook/widgets/styled_button.dart';
+import 'package:letmecook/widgets/styled_text.dart';
+import 'package:letmecook/widgets/styled_textbox.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -177,35 +181,7 @@ class _LogInPageState extends State<LogInPage> {
                               ),
                         ]
                       )
-                    ),
-
-
-
-
-
-                          // Container(
-                          //   alignment: Alignment.centerRight,
-                          //   child: isLogin
-                          //       ? StyledButton(
-                          //           text: 'Forgot Password?',
-                          //           buttonStyle: 'text',
-                          //           onPressed: forgotPassword)
-                          //       : const SizedBox(),
-                          // ),
-
-
-
-
-
-                          // const SizedBox(height: 10),
-                          // Container(
-                          //   alignment: Alignment.centerLeft,
-                          //   child: StyledText(
-                          //       text: errorMessage == '' ? '' : '$errorMessage',
-                          //       size: 16,
-                          //       color: Colors.red),
-                          // ),
-           
+                    ),           
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: Column(

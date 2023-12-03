@@ -1,23 +1,25 @@
-import 'package:flutter/material.dart';
-import 'package:letmecook/assets/icons/custom_icons.dart';
-import 'package:letmecook/pages/viewpost_page.dart';
-import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/heart_button.dart';
-import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:letmecook/assets/icons/custom_icons.dart';
+import 'package:letmecook/assets/themes/app_colors.dart';
+import 'package:letmecook/pages/viewpost_page.dart';
+import 'package:letmecook/widgets/bookmark_button.dart';
+import 'package:letmecook/widgets/heart_button.dart';
+import 'package:letmecook/widgets/styled_text.dart';
 
 class PostTile extends StatefulWidget {
-  PostTile({
-    Key? key,
-    required this.title,
-    required this.user,
-    required this.timestamp,
-    required this.imageUrl,
-    required this.postId,
-    required this.likes,
-  }) : super(key: key);
+  PostTile(
+      {Key? key,
+      required this.title,
+      required this.user,
+      required this.timestamp,
+      required this.imageUrl,
+      required this.postId,
+      required this.likes,
+      required this.bookmarkCount})
+      : super(key: key);
 
   // Variables
   final String title;
@@ -26,6 +28,7 @@ class PostTile extends StatefulWidget {
   final String imageUrl;
   final String postId;
   final List<String> likes;
+  final int bookmarkCount;
 
   @override
   _PostTileState createState() => _PostTileState();
@@ -35,8 +38,11 @@ class _PostTileState extends State<PostTile> {
   late final Future<DocumentSnapshot> userData;
   final currentUser = FirebaseAuth.instance.currentUser;
   bool isLiked = false;
+  bool isBookmarked = false;
   String username = '';
   String profilePictureUrl = '';
+  Future<int>? commentCount;
+  int bookmarkCount = 0;
 
   void toViewPost() {
     Navigator.push(
@@ -50,6 +56,37 @@ class _PostTileState extends State<PostTile> {
     super.initState();
     userData = fetchUserData();
     isLiked = widget.likes.contains(currentUser!.email);
+    fetchIsBookmarked();
+    commentCount = fetchCommentCount();
+    bookmarkCount = widget.bookmarkCount;
+    fetchBookmarkCount();
+  }
+
+  Future<void> fetchIsBookmarked() async {
+    DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(currentUser!.email)
+        .get();
+
+    if (userSnapshot.exists) {
+      setState(() {
+        isBookmarked = (userSnapshot['Bookmarks'] as List<dynamic>)
+            .contains(widget.postId);
+      });
+    }
+  }
+
+  Future<void> fetchBookmarkCount() async {
+    DocumentSnapshot postSnapshot = await FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .get();
+
+    if (postSnapshot.exists) {
+      setState(() {
+        bookmarkCount = postSnapshot['BookmarkCount'] ?? 0;
+      });
+    }
   }
 
   void toggleLike() {
@@ -57,18 +94,48 @@ class _PostTileState extends State<PostTile> {
       isLiked = !isLiked;
     });
 
-    DocumentReference postRef =
+    DocumentReference userRef =
         FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
 
     if (isLiked) {
-      postRef.update({
+      userRef.update({
         'Likes': FieldValue.arrayUnion([currentUser!.email])
       });
     } else {
-      postRef.update({
+      userRef.update({
         'Likes': FieldValue.arrayRemove([currentUser!.email])
       });
     }
+  }
+
+  void toggleBookmark() {
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+
+    DocumentReference userRef = FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(currentUser!.email);
+
+    DocumentReference postRef =
+        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+
+    if (isBookmarked) {
+      userRef.update({
+        'Bookmarks': FieldValue.arrayUnion([widget.postId]),
+      });
+      postRef.update({
+        'BookmarkCount': FieldValue.increment(1),
+      });
+    } else {
+      userRef.update({
+        'Bookmarks': FieldValue.arrayRemove([widget.postId]),
+      });
+      postRef.update({
+        'BookmarkCount': FieldValue.increment(-1),
+      });
+    }
+    fetchBookmarkCount();
   }
 
   Future<DocumentSnapshot> fetchUserData() async {
@@ -76,6 +143,17 @@ class _PostTileState extends State<PostTile> {
         .collection('Usernames')
         .doc(widget.user)
         .get();
+  }
+
+  Future<int> fetchCommentCount() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .collection('Comments') // Replace with your collection name
+        .get();
+
+    int documentCount = querySnapshot.docs.length;
+    return documentCount;
   }
 
   String getPostTimeDisplay(Timestamp timestamp) {
@@ -97,8 +175,6 @@ class _PostTileState extends State<PostTile> {
       return DateFormat('MMMM d, y').format(postTime);
     }
   }
-
-  final Color _heartColor = AppColors.dark;
 
   @override
   Widget build(BuildContext context) {
@@ -203,6 +279,7 @@ class _PostTileState extends State<PostTile> {
                 text: widget.title,
                 size: 20,
                 weight: FontWeight.w700,
+                overflow: TextOverflow.clip,
               ),
             ),
             // Third Div (Image)
@@ -233,28 +310,37 @@ class _PostTileState extends State<PostTile> {
                 ),
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: CustomIcons.comment(color: _heartColor),
-                    ),
+                    CustomIcons.comment(),
                     Container(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: const StyledText(
-                        text: '12',
+                      padding: const EdgeInsets.only(left: 5, right: 12),
+                      child: FutureBuilder<int>(
+                        future: commentCount,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const StyledText(
+                              text: '0',
+                            );
+                          } else {
+                            return StyledText(
+                              text: snapshot.data?.toString() ?? '0',
+                            );
+                          }
+                        },
                       ),
                     ),
                   ],
                 ),
+
+                // Bookmark
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: CustomIcons.bookmark(color: _heartColor),
-                    ),
+                    bookmarkButton(
+                        onTap: toggleBookmark, isBookmarked: isBookmarked),
                     Container(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: const StyledText(
-                        text: '12',
+                      padding: const EdgeInsets.only(left: 5, right: 12),
+                      child: StyledText(
+                        text: bookmarkCount.toString(),
                       ),
                     ),
                   ],
