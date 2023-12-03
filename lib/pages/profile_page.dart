@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/pages/settings_page.dart';
+import 'package:letmecook/pages/bookmarks_page.dart';
 import 'package:letmecook/widgets/preview_tile.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
@@ -26,6 +27,13 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SettingsPage()),
+    );
+  }
+
+  void toBookmarks() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const BookmarksPage()),
     );
   }
 
@@ -103,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             // Bookmark Div
             GestureDetector(
-              onTap: () {},
+              onTap: toBookmarks,
               child: StyledContainer(
                 child: Row(
                   children: [
