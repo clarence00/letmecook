@@ -338,7 +338,7 @@ class _PostTileState extends State<PostTile> {
                     bookmarkButton(
                         onTap: toggleBookmark, isBookmarked: isBookmarked),
                     Container(
-                      padding: const EdgeInsets.only(right: 12),
+                      padding: const EdgeInsets.only(left: 5, right: 12),
                       child: StyledText(
                         text: bookmarkCount.toString(),
                       ),
