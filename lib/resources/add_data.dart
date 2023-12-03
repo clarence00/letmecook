@@ -57,4 +57,31 @@ class StoreData {
       return response;
     }
   }
+
+  Future<String?> saveDataPost(
+      {required Uint8List file,
+      required String? email,
+      required String? title,
+      required String? fileName,
+      required String? imgURL}) async {
+    String response = 'Some error occurred';
+
+    try {
+      String imageUrl = await uploadImageToStorage(
+          'post-images/$email/$title/$fileName', file);
+
+      // await _firestore.collection('Usernames').doc(currentUser!.email).set({
+      //   'UserEmail': email,
+      //   'Title': title,
+      //   'ImageUrl': imageUrl,
+      // });
+
+      imgURL = imageUrl;
+      return imgURL;
+    } catch (e) {
+      response = e.toString();
+
+      return response;
+    }
+  }
 }
