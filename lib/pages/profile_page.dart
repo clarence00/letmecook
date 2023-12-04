@@ -9,7 +9,6 @@ import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/auth.dart';
 
-
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -185,9 +184,42 @@ class _ProfilePageState extends State<ProfilePage> {
                       weight: FontWeight.w700,
                     ),
                   ),
-                  const PreviewTile(),
-                  const PreviewTile(),
-                  const PreviewTile(),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("User Posts")
+                        .where('UserEmail', isEqualTo: currentUser!.email)
+                        .orderBy(
+                          "TimeStamp",
+                          descending: false,
+                        )
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: ((context, index) {
+                            final post = snapshot.data!.docs[index];
+                            return PreviewTile(
+                              title: post['Title'],
+                              imageUrl: '',
+                              likes: List<String>.from(post['Likes'] ?? []),
+                              bookmarkCount: post['BookmarkCount'],
+                              postId: post.id,
+                            );
+                          }),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: StyledText(text: 'Error:${snapshot.error}'),
+                        );
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

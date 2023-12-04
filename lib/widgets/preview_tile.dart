@@ -10,7 +10,7 @@ import 'package:letmecook/widgets/heart_button.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 
 class PreviewTile extends StatefulWidget {
-  PreviewTile(
+  const PreviewTile(
       {Key? key,
       required this.title,
       required this.imageUrl,
@@ -31,12 +31,7 @@ class PreviewTile extends StatefulWidget {
 }
 
 class _PreviewTileState extends State<PreviewTile> {
-  late final Future<DocumentSnapshot> userData;
-  late Future<String?> imageUrlFuture;
-  final currentUser = FirebaseAuth.instance.currentUser;
-  String _imageUrl = '';
   Future<int>? commentCount;
-  
 
   Future<int> fetchCommentCount() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -48,7 +43,6 @@ class _PreviewTileState extends State<PreviewTile> {
     int documentCount = querySnapshot.docs.length;
     return documentCount;
   }
-}
 
   void toViewPost() {
     Navigator.push(
@@ -57,33 +51,10 @@ class _PreviewTileState extends State<PreviewTile> {
             builder: (context) => ViewPostPage(postId: widget.postId)));
   }
 
+  @override
   void initState() {
     super.initState();
-    super.initState();
-    userData = fetchUserData();
-    imageUrlFuture = getImageUrl(widget.imageUrl);
     commentCount = fetchCommentCount();
-  }
-
-Future<String?> getImageUrl(String imageUrl) async {
-    try {
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-          .collection('User Posts')
-          .doc(widget.postId) // Replace with the actual document ID
-          .get();
-
-      if (documentSnapshot.exists) {
-        // If the document exists, retrieve the value of 'ImageUrl' field
-        return documentSnapshot['ImageUrl'] as String?;
-      } else {
-        // If the document doesn't exist
-        return null;
-      }
-    } catch (e) {
-      // Handle any potential errors
-      print('Error fetching data: $e');
-      return null;
-    }
   }
 
   @override
