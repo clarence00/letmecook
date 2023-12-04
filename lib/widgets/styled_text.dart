@@ -9,6 +9,7 @@ class StyledText extends StatelessWidget {
     this.weight = FontWeight.w400,
     this.color = AppColors.dark, // Add this line
     this.overflow = TextOverflow.ellipsis,
+    this.align = TextAlign.left,
     Key? key,
   }) : super(key: key);
 
@@ -17,6 +18,7 @@ class StyledText extends StatelessWidget {
   final FontWeight weight;
   final Color color;
   final TextOverflow overflow;
+  final TextAlign align;
 
   @override
   Widget build(context) {
@@ -28,7 +30,7 @@ class StyledText extends StatelessWidget {
         fontWeight: weight,
         color: color,
       ),
-      textAlign: TextAlign.left,
+      textAlign: align,
     );
   }
 }
