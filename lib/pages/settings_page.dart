@@ -27,6 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _controllerOldPassword = TextEditingController();
   final TextEditingController _controllerNewPassword = TextEditingController();
   bool usernameError = false;
+  String usernameErrorMessage = '';
   bool passwordError = false;
   bool usernameSuccess = false;
   bool passwordSuccess = false;
@@ -77,14 +78,14 @@ class _SettingsPageState extends State<SettingsPage> {
         .where('Username', isEqualTo: _controllerUsername.text)
         .get();
 
-    if (querySnapshot.docs.isEmpty ||
-        querySnapshot.docs.first.get('Username') == username) {
+    if ((querySnapshot.docs.isEmpty ||
+            querySnapshot.docs.first.get('Username') == username) &&
+        !_controllerUsername.text.contains(' ')) {
       await FirebaseFirestore.instance
           .collection('Usernames')
           .doc(currentUser!.email)
-          .set({
+          .update({
         'Username': _controllerUsername.text,
-        'UserEmail': currentUser!.email,
       });
       setState(() {
         username = _controllerUsername.text;
@@ -94,6 +95,11 @@ class _SettingsPageState extends State<SettingsPage> {
     } else {
       setState(() {
         usernameError = true;
+        if (_controllerUsername.text.contains(' ')) {
+          usernameErrorMessage = 'Username cannot contain spaces!';
+        } else {
+          usernameErrorMessage = 'Username already taken!';
+        }
       });
     }
   }
@@ -233,8 +239,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     text: username,
                   ),
                   usernameError
-                      ? const StyledText(
-                          text: 'Username is already taken!',
+                      ? StyledText(
+                          text: usernameErrorMessage,
                           size: 16,
                           color: Colors.red,
                         )

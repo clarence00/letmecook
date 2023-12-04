@@ -10,9 +10,10 @@ import 'package:letmecook/widgets/heart_button.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 
 class PreviewTile extends StatefulWidget {
-  PreviewTile(
+  const PreviewTile(
       {Key? key,
       required this.title,
+      required this.imageUrl,
       required this.postId,
       required this.likes,
       required this.bookmarkCount})
@@ -20,9 +21,11 @@ class PreviewTile extends StatefulWidget {
 
   // Variables
   final String title;
+  final String imageUrl;
   final String postId;
   final List<String> likes;
   final int bookmarkCount;
+
   @override
   State<PreviewTile> createState() => _PreviewTileState();
 }
@@ -48,6 +51,7 @@ class _PreviewTileState extends State<PreviewTile> {
             builder: (context) => ViewPostPage(postId: widget.postId)));
   }
 
+  @override
   void initState() {
     super.initState();
     commentCount = fetchCommentCount();
@@ -170,7 +174,7 @@ class _PreviewTileState extends State<PreviewTile> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.network(
-                  'https://picsum.photos/id/1074/400/400',
+                  widget.imageUrl,
                   fit: BoxFit.cover,
                   width: 80,
                   height: 80,
