@@ -1,8 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
+import 'package:letmecook/resources/add_data.dart';
+import 'package:letmecook/utils.dart';
 import 'package:letmecook/widget_tree.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
@@ -51,7 +57,7 @@ class _PostPageState extends State<PostPage> {
       'UserEmail': currentUser!.email,
       'Title': _controllerTitle.text,
       'Message': _controllerDescription.text,
-      'ImageUrl': '',
+      'ImageUrl': imgURL,
       'Category': _selectedCategories,
       'Ingredients': ingredients,
       'Steps': steps,
@@ -66,7 +72,39 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
-  void attachImage() {}
+  //Image Attachment
+  String imgURL = '';
+  PlatformFile? pickedFile;
+  Widget? fromPicker;
+  Uint8List? _image;
+  bool uploadImageError = false;
+  bool uploadImageSuccess = false;
+
+  void selectImage() async {
+    Uint8List img = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
+  }
+
+  void uploadImage() async {
+    try {
+      String? response = await StoreData().saveDataPost(
+        file: _image!,
+        title: _controllerTitle.text,
+        email: currentUser!.email,
+        fileName: fileName,
+      );
+      imgURL = response!;
+      setState(() {
+        uploadImageSuccess = true;
+      });
+    } catch (e) {
+      setState(() {
+        uploadImageError = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +227,28 @@ class _PostPageState extends State<PostPage> {
                               weight: FontWeight.w400,
                               size: 15,
                               hintText: 'Add Description',
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.accent,
+                                      foregroundColor: AppColors.dark),
+                                  onPressed: selectImage,
+                                  icon: Icon(Icons.camera),
+                                  label: Text('Attach an image!')),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.accent,
+                                      foregroundColor: AppColors.dark),
+                                  onPressed: uploadImage,
+                                  icon: Icon(Icons.arrow_upward),
+                                  label: Text('Upload')),
                             ),
                           ],
                         ),
