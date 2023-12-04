@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/post_tile.dart';
-import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/styled_textbox.dart';
-import 'package:letmecook/widgets/top_appbar.dart';
+import 'package:letmecook/widgets/top_appbar_back.dart';
 
 class BookmarksPage extends StatefulWidget {
   const BookmarksPage({Key? key}) : super(key: key);
@@ -19,10 +16,14 @@ class BookmarksPage extends StatefulWidget {
 class _BookmarksPageState extends State<BookmarksPage> {
   final currentUser = FirebaseAuth.instance.currentUser;
 
+  void backToPrev() {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: MyAppBarPushed(onPressed: backToPrev),
       backgroundColor: AppColors.background,
       body: Column(
         children: [
