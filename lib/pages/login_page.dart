@@ -59,6 +59,14 @@ class _LogInPageState extends State<LogInPage> {
       return;
     }
 
+    if (_controllerUsername.text.contains(' ')) {
+      setState(() {
+        usernameError = true;
+        errorMessage = 'Username cannot contain spaces!';
+      });
+      return;
+    }
+
     final querySnapshot = await FirebaseFirestore.instance
         .collection('Usernames')
         .where('Username', isEqualTo: _controllerUsername.text)
@@ -75,6 +83,7 @@ class _LogInPageState extends State<LogInPage> {
             .collection('Usernames')
             .doc(_controllerEmail.text)
             .set({
+          'Bookmarks': [],
           'Username': _controllerUsername.text,
           'UserEmail': _controllerEmail.text,
           'ProfilePicture':
@@ -132,9 +141,8 @@ class _LogInPageState extends State<LogInPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Column(
-                        children: [
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Column(children: [
                           isLogin
                               ? const SizedBox(height: 0)
                               : Container(
@@ -166,22 +174,18 @@ class _LogInPageState extends State<LogInPage> {
                           ),
                           const SizedBox(height: 10),
                           GestureDetector(
-                            child: Text(
-                              'Forgot Password',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontSize: 16,
-                              ) 
-                            ),
-                            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ForgotPasswordPage(),
-                              )
-                              )
-                              ),
-                        ]
-                      )
-                    ),           
+                              child: Text('Forgot Password',
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    fontSize: 16,
+                                  )),
+                              onTap: () =>
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => ForgotPasswordPage(),
+                                  ))),
+                        ])),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: Column(
