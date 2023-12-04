@@ -174,7 +174,7 @@ class _PreviewTileState extends State<PreviewTile> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.network(
-                  'https://picsum.photos/id/1074/400/400',
+                  widget.imageUrl,
                   fit: BoxFit.cover,
                   width: 80,
                   height: 80,

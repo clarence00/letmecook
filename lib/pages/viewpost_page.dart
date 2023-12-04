@@ -322,7 +322,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(16),
                               child: Image.network(
-                                'https://picsum.photos/id/1074/400/400',
+                                imageUrl,
                                 fit: BoxFit.cover,
                               ),
                             ),

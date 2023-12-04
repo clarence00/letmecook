@@ -203,7 +203,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             final post = snapshot.data!.docs[index];
                             return PreviewTile(
                               title: post['Title'],
-                              imageUrl: '',
+                              imageUrl:post['ImageUrl'],
                               likes: List<String>.from(post['Likes'] ?? []),
                               bookmarkCount: post['BookmarkCount'],
                               postId: post.id,
