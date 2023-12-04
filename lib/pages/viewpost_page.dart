@@ -321,8 +321,12 @@ class _ViewPostPageState extends State<ViewPostPage> {
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(16),
-                              child: Image.network(
-                                'https://picsum.photos/id/1074/400/400',
+                              child: imageUrl == '' ?
+                              Center(
+                                child: const CircularProgressIndicator()
+                              ) :
+                              Image.network(
+                                imageUrl,
                                 fit: BoxFit.cover,
                               ),
                             ),
