@@ -79,7 +79,7 @@ class StoreData {
 
       _URLValue = imageUrl;
 
-      print(imageUrl);
+      print(_URLValue);
       return _URLValue;
     } catch (e) {
       response = e.toString();

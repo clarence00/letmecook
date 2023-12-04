@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,11 +38,13 @@ class PostTile extends StatefulWidget {
 
 class _PostTileState extends State<PostTile> {
   late final Future<DocumentSnapshot> userData;
+  late Future<String?> imageUrlFuture;
   final currentUser = FirebaseAuth.instance.currentUser;
   bool isLiked = false;
   bool isBookmarked = false;
   String username = '';
   String profilePictureUrl = '';
+  String _imageUrl = '';
   Future<int>? commentCount;
   int bookmarkCount = 0;
 
@@ -55,6 +59,7 @@ class _PostTileState extends State<PostTile> {
   void initState() {
     super.initState();
     userData = fetchUserData();
+    imageUrlFuture = getImageUrl(widget.imageUrl);
     isLiked = widget.likes.contains(currentUser!.email);
     fetchIsBookmarked();
     commentCount = fetchCommentCount();
@@ -149,11 +154,32 @@ class _PostTileState extends State<PostTile> {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('User Posts')
         .doc(widget.postId)
-        .collection('Comments') // Replace with your collection name
+        .collection('Comments')
         .get();
 
     int documentCount = querySnapshot.docs.length;
     return documentCount;
+  }
+
+  Future<String?> getImageUrl(String imageUrl) async {
+    try {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('User Posts')
+          .doc(widget.postId) // Replace with the actual document ID
+          .get();
+
+      if (documentSnapshot.exists) {
+        // If the document exists, retrieve the value of 'ImageUrl' field
+        return documentSnapshot['ImageUrl'] as String?;
+      } else {
+        // If the document doesn't exist
+        return null;
+      }
+    } catch (e) {
+      // Handle any potential errors
+      print('Error fetching data: $e');
+      return null;
+    }
   }
 
   String getPostTimeDisplay(Timestamp timestamp) {
@@ -287,9 +313,21 @@ class _PostTileState extends State<PostTile> {
               margin: const EdgeInsets.symmetric(vertical: 10),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.network(
-                  'https://picsum.photos/id/1074/400/400',
-                  fit: BoxFit.cover,
+                child: FutureBuilder<String?>(
+                  future: imageUrlFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.data == null) {
+                      return Text(' ');
+                    } else {
+                      // Use the retrieved URL
+                      _imageUrl = snapshot.data!;
+                      return Image.network(_imageUrl);
+                    }
+                  },
                 ),
               ),
             ),
