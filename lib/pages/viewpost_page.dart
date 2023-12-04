@@ -4,11 +4,11 @@ import 'package:letmecook/assets/icons/custom_icons.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/top_appbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:letmecook/widgets/heart_button.dart';
 import 'package:intl/intl.dart';
+import 'package:letmecook/widgets/top_appbar_back.dart';
 
 import '../widgets/comment_tile.dart';
 
@@ -163,10 +163,14 @@ class _ViewPostPageState extends State<ViewPostPage> {
     }
   }
 
+  void backToPrev() {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: MyAppBarPushed(onPressed: backToPrev),
       backgroundColor: AppColors.background,
       body: CustomScrollView(
         slivers: [

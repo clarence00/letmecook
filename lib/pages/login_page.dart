@@ -7,11 +7,7 @@ import 'package:letmecook/widgets/styled_textbox.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/assets/icons/logos.dart';
-import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/auth.dart';
-import 'package:letmecook/widgets/styled_button.dart';
-import 'package:letmecook/widgets/styled_text.dart';
-import 'package:letmecook/widgets/styled_textbox.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -141,8 +137,9 @@ class _LogInPageState extends State<LogInPage> {
                       ),
                     ),
                     Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Column(children: [
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Column(
+                        children: [
                           isLogin
                               ? const SizedBox(height: 0)
                               : Container(
@@ -174,18 +171,27 @@ class _LogInPageState extends State<LogInPage> {
                           ),
                           const SizedBox(height: 10),
                           GestureDetector(
-                              child: Text('Forgot Password',
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    fontSize: 16,
-                                  )),
-                              onTap: () =>
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ForgotPasswordPage(),
-                                  ))),
-                        ])),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                StyledText(
+                                  text: 'Forgot Password?',
+                                  color: AppColors.accent,
+                                  size: 18,
+                                  weight: FontWeight.w700,
+                                ),
+                              ],
+                            ),
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgotPasswordPage(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: Column(

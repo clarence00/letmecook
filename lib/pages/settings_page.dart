@@ -9,10 +9,10 @@ import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
-import 'package:letmecook/widgets/top_appbar.dart';
 import 'package:letmecook/resources/add_data.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:letmecook/widgets/top_appbar_back.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -152,10 +152,14 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  void backToPrev() {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: MyAppBarPushed(onPressed: backToPrev),
       backgroundColor: AppColors.background,
       body: SingleChildScrollView(
         child: Column(
