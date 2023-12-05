@@ -34,6 +34,7 @@ class _PostPageState extends State<PostPage> {
   List<TextEditingController> stepsController = [TextEditingController()];
 
   int currentStep = 1;
+  String errorMessage = '';
 
   //Variables for Category Dropdown
   final List<String> _categories = [
@@ -156,7 +157,30 @@ class _PostPageState extends State<PostPage> {
                                   uploadImage();
                                   setState(() {
                                     currentStep += 1;
+                                    errorMessage = '';
                                   });
+                                } else {
+                                  if (_controllerTitle.text.trim().isEmpty ||
+                                      _controllerDescription.text
+                                          .trim()
+                                          .isEmpty ||
+                                      _selectedCategories.isEmpty) {
+                                    setState(() {
+                                      errorMessage =
+                                          'Please fill out all the fields!';
+                                    });
+                                  } else if (_controllerTitle.text
+                                          .trim()
+                                          .isNotEmpty &&
+                                      _controllerDescription.text
+                                          .trim()
+                                          .isNotEmpty &&
+                                      _selectedCategories.isNotEmpty &&
+                                      _image == null) {
+                                    setState(() {
+                                      errorMessage = 'Please attach an image!';
+                                    });
+                                  }
                                 }
                               },
                               child: Container(
@@ -234,19 +258,6 @@ class _PostPageState extends State<PostPage> {
 
                             _image != null
                                 ? Center(
-                                    // child: Container(
-                                    //   margin: const EdgeInsets.only(top: 10),
-                                    //   // padding: const EdgeInsets.all(15),
-                                    //   decoration: BoxDecoration(
-                                    //     borderRadius: BorderRadius.circular(16),
-                                    //   ),
-                                    //   child: ClipRRect(
-                                    //     borderRadius: BorderRadius.circular(16),
-                                    //     child: Image(
-                                    //       image: MemoryImage(_image!),
-                                    //     ),
-                                    //   ),
-                                    // ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(16),
                                       child: Image(
@@ -255,7 +266,15 @@ class _PostPageState extends State<PostPage> {
                                     ),
                                   )
                                 : const SizedBox(),
-
+                            const SizedBox(height: 10),
+                            errorMessage == ''
+                                ? const SizedBox()
+                                : Center(
+                                    child: StyledText(
+                                      text: errorMessage,
+                                      color: Colors.red,
+                                    ),
+                                  ),
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: ElevatedButton.icon(
@@ -353,7 +372,13 @@ class _PostPageState extends State<PostPage> {
                                         (controller) =>
                                             controller.text.trim() != '')) {
                                       setState(() {
+                                        errorMessage = '';
                                         currentStep += 1;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        errorMessage =
+                                            'Please fill out all the fields!';
                                       });
                                     }
                                   },
@@ -479,6 +504,15 @@ class _PostPageState extends State<PostPage> {
                                     );
                                   },
                                 ),
+                                const SizedBox(height: 10),
+                                errorMessage == ''
+                                    ? const SizedBox()
+                                    : Center(
+                                        child: StyledText(
+                                          text: errorMessage,
+                                          color: Colors.red,
+                                        ),
+                                      ),
                               ],
                             ),
                           ),
@@ -562,7 +596,15 @@ class _PostPageState extends State<PostPage> {
                                   onTap: () {
                                     if (stepsController.every((controller) =>
                                         controller.text.trim() != '')) {
+                                      setState(() {
+                                        errorMessage = '';
+                                      });
                                       post();
+                                    } else {
+                                      setState(() {
+                                        errorMessage =
+                                            'Please fill out all the fields!';
+                                      });
                                     }
                                   },
                                   child: Container(
@@ -701,6 +743,15 @@ class _PostPageState extends State<PostPage> {
                                     );
                                   },
                                 ),
+                                const SizedBox(height: 10),
+                                errorMessage == ''
+                                    ? const SizedBox()
+                                    : Center(
+                                        child: StyledText(
+                                          text: errorMessage,
+                                          color: Colors.red,
+                                        ),
+                                      ),
                               ],
                             ),
                           ),
