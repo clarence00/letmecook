@@ -170,25 +170,27 @@ class _LogInPageState extends State<LogInPage> {
                             obscureText: true,
                           ),
                           const SizedBox(height: 10),
-                          GestureDetector(
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                StyledText(
-                                  text: 'Forgot Password?',
-                                  color: AppColors.accent,
-                                  size: 18,
-                                  weight: FontWeight.w700,
-                                ),
-                              ],
-                            ),
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ForgotPasswordPage(),
-                              ),
-                            ),
-                          ),
+                          isLogin
+                              ? GestureDetector(
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      StyledText(
+                                        text: 'Forgot Password?',
+                                        color: AppColors.accent,
+                                        size: 18,
+                                        weight: FontWeight.w700,
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ForgotPasswordPage(),
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(),
                         ],
                       ),
                     ),
