@@ -34,6 +34,7 @@ class _PostPageState extends State<PostPage> {
   List<TextEditingController> stepsController = [TextEditingController()];
 
   int currentStep = 1;
+  String errorMessage = '';
 
   //Variables for Category Dropdown
   final List<String> _categories = [
@@ -151,10 +152,35 @@ class _PostPageState extends State<PostPage> {
                                     _controllerDescription.text
                                         .trim()
                                         .isNotEmpty &&
-                                    _selectedCategories.isNotEmpty) {
+                                    _selectedCategories.isNotEmpty &&
+                                    _image != null) {
+                                  uploadImage();
                                   setState(() {
                                     currentStep += 1;
+                                    errorMessage = '';
                                   });
+                                } else {
+                                  if (_controllerTitle.text.trim().isEmpty ||
+                                      _controllerDescription.text
+                                          .trim()
+                                          .isEmpty ||
+                                      _selectedCategories.isEmpty) {
+                                    setState(() {
+                                      errorMessage =
+                                          'Please fill out all the fields!';
+                                    });
+                                  } else if (_controllerTitle.text
+                                          .trim()
+                                          .isNotEmpty &&
+                                      _controllerDescription.text
+                                          .trim()
+                                          .isNotEmpty &&
+                                      _selectedCategories.isNotEmpty &&
+                                      _image == null) {
+                                    setState(() {
+                                      errorMessage = 'Please attach an image!';
+                                    });
+                                  }
                                 }
                               },
                               child: Container(
@@ -228,7 +254,27 @@ class _PostPageState extends State<PostPage> {
                               size: 15,
                               hintText: 'Add Description',
                             ),
+                            const SizedBox(height: 10),
 
+                            _image != null
+                                ? Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image(
+                                        image: MemoryImage(_image!),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            const SizedBox(height: 10),
+                            errorMessage == ''
+                                ? const SizedBox()
+                                : Center(
+                                    child: StyledText(
+                                      text: errorMessage,
+                                      color: Colors.red,
+                                    ),
+                                  ),
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: ElevatedButton.icon(
@@ -236,19 +282,8 @@ class _PostPageState extends State<PostPage> {
                                       backgroundColor: AppColors.accent,
                                       foregroundColor: AppColors.dark),
                                   onPressed: selectImage,
-                                  icon: Icon(Icons.camera),
-                                  label: Text('Attach an image!')),
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.accent,
-                                      foregroundColor: AppColors.dark),
-                                  onPressed: uploadImage,
-                                  icon: Icon(Icons.arrow_upward),
-                                  label: Text('Upload')),
+                                  icon: const Icon(Icons.camera),
+                                  label: const Text('Attach an image!')),
                             ),
                           ],
                         ),
@@ -337,7 +372,13 @@ class _PostPageState extends State<PostPage> {
                                         (controller) =>
                                             controller.text.trim() != '')) {
                                       setState(() {
+                                        errorMessage = '';
                                         currentStep += 1;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        errorMessage =
+                                            'Please fill out all the fields!';
                                       });
                                     }
                                   },
@@ -463,6 +504,15 @@ class _PostPageState extends State<PostPage> {
                                     );
                                   },
                                 ),
+                                const SizedBox(height: 10),
+                                errorMessage == ''
+                                    ? const SizedBox()
+                                    : Center(
+                                        child: StyledText(
+                                          text: errorMessage,
+                                          color: Colors.red,
+                                        ),
+                                      ),
                               ],
                             ),
                           ),
@@ -546,7 +596,15 @@ class _PostPageState extends State<PostPage> {
                                   onTap: () {
                                     if (stepsController.every((controller) =>
                                         controller.text.trim() != '')) {
+                                      setState(() {
+                                        errorMessage = '';
+                                      });
                                       post();
+                                    } else {
+                                      setState(() {
+                                        errorMessage =
+                                            'Please fill out all the fields!';
+                                      });
                                     }
                                   },
                                   child: Container(
@@ -685,6 +743,15 @@ class _PostPageState extends State<PostPage> {
                                     );
                                   },
                                 ),
+                                const SizedBox(height: 10),
+                                errorMessage == ''
+                                    ? const SizedBox()
+                                    : Center(
+                                        child: StyledText(
+                                          text: errorMessage,
+                                          color: Colors.red,
+                                        ),
+                                      ),
                               ],
                             ),
                           ),
