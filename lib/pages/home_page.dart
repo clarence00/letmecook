@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                         timestamp: post['TimeStamp'],
                         imageUrl: 'imageUrl',
                         likes: List<String>.from(post['Likes'] ?? []),
-                        bookmarkCount: post['BookmarkCount'],
+                        bookmarks: List<String>.from(post['Bookmarks'] ?? []),
                         postId: post.id,
                       );
                     }),

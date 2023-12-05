@@ -67,7 +67,7 @@ class _PostPageState extends State<PostPage> {
       'Ingredients': ingredients,
       'Steps': steps,
       'Likes': [],
-      'BookmarkCount': 0,
+      'Bookmarks': [],
       'TimeStamp': Timestamp.now(),
     });
 

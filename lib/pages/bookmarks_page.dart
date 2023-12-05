@@ -50,16 +50,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
                             .where((post) => bookmarks.contains(post.id))
                             .toList();
 
-                        if (filteredPosts.isEmpty) {
-                          return const Center(
-                            child: StyledText(
-                              text: 'Bookmarks is empty.',
-                              size: 20,
-                              weight: FontWeight.w400,
-                            ),
-                          );
-                        }
-
                         return ListView.builder(
                           itemCount: filteredPosts.length,
                           itemBuilder: (context, index) {
@@ -70,7 +60,8 @@ class _BookmarksPageState extends State<BookmarksPage> {
                               timestamp: post['TimeStamp'],
                               imageUrl: 'imageUrl', // Replace with actual field
                               likes: List<String>.from(post['Likes'] ?? []),
-                              bookmarkCount: post['BookmarkCount'],
+                              bookmarks:
+                                  List<String>.from(post['Bookmarks'] ?? []),
                               postId: post.id,
                             );
                           },

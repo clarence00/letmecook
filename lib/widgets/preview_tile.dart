@@ -16,7 +16,7 @@ class PreviewTile extends StatefulWidget {
       required this.imageUrl,
       required this.postId,
       required this.likes,
-      required this.bookmarkCount})
+      required this.bookmarks})
       : super(key: key);
 
   // Variables
@@ -24,7 +24,7 @@ class PreviewTile extends StatefulWidget {
   final String imageUrl;
   final String postId;
   final List<String> likes;
-  final int bookmarkCount;
+  final List<String> bookmarks;
 
   @override
   State<PreviewTile> createState() => _PreviewTileState();
@@ -153,7 +153,7 @@ class _PreviewTileState extends State<PreviewTile> {
                         Container(
                           alignment: Alignment.center,
                           child: StyledText(
-                            text: widget.bookmarkCount.toString(),
+                            text: widget.bookmarks.length.toString(),
                           ),
                         )
                       ],
