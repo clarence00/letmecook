@@ -136,13 +136,9 @@ class _SearchPageState extends State<SearchPage> {
                                       radius: 25,
                                     ),
                                     const SizedBox(width: 15),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        StyledText(text: data['Username']),
-                                        StyledText(text: data['UserEmail']),
-                                      ],
+                                    StyledText(
+                                      text: data['Username'],
+                                      size: 20,
                                     ),
                                   ],
                                 ),
