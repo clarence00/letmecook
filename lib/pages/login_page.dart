@@ -191,6 +191,15 @@ class _LogInPageState extends State<LogInPage> {
                                   ),
                                 )
                               : const SizedBox(),
+                          errorMessage != ''
+                              ? Column(
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    StyledText(
+                                        text: errorMessage!, color: Colors.red),
+                                  ],
+                                )
+                              : const SizedBox(),
                         ],
                       ),
                     ),
