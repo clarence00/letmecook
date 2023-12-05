@@ -49,10 +49,14 @@ class _PostPageState extends State<PostPage> {
   List<String> _selectedCategories = [];
 
   void post() {
-    List<String> ingredients =
-        ingredientsController.map((controller) => controller.text).toList();
-    List<String> steps =
-        stepsController.map((controller) => controller.text).toList();
+    List<String> ingredients = ingredientsController
+        .map((controller) => controller.text.trim())
+        .where((trimmedText) => trimmedText.isNotEmpty)
+        .toList();
+    List<String> steps = stepsController
+        .map((controller) => controller.text.trim())
+        .where((trimmedText) => trimmedText.isNotEmpty)
+        .toList();
 
     FirebaseFirestore.instance.collection("User Posts").add({
       'UserEmail': currentUser!.email,
