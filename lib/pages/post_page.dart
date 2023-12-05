@@ -151,7 +151,9 @@ class _PostPageState extends State<PostPage> {
                                     _controllerDescription.text
                                         .trim()
                                         .isNotEmpty &&
-                                    _selectedCategories.isNotEmpty) {
+                                    _selectedCategories.isNotEmpty &&
+                                    _image != null) {
+                                  uploadImage();
                                   setState(() {
                                     currentStep += 1;
                                   });
@@ -228,6 +230,31 @@ class _PostPageState extends State<PostPage> {
                               size: 15,
                               hintText: 'Add Description',
                             ),
+                            const SizedBox(height: 10),
+
+                            _image != null
+                                ? Center(
+                                    // child: Container(
+                                    //   margin: const EdgeInsets.only(top: 10),
+                                    //   // padding: const EdgeInsets.all(15),
+                                    //   decoration: BoxDecoration(
+                                    //     borderRadius: BorderRadius.circular(16),
+                                    //   ),
+                                    //   child: ClipRRect(
+                                    //     borderRadius: BorderRadius.circular(16),
+                                    //     child: Image(
+                                    //       image: MemoryImage(_image!),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image(
+                                        image: MemoryImage(_image!),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
 
                             Padding(
                               padding: const EdgeInsets.all(10.0),
@@ -236,19 +263,8 @@ class _PostPageState extends State<PostPage> {
                                       backgroundColor: AppColors.accent,
                                       foregroundColor: AppColors.dark),
                                   onPressed: selectImage,
-                                  icon: Icon(Icons.camera),
-                                  label: Text('Attach an image!')),
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.accent,
-                                      foregroundColor: AppColors.dark),
-                                  onPressed: uploadImage,
-                                  icon: Icon(Icons.arrow_upward),
-                                  label: Text('Upload')),
+                                  icon: const Icon(Icons.camera),
+                                  label: const Text('Attach an image!')),
                             ),
                           ],
                         ),
