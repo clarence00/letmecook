@@ -10,6 +10,7 @@ import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/resources/add_data.dart';
 import 'package:letmecook/utils.dart';
 import 'package:letmecook/widget_tree.dart';
+import 'package:letmecook/widgets/styled_button.dart';
 import 'package:letmecook/widgets/styled_container.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/styled_textbox.dart';
@@ -251,7 +252,7 @@ class _PostPageState extends State<PostPage> {
                               text: _controllerDescription.text,
                               controller: _controllerDescription,
                               weight: FontWeight.w400,
-                              size: 15,
+                              size: 16,
                               hintText: 'Add Description',
                             ),
                             const SizedBox(height: 10),
@@ -275,16 +276,14 @@ class _PostPageState extends State<PostPage> {
                                       color: Colors.red,
                                     ),
                                   ),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.accent,
-                                      foregroundColor: AppColors.dark),
-                                  onPressed: selectImage,
-                                  icon: const Icon(Icons.camera),
-                                  label: const Text('Attach an image!')),
+                            const SizedBox(height: 10),
+                            StyledButton(
+                              text: 'Attach an image!',
+                              buttonStyle: 'primary',
+                              size: 24,
+                              onPressed: selectImage,
                             ),
+                            const SizedBox(height: 10),
                           ],
                         ),
                       ),
