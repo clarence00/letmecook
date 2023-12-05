@@ -44,7 +44,7 @@ dependencies:
   image_picker: ^1.0.4
   firebase_storage: ^11.2.8
   file_picker: ^6.0.0
-  image_picker_web: ^3.1.1
+  # image_picker_web: ^3.1.1
   intl: ^0.18.1
   email_validator: ^2.1.17
   multiselect: ^0.1.0
@@ -102,16 +102,16 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
-    # - family: Schyler
-    #   fonts:
-    #     - asset: fonts/Schyler-Regular.ttf
-    #     - asset: fonts/Schyler-Italic.ttf
-    #       style: italic
-    # - family: Poppins
-    #   fonts:
-    #     - asset: fonts/Poppins.ttf
-        # - asset: fonts/TrajanPro_Bold.ttf
-          # weight: 700
-  
+  # - family: Schyler
+  #   fonts:
+  #     - asset: fonts/Schyler-Regular.ttf
+  #     - asset: fonts/Schyler-Italic.ttf
+  #       style: italic
+  # - family: Poppins
+  #   fonts:
+  #     - asset: fonts/Poppins.ttf
+  # - asset: fonts/TrajanPro_Bold.ttf
+  # weight: 700
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

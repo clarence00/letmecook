@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker_web/image_picker_web.dart';
+// import 'package:image_picker_web/image_picker_web.dart';
 import 'package:image_picker/image_picker.dart';
 
 String? fileName;
-
 
 pickImage(ImageSource source) async {
   final ImagePicker _imagePicker = ImagePicker();
@@ -15,18 +14,16 @@ pickImage(ImageSource source) async {
   }
 }
 
-
-
 class Utils {
-  
   static final messengerKey = GlobalKey<ScaffoldMessengerState>();
 
-  static showSnackBar(String? text){
-    
+  static showSnackBar(String? text) {
     if (text == null) return;
 
-    final snackBar = SnackBar(content: Text(text), backgroundColor: Colors.red ,);
-
+    final snackBar = SnackBar(
+      content: Text(text),
+      backgroundColor: Colors.red,
+    );
 
     messengerKey.currentState!
       ..removeCurrentSnackBar()
