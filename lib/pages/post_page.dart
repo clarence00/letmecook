@@ -56,8 +56,8 @@ class _PostPageState extends State<PostPage> {
 
     FirebaseFirestore.instance.collection("User Posts").add({
       'UserEmail': currentUser!.email,
-      'Title': _controllerTitle.text,
-      'Message': _controllerDescription.text,
+      'Title': _controllerTitle.text.trim(),
+      'Message': _controllerDescription.text.trim(),
       'ImageUrl': imgURL,
       'Category': _selectedCategories,
       'Ingredients': ingredients,
@@ -153,11 +153,19 @@ class _PostPageState extends State<PostPage> {
                                         .trim()
                                         .isNotEmpty &&
                                     _selectedCategories.isNotEmpty &&
-                                    _image != null) {
+                                    _image != null &&
+                                    _controllerTitle.text.trim().length <=
+                                        100) {
                                   uploadImage();
                                   setState(() {
                                     currentStep += 1;
                                     errorMessage = '';
+                                  });
+                                } else if (_controllerTitle.text.trim().length >
+                                    100) {
+                                  setState(() {
+                                    errorMessage =
+                                        'Title cannot exceed 100 characters!';
                                   });
                                 } else {
                                   if (_controllerTitle.text.trim().isEmpty ||
