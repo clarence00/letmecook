@@ -32,6 +32,9 @@ class PreviewTile extends StatefulWidget {
 
 class _PreviewTileState extends State<PreviewTile> {
   Future<int>? commentCount;
+  final currentUser = FirebaseAuth.instance.currentUser;
+  bool isLiked = false;
+  bool isBookmarked = false;
 
   Future<int> fetchCommentCount() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -51,10 +54,60 @@ class _PreviewTileState extends State<PreviewTile> {
             builder: (context) => ViewPostPage(postId: widget.postId)));
   }
 
+  void toggleLike() {
+    setState(() {
+      isLiked = !isLiked;
+    });
+
+    DocumentReference postRef =
+        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+
+    if (isLiked) {
+      postRef.update({
+        'Likes': FieldValue.arrayUnion([currentUser!.email])
+      });
+    } else {
+      postRef.update({
+        'Likes': FieldValue.arrayRemove([currentUser!.email])
+      });
+    }
+  }
+
+  void toggleBookmark() {
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+
+    DocumentReference userRef = FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(currentUser!.email);
+
+    DocumentReference postRef =
+        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+
+    if (isBookmarked) {
+      postRef.update({
+        'Bookmarks': FieldValue.arrayUnion([currentUser!.email])
+      });
+      userRef.update({
+        'Bookmarks': FieldValue.arrayUnion([widget.postId]),
+      });
+    } else {
+      postRef.update({
+        'Bookmarks': FieldValue.arrayRemove([currentUser!.email])
+      });
+      userRef.update({
+        'Bookmarks': FieldValue.arrayRemove([widget.postId]),
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     commentCount = fetchCommentCount();
+    isLiked = widget.likes.contains(currentUser!.email);
+    isBookmarked = widget.bookmarks.contains(currentUser!.email);
   }
 
   @override
@@ -94,11 +147,11 @@ class _PreviewTileState extends State<PreviewTile> {
                         Container(
                           padding: const EdgeInsets.only(left: 5),
                           child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
+                            onPressed: toggleLike,
+                            icon: Icon(
                               Icons.favorite_rounded,
                               size: 18,
-                              color: AppColors.dark,
+                              color: isLiked ? Colors.red : AppColors.dark,
                             ),
                           ),
                         ),
@@ -143,11 +196,13 @@ class _PreviewTileState extends State<PreviewTile> {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
+                          onPressed: toggleBookmark,
+                          icon: Icon(
                             Icons.bookmark_rounded,
                             size: 18,
-                            color: AppColors.dark,
+                            color: isBookmarked
+                                ? AppColors.accent
+                                : AppColors.dark,
                           ),
                         ),
                         Container(
