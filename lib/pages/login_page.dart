@@ -101,7 +101,7 @@ class _LogInPageState extends State<LogInPage> {
   @override
   Widget build(context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.dark,
       body: Center(
         child: Column(
