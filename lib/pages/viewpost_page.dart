@@ -41,6 +41,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
   Timestamp timestamp = Timestamp.fromDate(DateTime.now());
   String likes = '0';
   String bookmarks = '0';
+  int commentCount = 0;
 
   @override
   void initState() {
@@ -161,10 +162,13 @@ class _ViewPostPageState extends State<ViewPostPage> {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('User Posts')
         .doc(widget.postId)
-        .collection('Comments') // Replace with your collection name
+        .collection('Comments')
         .get();
 
     int documentCount = querySnapshot.docs.length;
+    setState(() {
+      commentCount = documentCount;
+    });
     return documentCount;
   }
 
@@ -425,62 +429,70 @@ class _ViewPostPageState extends State<ViewPostPage> {
                       ),
                     ),
                     // Comment Div
-                    StyledContainer(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            alignment: Alignment.centerLeft,
-                            child: const StyledText(
-                              text: 'Comments',
-                              size: 20,
-                              weight: FontWeight.w700,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: AppColors.dark,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance
-                                    .collection('User Posts')
-                                    .doc(widget.postId)
-                                    .collection('Comments')
-                                    .orderBy('TimeStamp', descending: true)
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return ListView(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        children:
-                                            snapshot.data!.docs.map((doc) {
-                                          final commentData = doc.data()
-                                              as Map<String, dynamic>;
-                                          return CommentTile(
-                                            text: commentData['Comment'],
-                                            user: commentData['UserEmail'],
-                                            time: commentData['TimeStamp'],
+                    commentCount == 0
+                        ? const SizedBox()
+                        : StyledContainer(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  alignment: Alignment.centerLeft,
+                                  child: const StyledText(
+                                    text: 'Comments',
+                                    size: 20,
+                                    weight: FontWeight.w700,
+                                  ),
+                                ),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: AppColors.dark,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: StreamBuilder<QuerySnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('User Posts')
+                                          .doc(widget.postId)
+                                          .collection('Comments')
+                                          .orderBy('TimeStamp',
+                                              descending: true)
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return ListView(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              children: snapshot.data!.docs
+                                                  .map((doc) {
+                                                final commentData = doc.data()
+                                                    as Map<String, dynamic>;
+                                                return CommentTile(
+                                                  text: commentData['Comment'],
+                                                  user:
+                                                      commentData['UserEmail'],
+                                                  time:
+                                                      commentData['TimeStamp'],
+                                                );
+                                              }).toList());
+                                        } else {
+                                          return const Expanded(
+                                            child: SizedBox(height: 15),
                                           );
-                                        }).toList());
-                                  } else {
-                                    return const Expanded(
-                                      child: SizedBox(height: 15),
-                                    );
-                                  }
-                                }),
+                                        }
+                                      }),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
                     const SizedBox(
                       height: 15,
                     ),
