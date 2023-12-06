@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/pages/profile_page.dart';
+import 'package:letmecook/pages/searchedprofile_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 
 class SearchPage extends StatefulWidget {
@@ -21,6 +22,15 @@ class _SearchPageState extends State<SearchPage> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const ProfilePage()),
+    );
+  }
+
+  void toSearchedUserProfile(String searchedUserEmail) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              SearchedProfilePage(searchedUser: searchedUserEmail)),
     );
   }
 
@@ -143,7 +153,9 @@ class _SearchPageState extends State<SearchPage> {
                                   ],
                                 ),
                               ),
-                              onTap: () => toProfile(),
+                              onTap: () {
+                                toSearchedUserProfile(data['UserEmail']);
+                              },
                             );
                           }
                           return Container();
