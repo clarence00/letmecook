@@ -90,14 +90,14 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           ),
-          const SizedBox(height: 15),
-          const Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: StyledText(
-              text: 'Recent',
-              size: 20,
-            ),
-          ),
+          // const SizedBox(height: 15),
+          // const Padding(
+          //   padding: EdgeInsets.only(left: 20),
+          //   child: StyledText(
+          //     text: 'Recent',
+          //     size: 20,
+          //   ),
+          // ),
           const SizedBox(height: 10),
 
           // People
@@ -117,10 +117,10 @@ class _SearchPageState extends State<SearchPage> {
                           var data = snapshots.data!.docs[index].data()
                               as Map<String, dynamic>;
 
-                          if (username.isEmpty ||
-                              data['Username']
+                          if (data['Username']
                                   .toString()
-                                  .startsWith(username.toLowerCase())) {
+                                  .startsWith(username.toLowerCase()) &&
+                              username.isNotEmpty) {
                             return GestureDetector(
                               child: Container(
                                 margin: const EdgeInsets.symmetric(

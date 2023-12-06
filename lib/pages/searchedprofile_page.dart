@@ -86,11 +86,6 @@ class _SearchProfilePageState extends State<SearchedProfilePage> {
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.more_vert,
-                  color: AppColors.dark,
-                  size: 24,
-                ),
               ],
             ),
           ),
