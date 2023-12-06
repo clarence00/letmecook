@@ -7,6 +7,7 @@ import 'package:letmecook/widgets/styled_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:letmecook/widgets/heart_button.dart';
+import 'package:letmecook/widget_tree.dart';
 import 'package:intl/intl.dart';
 import 'package:letmecook/widgets/top_appbar_back.dart';
 
@@ -48,6 +49,13 @@ class _ViewPostPageState extends State<ViewPostPage> {
     super.initState();
     _controllerComment.text = '';
     fetchPostData();
+  }
+
+  void toHomepage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const WidgetTree()),
+    );
   }
 
   void toggleLike() {
@@ -98,6 +106,15 @@ class _ViewPostPageState extends State<ViewPostPage> {
       });
     }
     fetchPostData();
+  }
+
+  void deletePost() async {
+    await FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .delete();
+
+    toHomepage();
   }
 
   void addComment() {
@@ -270,10 +287,13 @@ class _ViewPostPageState extends State<ViewPostPage> {
                             ),
                           ),
                           userEmail == currentUser!.email
-                              ? const Icon(
-                                  Icons.delete,
-                                  color: AppColors.dark,
-                                  size: 24,
+                              ? GestureDetector(
+                                  onTap: deletePost,
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: AppColors.dark,
+                                    size: 24,
+                                  ),
                                 )
                               : const SizedBox(),
                         ],
