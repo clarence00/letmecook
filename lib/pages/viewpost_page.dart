@@ -37,9 +37,10 @@ class _ViewPostPageState extends State<ViewPostPage> {
   List<dynamic> steps = [];
   List<dynamic> categories = [];
   bool isLiked = false;
+  bool isBookmarked = false;
   Timestamp timestamp = Timestamp.fromDate(DateTime.now());
   String likes = '0';
-  int bookmarkCount = 0;
+  String bookmarks = '0';
 
   @override
   void initState() {
@@ -65,6 +66,37 @@ class _ViewPostPageState extends State<ViewPostPage> {
         'Likes': FieldValue.arrayRemove([currentUser!.email])
       });
     }
+    fetchPostData();
+  }
+
+  void toggleBookmark() {
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+
+    DocumentReference userRef = FirebaseFirestore.instance
+        .collection('Usernames')
+        .doc(currentUser!.email);
+
+    DocumentReference postRef =
+        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+
+    if (isBookmarked) {
+      postRef.update({
+        'Bookmarks': FieldValue.arrayUnion([currentUser!.email])
+      });
+      userRef.update({
+        'Bookmarks': FieldValue.arrayUnion([widget.postId]),
+      });
+    } else {
+      postRef.update({
+        'Bookmarks': FieldValue.arrayRemove([currentUser!.email])
+      });
+      userRef.update({
+        'Bookmarks': FieldValue.arrayRemove([widget.postId]),
+      });
+    }
+    fetchPostData();
   }
 
   void addComment() {
@@ -107,8 +139,9 @@ class _ViewPostPageState extends State<ViewPostPage> {
       steps = postDoc.data()?['Steps'] ?? [];
       categories = postDoc.data()?['Category'] ?? [];
       isLiked = postDoc.data()?['Likes'].contains(currentUser!.email);
+      isBookmarked = postDoc.data()?['Bookmarks'].contains(currentUser!.email);
       likes = postDoc.data()?['Likes'].length.toString() ?? '0';
-      bookmarkCount = postDoc.data()?['BookmarkCount'] ?? 0;
+      bookmarks = postDoc.data()?['Bookmarks'].length.toString() ?? '0';
       fetchUserData();
     });
   }
@@ -340,7 +373,8 @@ class _ViewPostPageState extends State<ViewPostPage> {
                             children: [
                               Row(
                                 children: [
-                                  LikeButton(onTap: () {}, isLiked: isLiked),
+                                  LikeButton(
+                                      onTap: toggleLike, isLiked: isLiked),
                                   Container(
                                     padding: const EdgeInsets.only(
                                         left: 5, right: 12),
@@ -371,14 +405,16 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: toggleBookmark,
                                     icon: CustomIcons.bookmark(
-                                        color: AppColors.dark),
+                                        color: isBookmarked
+                                            ? AppColors.accent
+                                            : AppColors.dark),
                                   ),
                                   Container(
                                     padding: const EdgeInsets.only(right: 12),
                                     child: StyledText(
-                                      text: bookmarkCount.toString(),
+                                      text: bookmarks,
                                     ),
                                   ),
                                 ],
