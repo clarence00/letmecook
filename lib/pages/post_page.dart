@@ -29,6 +29,7 @@ class _PostPageState extends State<PostPage> {
 
   // Variable for UI only (should be changed accordingly)
   final bool hasImage = true;
+  bool uploading = false;
   final _controllerTitle = TextEditingController();
   final _controllerDescription = TextEditingController();
   List<TextEditingController> ingredientsController = [TextEditingController()];
@@ -50,32 +51,38 @@ class _PostPageState extends State<PostPage> {
   List<String> _selectedCategories = [];
 
   void post() {
-    List<String> ingredients = ingredientsController
-        .map((controller) => controller.text.trim())
-        .where((trimmedText) => trimmedText.isNotEmpty)
-        .toList();
-    List<String> steps = stepsController
-        .map((controller) => controller.text.trim())
-        .where((trimmedText) => trimmedText.isNotEmpty)
-        .toList();
+    if (uploadImageSuccess == true) {
+      List<String> ingredients = ingredientsController
+          .map((controller) => controller.text.trim())
+          .where((trimmedText) => trimmedText.isNotEmpty)
+          .toList();
+      List<String> steps = stepsController
+          .map((controller) => controller.text.trim())
+          .where((trimmedText) => trimmedText.isNotEmpty)
+          .toList();
 
-    FirebaseFirestore.instance.collection("User Posts").add({
-      'UserEmail': currentUser!.email,
-      'Title': _controllerTitle.text.trim(),
-      'Message': _controllerDescription.text.trim(),
-      'ImageUrl': imgURL,
-      'Category': _selectedCategories,
-      'Ingredients': ingredients,
-      'Steps': steps,
-      'Likes': [],
-      'Bookmarks': [],
-      'TimeStamp': Timestamp.now(),
-    });
+      FirebaseFirestore.instance.collection("User Posts").add({
+        'UserEmail': currentUser!.email,
+        'Title': _controllerTitle.text.trim(),
+        'Message': _controllerDescription.text.trim(),
+        'ImageUrl': imgURL,
+        'Category': _selectedCategories,
+        'Ingredients': ingredients,
+        'Steps': steps,
+        'Likes': [],
+        'Bookmarks': [],
+        'TimeStamp': Timestamp.now(),
+      });
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const WidgetTree()),
-    );
+      setState(() {
+        uploadImageSuccess == false;
+      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const WidgetTree()),
+      );
+    }
   }
 
   //Image Attachment
@@ -95,6 +102,7 @@ class _PostPageState extends State<PostPage> {
 
   void uploadImage() async {
     try {
+      uploading = true;
       String? response = await StoreData().saveDataPost(
         file: _image!,
         title: _controllerTitle.text,
@@ -104,7 +112,9 @@ class _PostPageState extends State<PostPage> {
       imgURL = response!;
       setState(() {
         uploadImageSuccess = true;
+        uploading = false;
       });
+      post();
     } catch (e) {
       setState(() {
         uploadImageError = true;
@@ -162,7 +172,7 @@ class _PostPageState extends State<PostPage> {
                                     _image != null &&
                                     _controllerTitle.text.trim().length <=
                                         100) {
-                                  uploadImage();
+                                  // uploadImage();
                                   setState(() {
                                     currentStep += 1;
                                     errorMessage = '';
@@ -611,7 +621,7 @@ class _PostPageState extends State<PostPage> {
                                       setState(() {
                                         errorMessage = '';
                                       });
-                                      post();
+                                      uploadImage();
                                     } else {
                                       setState(() {
                                         errorMessage =
@@ -658,6 +668,15 @@ class _PostPageState extends State<PostPage> {
                             ),
                             child: Column(
                               children: [
+                                uploading == true
+                                    ? const Padding(
+                                        padding: EdgeInsets.only(bottom: 5),
+                                        child: Center(
+                                            child: StyledText(
+                                                text: 'Uploading...',
+                                                color: Colors.green)),
+                                      )
+                                    : const SizedBox(),
                                 const StyledText(
                                   text: 'Steps',
                                   size: 20,
