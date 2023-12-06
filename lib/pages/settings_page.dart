@@ -160,6 +160,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBarPushed(onPressed: backToPrev),
+      resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.background,
       body: SingleChildScrollView(
         child: Column(
