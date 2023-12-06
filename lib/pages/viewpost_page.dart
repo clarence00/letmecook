@@ -269,11 +269,13 @@ class _ViewPostPageState extends State<ViewPostPage> {
                               ],
                             ),
                           ),
-                          const Icon(
-                            Icons.more_vert,
-                            color: AppColors.dark,
-                            size: 24,
-                          ),
+                          userEmail == currentUser!.email
+                              ? const Icon(
+                                  Icons.delete,
+                                  color: AppColors.dark,
+                                  size: 24,
+                                )
+                              : const SizedBox(),
                         ],
                       ),
                     ),

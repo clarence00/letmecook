@@ -257,11 +257,6 @@ class _PostTileState extends State<PostTile> {
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.more_vert,
-                  color: AppColors.dark,
-                  size: 24,
-                ),
               ],
             ),
             // Second Div (Title)
