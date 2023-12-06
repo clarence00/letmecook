@@ -498,12 +498,14 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                                 final commentData = doc.data()
                                                     as Map<String, dynamic>;
                                                 return CommentTile(
-                                                  text: commentData['Comment'],
-                                                  user:
-                                                      commentData['UserEmail'],
-                                                  time:
-                                                      commentData['TimeStamp'],
-                                                );
+                                                    text:
+                                                        commentData['Comment'],
+                                                    user: commentData[
+                                                        'UserEmail'],
+                                                    time: commentData[
+                                                        'TimeStamp'],
+                                                    postId: widget.postId,
+                                                    commentDocId: doc.id);
                                               }).toList());
                                         } else {
                                           return const Expanded(

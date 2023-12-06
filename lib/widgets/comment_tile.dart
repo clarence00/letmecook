@@ -3,14 +3,23 @@ import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CommentTile extends StatefulWidget {
-  const CommentTile(
-      {super.key, required this.user, required this.text, required this.time});
+  const CommentTile({
+    super.key,
+    required this.user,
+    required this.text,
+    required this.time,
+    required this.postId,
+    required this.commentDocId,
+  });
 
   final String user;
   final String text;
   final Timestamp time;
+  final String postId;
+  final String commentDocId;
 
   @override
   State<CommentTile> createState() => _CommentTileState();
@@ -19,6 +28,7 @@ class CommentTile extends StatefulWidget {
 class _CommentTileState extends State<CommentTile> {
   String username = '';
   String profilePictureUrl = '';
+  final currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -35,6 +45,15 @@ class _CommentTileState extends State<CommentTile> {
       username = snapshot.data()?['Username'] ?? widget.user;
       profilePictureUrl = snapshot.data()?['ProfilePicture'] ?? widget.user;
     });
+  }
+
+  void deleteComment() async {
+    await FirebaseFirestore.instance
+        .collection('User Posts')
+        .doc(widget.postId)
+        .collection('Comments')
+        .doc(widget.commentDocId)
+        .delete();
   }
 
   String getCommentTimeDisplay(Timestamp timestamp) {
@@ -98,14 +117,19 @@ class _CommentTileState extends State<CommentTile> {
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(right: 5),
-                child: Icon(
-                  Icons.more_vert,
-                  color: AppColors.dark,
-                  size: 24,
-                ),
-              ),
+              widget.user == currentUser!.email
+                  ? GestureDetector(
+                      onTap: deleteComment,
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 5),
+                        child: Icon(
+                          Icons.delete,
+                          color: AppColors.dark,
+                          size: 24,
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
             ],
           ),
           // Comment
