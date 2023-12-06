@@ -10,6 +10,7 @@ import 'package:letmecook/widgets/heart_button.dart';
 import 'package:letmecook/widget_tree.dart';
 import 'package:intl/intl.dart';
 import 'package:letmecook/widgets/top_appbar_back.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../widgets/comment_tile.dart';
 
@@ -108,13 +109,30 @@ class _ViewPostPageState extends State<ViewPostPage> {
     fetchPostData();
   }
 
-  void deletePost() async {
-    await FirebaseFirestore.instance
-        .collection('User Posts')
-        .doc(widget.postId)
-        .delete();
+  Reference getImageReference(String userEmail, String title, String filename) {
+    String imagePath = 'images/posts/$userEmail/$title/$filename';
+    return FirebaseStorage.instance.ref(imagePath);
+  }
 
-    toHomepage();
+  void deletePost() async {
+    Uri uri = Uri.parse(imageUrl);
+    String path = uri.path;
+    List<String> pathSegments = path.split('%2F');
+    String filename = pathSegments.last;
+
+    try {
+      Reference imageRef =
+          getImageReference(currentUser!.email ?? '', title, filename);
+
+      await imageRef.delete();
+
+      await FirebaseFirestore.instance
+          .collection('User Posts')
+          .doc(widget.postId)
+          .delete();
+
+      toHomepage();
+    } on Exception catch (e) {}
   }
 
   void addComment() {
