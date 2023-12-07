@@ -17,6 +17,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   String username = "";
+  String searchBy = 'Post';
 
   void toProfile() {
     Navigator.push(
@@ -96,50 +97,77 @@ class _SearchPageState extends State<SearchPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            searchBy = 'Post';
+                          });
+                        },
                         child: Container(
                           width: 100,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
-                            color: AppColors.dark,
+                            color: searchBy == 'Post'
+                                ? AppColors.dark
+                                : AppColors.background,
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: StyledText(
-                                text: 'Post', color: AppColors.light),
+                                text: 'Post',
+                                color: searchBy == 'Post'
+                                    ? AppColors.light
+                                    : AppColors.dark),
                           ),
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            searchBy = 'People';
+                          });
+                        },
                         child: Container(
                           width: 100,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
-                            color: AppColors.background,
+                            color: searchBy == 'People'
+                                ? AppColors.dark
+                                : AppColors.background,
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: StyledText(
-                                text: 'People', color: AppColors.dark),
+                                text: 'People',
+                                color: searchBy == 'People'
+                                    ? AppColors.light
+                                    : AppColors.dark),
                           ),
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            searchBy = 'Category';
+                          });
+                        },
                         child: Container(
                           width: 100,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
-                            color: AppColors.background,
+                            color: searchBy == 'Category'
+                                ? AppColors.dark
+                                : AppColors.background,
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: StyledText(
-                                text: 'Category', color: AppColors.dark),
+                                text: 'Category',
+                                color: searchBy == 'Category'
+                                    ? AppColors.light
+                                    : AppColors.dark),
                           ),
                         ),
                       ),
