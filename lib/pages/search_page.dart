@@ -176,72 +176,82 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
           const SizedBox(height: 10),
+          searchBy == 'Post'
+              // Search by post
+              ? const SizedBox()
+              // Search by people
+              : searchBy == 'People'
+                  ? Expanded(
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Usernames')
+                            .snapshots(),
+                        builder: (context, snapshots) {
+                          return (snapshots.connectionState ==
+                                  ConnectionState.waiting)
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : ListView.builder(
+                                  itemCount: snapshots.data!.docs.length,
+                                  itemBuilder: ((context, index) {
+                                    var data = snapshots.data!.docs[index]
+                                        .data() as Map<String, dynamic>;
 
-          // People
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('Usernames')
-                  .snapshots(),
-              builder: (context, snapshots) {
-                return (snapshots.connectionState == ConnectionState.waiting)
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : ListView.builder(
-                        itemCount: snapshots.data!.docs.length,
-                        itemBuilder: ((context, index) {
-                          var data = snapshots.data!.docs[index].data()
-                              as Map<String, dynamic>;
-
-                          if (data['Username']
-                                  .toString()
-                                  .startsWith(username.toLowerCase()) &&
-                              username.isNotEmpty) {
-                            return GestureDetector(
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 5),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 10),
-                                decoration: BoxDecoration(
-                                  color: AppColors.light,
-                                  borderRadius: BorderRadius.circular(16),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppColors.dark.withOpacity(0.25),
-                                      spreadRadius: 0,
-                                      blurRadius: 15,
-                                      offset: const Offset(0, 5),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage(data['ProfilePicture']),
-                                      radius: 25,
-                                    ),
-                                    const SizedBox(width: 15),
-                                    StyledText(
-                                      text: data['Username'],
-                                      size: 20,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              onTap: () {
-                                toSearchedUserProfile(data['UserEmail']);
-                              },
-                            );
-                          }
-                          return Container();
-                        }),
-                      );
-              },
-            ),
-          ),
+                                    if (data['Username'].toString().startsWith(
+                                            username.toLowerCase()) &&
+                                        username.isNotEmpty) {
+                                      return GestureDetector(
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 5),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 10),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.light,
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: AppColors.dark
+                                                    .withOpacity(0.25),
+                                                spreadRadius: 0,
+                                                blurRadius: 15,
+                                                offset: const Offset(0, 5),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              CircleAvatar(
+                                                backgroundImage: NetworkImage(
+                                                    data['ProfilePicture']),
+                                                radius: 25,
+                                              ),
+                                              const SizedBox(width: 15),
+                                              StyledText(
+                                                text: data['Username'],
+                                                size: 20,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          toSearchedUserProfile(
+                                              data['UserEmail']);
+                                        },
+                                      );
+                                    }
+                                    return Container();
+                                  }),
+                                );
+                        },
+                      ),
+                    )
+                  // Search by category
+                  : searchBy == 'Category'
+                      ? const SizedBox()
+                      : const SizedBox(),
         ],
       ),
     );
