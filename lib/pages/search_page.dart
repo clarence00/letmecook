@@ -59,45 +59,94 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ],
             ),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: TextField(
-                style: GoogleFonts.poppins(
-                  color: AppColors.dark,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.search_rounded,
-                    color: AppColors.dark,
-                    size: 24,
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  hintText: 'Search...',
-                  border: InputBorder.none,
-                ),
-                onChanged: (value) {
-                  setState(
-                    () {
-                      username = value;
+                  child: TextField(
+                    style: GoogleFonts.poppins(
+                      color: AppColors.dark,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.search_rounded,
+                        color: AppColors.dark,
+                        size: 24,
+                      ),
+                      hintText: 'Search...',
+                      border: InputBorder.none,
+                    ),
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          username = value;
+                        },
+                      );
                     },
-                  );
-                },
-              ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          width: 100,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.dark,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Center(
+                            child: StyledText(
+                                text: 'Post', color: AppColors.light),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          width: 100,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.background,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Center(
+                            child: StyledText(
+                                text: 'People', color: AppColors.dark),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          width: 100,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.background,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Center(
+                            child: StyledText(
+                                text: 'Category', color: AppColors.dark),
+                          ),
+                        ),
+                      ),
+                    ]),
+              ],
             ),
           ),
-          // const SizedBox(height: 15),
-          // const Padding(
-          //   padding: EdgeInsets.only(left: 20),
-          //   child: StyledText(
-          //     text: 'Recent',
-          //     size: 20,
-          //   ),
-          // ),
           const SizedBox(height: 10),
 
           // People
