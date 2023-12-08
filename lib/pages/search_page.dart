@@ -5,6 +5,7 @@ import 'package:letmecook/assets/themes/app_colors.dart';
 import 'package:letmecook/pages/profile_page.dart';
 import 'package:letmecook/pages/searchedprofile_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
+import 'package:letmecook/widgets/post_tile.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -16,7 +17,7 @@ class SearchPage extends StatefulWidget {
 // Variable for UI only (should be changed accordingly)
 
 class _SearchPageState extends State<SearchPage> {
-  String username = "";
+  String searchText = "";
   String searchBy = 'Post';
 
   void toProfile() {
@@ -86,7 +87,7 @@ class _SearchPageState extends State<SearchPage> {
                     onChanged: (value) {
                       setState(
                         () {
-                          username = value;
+                          searchText = value;
                         },
                       );
                     },
@@ -178,7 +179,43 @@ class _SearchPageState extends State<SearchPage> {
           const SizedBox(height: 10),
           searchBy == 'Post'
               // Search by post
-              ? const SizedBox()
+              ? Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('User Posts')
+                        .where('SearchKeywords',
+                            arrayContainsAny:
+                                searchText.toLowerCase().split(' '))
+                        .snapshots(),
+                    builder: (context, snapshots) {
+                      return (snapshots.connectionState ==
+                              ConnectionState.waiting)
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : ListView.builder(
+                              itemCount: snapshots.data!.docs.length,
+                              itemBuilder: ((context, index) {
+                                var post = snapshots.data!.docs[index];
+                                if (searchText.isNotEmpty) {
+                                  return PostTile(
+                                    title: post['Title'],
+                                    user: post['UserEmail'],
+                                    timestamp: post['TimeStamp'],
+                                    imageUrl: 'imageUrl',
+                                    likes:
+                                        List<String>.from(post['Likes'] ?? []),
+                                    bookmarks: List<String>.from(
+                                        post['Bookmarks'] ?? []),
+                                    postId: post.id,
+                                  );
+                                }
+                                return Container();
+                              }),
+                            );
+                    },
+                  ),
+                )
               // Search by people
               : searchBy == 'People'
                   ? Expanded(
@@ -199,8 +236,8 @@ class _SearchPageState extends State<SearchPage> {
                                         .data() as Map<String, dynamic>;
 
                                     if (data['Username'].toString().startsWith(
-                                            username.toLowerCase()) &&
-                                        username.isNotEmpty) {
+                                            searchText.toLowerCase()) &&
+                                        searchText.isNotEmpty) {
                                       return GestureDetector(
                                         child: Container(
                                           margin: const EdgeInsets.symmetric(

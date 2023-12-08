@@ -72,6 +72,7 @@ class _PostPageState extends State<PostPage> {
         'Likes': [],
         'Bookmarks': [],
         'TimeStamp': Timestamp.now(),
+        'SearchKeywords': _controllerTitle.text.trim().toLowerCase().split(' '),
       });
 
       setState(() {
