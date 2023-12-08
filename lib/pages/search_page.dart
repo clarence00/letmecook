@@ -6,6 +6,7 @@ import 'package:letmecook/pages/profile_page.dart';
 import 'package:letmecook/pages/searchedprofile_page.dart';
 import 'package:letmecook/widgets/styled_text.dart';
 import 'package:letmecook/widgets/post_tile.dart';
+import 'package:multiselect/multiselect.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -19,6 +20,16 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   String searchText = "";
   String searchBy = 'Post';
+  final List<String> _categories = [
+    'Pork',
+    'Chicken',
+    'Beef',
+    'Fish',
+    'Etc.',
+    'Below 100 Pesos ',
+    'Above 100 Pesos'
+  ];
+  List<String> _selectedCategories = [];
 
   void toProfile() {
     Navigator.push(
@@ -63,36 +74,63 @@ class _SearchPageState extends State<SearchPage> {
             ),
             child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.background,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: TextField(
-                    style: GoogleFonts.poppins(
-                      color: AppColors.dark,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.search_rounded,
-                        color: AppColors.dark,
-                        size: 24,
+                searchBy != 'Category'
+                    ? Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: AppColors.background,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: TextField(
+                          style: GoogleFonts.poppins(
+                            color: AppColors.dark,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.search_rounded,
+                              color: AppColors.dark,
+                              size: 24,
+                            ),
+                            hintText: 'Search...',
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (value) {
+                            setState(
+                              () {
+                                searchText = value;
+                              },
+                            );
+                          },
+                        ),
+                      )
+                    : Container(
+                        decoration: ShapeDecoration(
+                          color: AppColors.background,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: DropDownMultiSelect(
+                          decoration: const InputDecoration(
+                              focusedBorder: InputBorder.none,
+                              border: InputBorder.none),
+                          options: _categories,
+                          selectedValues: _selectedCategories,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedCategories = value;
+                            });
+                          },
+                          whenEmpty: 'Please Select a Category!',
+                          selected_values_style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.dark,
+                          ),
+                        ),
                       ),
-                      hintText: 'Search...',
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          searchText = value;
-                        },
-                      );
-                    },
-                  ),
-                ),
                 const SizedBox(height: 10),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -287,7 +325,46 @@ class _SearchPageState extends State<SearchPage> {
                     )
                   // Search by category
                   : searchBy == 'Category'
-                      ? const SizedBox()
+                      ? Expanded(
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: _selectedCategories.isNotEmpty
+                                ? FirebaseFirestore.instance
+                                    .collection('User Posts')
+                                    .where('Category',
+                                        arrayContainsAny: _selectedCategories)
+                                    .snapshots()
+                                : FirebaseFirestore.instance
+                                    .collection('User Posts')
+                                    .snapshots(),
+                            builder: (context, snapshots) {
+                              return (snapshots.connectionState ==
+                                      ConnectionState.waiting)
+                                  ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : ListView.builder(
+                                      itemCount: snapshots.data!.docs.length,
+                                      itemBuilder: ((context, index) {
+                                        var post = snapshots.data!.docs[index];
+                                        if (_selectedCategories.isNotEmpty) {
+                                          return PostTile(
+                                            title: post['Title'],
+                                            user: post['UserEmail'],
+                                            timestamp: post['TimeStamp'],
+                                            imageUrl: 'imageUrl',
+                                            likes: List<String>.from(
+                                                post['Likes'] ?? []),
+                                            bookmarks: List<String>.from(
+                                                post['Bookmarks'] ?? []),
+                                            postId: post.id,
+                                          );
+                                        }
+                                        return Container();
+                                      }),
+                                    );
+                            },
+                          ),
+                        )
                       : const SizedBox(),
         ],
       ),
