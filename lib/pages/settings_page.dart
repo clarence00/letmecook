@@ -40,6 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
   PlatformFile? pickedFile;
   Widget? fromPicker;
   Uint8List? _image;
+  bool uploading = false;
 
   void toWidgetTree() {
     Navigator.push(
@@ -56,6 +57,9 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void uploadImage() async {
+    setState(() {
+      uploading = true;
+    });
     try {
       String? response = await StoreData().saveData(
           file: _image!,
@@ -63,6 +67,7 @@ class _SettingsPageState extends State<SettingsPage> {
           email: currentUser!.email,
           fileName: fileName);
       setState(() {
+        uploading = false;
         uploadImageSuccess = true;
       });
     } catch (e) {
@@ -201,7 +206,14 @@ class _SettingsPageState extends State<SettingsPage> {
                               size: 16,
                               color: Colors.green,
                             )
-                          : const SizedBox(height: 0),
+                          : const SizedBox(),
+                  uploading
+                      ? const StyledText(
+                          text: 'Uploading...',
+                          size: 16,
+                          color: AppColors.accent,
+                        )
+                      : const SizedBox(),
                   Container(
                     padding: const EdgeInsets.only(top: 10),
                     child: StyledButton(

@@ -71,12 +71,6 @@ class StoreData {
       String imageUrl = await uploadImageToStorage(
           'images/posts/$email/$title/$fileName', file);
 
-      // await _firestore.collection('Usernames').doc(currentUser!.email).set({
-      //   'UserEmail': email,
-      //   'Title': title,
-      //   'ImageUrl': imageUrl,
-      // });
-
       _URLValue = imageUrl;
 
       print(_URLValue);

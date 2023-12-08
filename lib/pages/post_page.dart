@@ -72,6 +72,7 @@ class _PostPageState extends State<PostPage> {
         'Likes': [],
         'Bookmarks': [],
         'TimeStamp': Timestamp.now(),
+        'SearchKeywords': _controllerTitle.text.trim().toLowerCase().split(' '),
       });
 
       setState(() {
@@ -153,75 +154,99 @@ class _PostPageState extends State<PostPage> {
                             ),
                           ],
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
                           children: [
-                            const StyledText(
-                              text: "Page 1/3",
-                              color: AppColors.dark,
-                              size: 20,
-                              weight: FontWeight.w700,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                if (_controllerTitle.text.trim().isNotEmpty &&
-                                    _controllerDescription.text
-                                        .trim()
-                                        .isNotEmpty &&
-                                    _selectedCategories.isNotEmpty &&
-                                    _image != null &&
-                                    _controllerTitle.text.trim().length <=
-                                        100) {
-                                  // uploadImage();
-                                  setState(() {
-                                    currentStep += 1;
-                                    errorMessage = '';
-                                  });
-                                } else if (_controllerTitle.text.trim().length >
-                                    100) {
-                                  setState(() {
-                                    errorMessage =
-                                        'Title cannot exceed 100 characters!';
-                                  });
-                                } else {
-                                  if (_controllerTitle.text.trim().isEmpty ||
-                                      _controllerDescription.text
-                                          .trim()
-                                          .isEmpty ||
-                                      _selectedCategories.isEmpty) {
-                                    setState(() {
-                                      errorMessage =
-                                          'Please fill out all the fields!';
-                                    });
-                                  } else if (_controllerTitle.text
-                                          .trim()
-                                          .isNotEmpty &&
-                                      _controllerDescription.text
-                                          .trim()
-                                          .isNotEmpty &&
-                                      _selectedCategories.isNotEmpty &&
-                                      _image == null) {
-                                    setState(() {
-                                      errorMessage = 'Please attach an image!';
-                                    });
-                                  }
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 5),
-                                decoration: BoxDecoration(
-                                  color: AppColors.accent,
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                child: const StyledText(
-                                  text: 'Next',
-                                  size: 16,
-                                  weight: FontWeight.w700,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const StyledText(
+                                  text: "Page 1/3",
                                   color: AppColors.dark,
+                                  size: 20,
+                                  weight: FontWeight.w700,
                                 ),
-                              ),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (_controllerTitle.text
+                                            .trim()
+                                            .isNotEmpty &&
+                                        _controllerDescription.text
+                                            .trim()
+                                            .isNotEmpty &&
+                                        _selectedCategories.isNotEmpty &&
+                                        _image != null &&
+                                        _controllerTitle.text.trim().length <=
+                                            100) {
+                                      // uploadImage();
+                                      setState(() {
+                                        currentStep += 1;
+                                        errorMessage = '';
+                                      });
+                                    } else if (_controllerTitle.text
+                                            .trim()
+                                            .length >
+                                        100) {
+                                      setState(() {
+                                        errorMessage =
+                                            'Title cannot exceed 100 characters!';
+                                      });
+                                    } else {
+                                      if (_controllerTitle.text
+                                              .trim()
+                                              .isEmpty ||
+                                          _controllerDescription.text
+                                              .trim()
+                                              .isEmpty ||
+                                          _selectedCategories.isEmpty) {
+                                        setState(() {
+                                          errorMessage =
+                                              'Please fill out all the fields!';
+                                        });
+                                      } else if (_controllerTitle.text
+                                              .trim()
+                                              .isNotEmpty &&
+                                          _controllerDescription.text
+                                              .trim()
+                                              .isNotEmpty &&
+                                          _selectedCategories.isNotEmpty &&
+                                          _image == null) {
+                                        setState(() {
+                                          errorMessage =
+                                              'Please attach an image!';
+                                        });
+                                      }
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.accent,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: const StyledText(
+                                      text: 'Next',
+                                      size: 16,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.dark,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                            errorMessage != ''
+                                ? Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      Center(
+                                        child: StyledText(
+                                          text: errorMessage,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const SizedBox()
                           ],
                         ),
                       ),
@@ -291,15 +316,6 @@ class _PostPageState extends State<PostPage> {
                                   )
                                 : const SizedBox(),
                             const SizedBox(height: 10),
-                            errorMessage == ''
-                                ? const SizedBox()
-                                : Center(
-                                    child: StyledText(
-                                      text: errorMessage,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                            const SizedBox(height: 10),
                             StyledButton(
                               text: 'Attach an image!',
                               buttonStyle: 'primary',
@@ -336,89 +352,110 @@ class _PostPageState extends State<PostPage> {
                                 ),
                               ],
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Column(
                               children: [
-                                const StyledText(
-                                  text: "Page 2/3",
-                                  color: AppColors.dark,
-                                  size: 20,
-                                  weight: FontWeight.w700,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      currentStep--;
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.background,
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: const StyledText(
-                                      text: 'Back',
-                                      size: 16,
-                                      weight: FontWeight.w700,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const StyledText(
+                                      text: "Page 2/3",
                                       color: AppColors.dark,
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      ingredientsController
-                                          .add(TextEditingController());
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.accent,
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: const StyledText(
-                                      text: 'Add',
-                                      size: 16,
+                                      size: 20,
                                       weight: FontWeight.w700,
-                                      color: AppColors.dark,
                                     ),
-                                  ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          currentStep--;
+                                        });
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 5),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.background,
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        child: const StyledText(
+                                          text: 'Back',
+                                          size: 16,
+                                          weight: FontWeight.w700,
+                                          color: AppColors.dark,
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          ingredientsController
+                                              .add(TextEditingController());
+                                        });
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 5),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.accent,
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        child: const StyledText(
+                                          text: 'Add',
+                                          size: 16,
+                                          weight: FontWeight.w700,
+                                          color: AppColors.dark,
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (ingredientsController.every(
+                                            (controller) =>
+                                                controller.text.trim() != '')) {
+                                          setState(() {
+                                            errorMessage = '';
+                                            currentStep += 1;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            errorMessage =
+                                                'Please fill out all the fields!';
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 5),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.accent,
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        child: const StyledText(
+                                          text: 'Next',
+                                          size: 16,
+                                          weight: FontWeight.w700,
+                                          color: AppColors.dark,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    if (ingredientsController.every(
-                                        (controller) =>
-                                            controller.text.trim() != '')) {
-                                      setState(() {
-                                        errorMessage = '';
-                                        currentStep += 1;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        errorMessage =
-                                            'Please fill out all the fields!';
-                                      });
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.accent,
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: const StyledText(
-                                      text: 'Next',
-                                      size: 16,
-                                      weight: FontWeight.w700,
-                                      color: AppColors.dark,
-                                    ),
-                                  ),
-                                ),
+                                errorMessage != ''
+                                    ? Column(
+                                        children: [
+                                          const SizedBox(height: 10),
+                                          Center(
+                                            child: StyledText(
+                                              text: errorMessage,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : const SizedBox()
                               ],
                             ),
                           ),
@@ -526,15 +563,6 @@ class _PostPageState extends State<PostPage> {
                                     );
                                   },
                                 ),
-                                const SizedBox(height: 10),
-                                errorMessage == ''
-                                    ? const SizedBox()
-                                    : Center(
-                                        child: StyledText(
-                                          text: errorMessage,
-                                          color: Colors.red,
-                                        ),
-                                      ),
                               ],
                             ),
                           ),
@@ -562,88 +590,121 @@ class _PostPageState extends State<PostPage> {
                                 )
                               ],
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Column(
                               children: [
-                                const StyledText(
-                                  text: "Page 3/3",
-                                  color: AppColors.dark,
-                                  size: 20,
-                                  weight: FontWeight.w700,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      currentStep--;
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.background,
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: const StyledText(
-                                      text: 'Back',
-                                      size: 16,
-                                      weight: FontWeight.w700,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const StyledText(
+                                      text: "Page 3/3",
                                       color: AppColors.dark,
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      stepsController
-                                          .add(TextEditingController());
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.accent,
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: const StyledText(
-                                      text: 'Add',
-                                      size: 16,
+                                      size: 20,
                                       weight: FontWeight.w700,
-                                      color: AppColors.dark,
                                     ),
-                                  ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          currentStep--;
+                                        });
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 5),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.background,
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        child: const StyledText(
+                                          text: 'Back',
+                                          size: 16,
+                                          weight: FontWeight.w700,
+                                          color: AppColors.dark,
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          stepsController
+                                              .add(TextEditingController());
+                                        });
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 5),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.accent,
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        child: const StyledText(
+                                          text: 'Add',
+                                          size: 16,
+                                          weight: FontWeight.w700,
+                                          color: AppColors.dark,
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (stepsController.every(
+                                            (controller) =>
+                                                controller.text.trim() != '')) {
+                                          setState(() {
+                                            errorMessage = '';
+                                          });
+                                          uploadImage();
+                                        } else {
+                                          setState(() {
+                                            errorMessage =
+                                                'Please fill out all the fields!';
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 5),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.accent,
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        child: const StyledText(
+                                          text: 'Post',
+                                          size: 16,
+                                          weight: FontWeight.w700,
+                                          color: AppColors.dark,
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    if (stepsController.every((controller) =>
-                                        controller.text.trim() != '')) {
-                                      setState(() {
-                                        errorMessage = '';
-                                      });
-                                      uploadImage();
-                                    } else {
-                                      setState(() {
-                                        errorMessage =
-                                            'Please fill out all the fields!';
-                                      });
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.accent,
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: const StyledText(
-                                      text: 'Post',
-                                      size: 16,
-                                      weight: FontWeight.w700,
-                                      color: AppColors.dark,
-                                    ),
-                                  ),
-                                )
+                                errorMessage != ''
+                                    ? Column(
+                                        children: [
+                                          const SizedBox(height: 10),
+                                          Center(
+                                            child: StyledText(
+                                              text: errorMessage,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : uploading
+                                        ? const Column(
+                                            children: [
+                                              SizedBox(height: 10),
+                                              Center(
+                                                child: StyledText(
+                                                    text: 'Uploading...',
+                                                    color: Colors.green),
+                                              ),
+                                            ],
+                                          )
+                                        : const SizedBox()
                               ],
                             ),
                           ),
@@ -668,15 +729,6 @@ class _PostPageState extends State<PostPage> {
                             ),
                             child: Column(
                               children: [
-                                uploading == true
-                                    ? const Padding(
-                                        padding: EdgeInsets.only(bottom: 5),
-                                        child: Center(
-                                            child: StyledText(
-                                                text: 'Uploading...',
-                                                color: Colors.green)),
-                                      )
-                                    : const SizedBox(),
                                 const StyledText(
                                   text: 'Steps',
                                   size: 20,
@@ -774,15 +826,6 @@ class _PostPageState extends State<PostPage> {
                                     );
                                   },
                                 ),
-                                const SizedBox(height: 10),
-                                errorMessage == ''
-                                    ? const SizedBox()
-                                    : Center(
-                                        child: StyledText(
-                                          text: errorMessage,
-                                          color: Colors.red,
-                                        ),
-                                      ),
                               ],
                             ),
                           ),

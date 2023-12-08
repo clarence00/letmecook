@@ -44,6 +44,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
   String likes = '0';
   String bookmarks = '0';
   int commentCount = 0;
+  bool deleting = false;
 
   @override
   void initState() {
@@ -115,6 +116,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
   }
 
   void deletePost() async {
+    deleting = true;
     Uri uri = Uri.parse(imageUrl);
     String path = uri.path;
     List<String> pathSegments = path.split('%2F');
@@ -262,58 +264,76 @@ class _ViewPostPageState extends State<ViewPostPage> {
                           bottomRight: Radius.circular(24),
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
                         children: [
-                          // First Div (Profile)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5),
-                            child: profilePictureUrl != ''
-                                ? CircleAvatar(
-                                    radius: 16,
-                                    backgroundImage:
-                                        NetworkImage(profilePictureUrl),
-                                  )
-                                : const CircleAvatar(
-                                    radius: 16,
-                                    backgroundColor: AppColors.light,
-                                    child: CircularProgressIndicator(),
-                                  ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // First Div (Profile)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: profilePictureUrl != ''
+                                    ? CircleAvatar(
+                                        radius: 16,
+                                        backgroundImage:
+                                            NetworkImage(profilePictureUrl),
+                                      )
+                                    : const CircleAvatar(
+                                        radius: 16,
+                                        backgroundColor: AppColors.light,
+                                        child: CircularProgressIndicator(),
+                                      ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: StyledText(
+                                        text: username,
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 5, right: 5),
+                                      child: Icon(
+                                        Icons.circle_rounded,
+                                        color: AppColors.accent,
+                                        size: 8,
+                                      ),
+                                    ),
+                                    StyledText(
+                                      text: getPostTimeDisplay(timestamp),
+                                      size: 12,
+                                      color: AppColors.accent,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              userEmail == currentUser!.email
+                                  ? GestureDetector(
+                                      onTap: deletePost,
+                                      child: const Icon(
+                                        Icons.delete,
+                                        color: AppColors.dark,
+                                        size: 24,
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ],
                           ),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: StyledText(
-                                    text: username,
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 5, right: 5),
-                                  child: Icon(
-                                    Icons.circle_rounded,
-                                    color: AppColors.accent,
-                                    size: 8,
-                                  ),
-                                ),
-                                StyledText(
-                                  text: getPostTimeDisplay(timestamp),
-                                  size: 12,
-                                  color: AppColors.accent,
-                                ),
-                              ],
-                            ),
-                          ),
-                          userEmail == currentUser!.email
-                              ? GestureDetector(
-                                  onTap: deletePost,
-                                  child: const Icon(
-                                    Icons.delete,
-                                    color: AppColors.dark,
-                                    size: 24,
-                                  ),
+                          deleting
+                              ? const Column(
+                                  children: [
+                                    SizedBox(height: 10),
+                                    Center(
+                                      child: StyledText(
+                                        text: 'Deleting...',
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ],
                                 )
-                              : const SizedBox(),
+                              : const SizedBox()
                         ],
                       ),
                     ),
