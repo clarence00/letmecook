@@ -229,7 +229,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       text: 'Upload',
                       size: 20,
                       buttonStyle: 'primary',
-                      onPressed: uploadImage,
+                      onPressed: _image != null ? uploadImage : () {},
                     ),
                   ),
                 ],
